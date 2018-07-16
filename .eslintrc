@@ -1,0 +1,15 @@
+{
+  "extends": "eslint-config-egg",
+  "rules": {
+    "arrow-parens": ["error", "always"],
+    "generator-star-spacing": [
+      "error",
+      {
+        "after": false,
+        "before": false
+      }
+    ],
+    "comma-dangle": ["error", "never"],
+    "array-bracket-spacing": ["error", "never"]
+  }
+}
