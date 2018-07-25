@@ -13,7 +13,7 @@ module.exports = (appInfo) => {
     csrf: false
   };
   config.sequelize = {
-    dialect: 'sqlserver', // support: mysql, mariadb, postgres, mssql
+    dialect: 'mssql', // support: mysql, mariadb, postgres, mssql
     database: 'test',
     host: 'localhost',
     port: '1433',
