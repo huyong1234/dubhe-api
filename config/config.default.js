@@ -12,6 +12,14 @@ module.exports = (appInfo) => {
   config.security = {
     csrf: false
   };
+  config.sequelize = {
+    dialect: 'sqlserver', // support: mysql, mariadb, postgres, mssql
+    database: 'test',
+    host: 'localhost',
+    port: '1433',
+    username: 'root',
+    password: ''
+  };
 
   return config;
 };
