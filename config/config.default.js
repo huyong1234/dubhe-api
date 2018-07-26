@@ -13,12 +13,12 @@ module.exports = (appInfo) => {
     csrf: false
   };
   config.sequelize = {
-    dialect: 'mssql', // support: mysql, mariadb, postgres, mssql
-    database: 'test',
+    dialect: 'mssql',
+    database: 'ecology',
     host: 'localhost',
     port: '1433',
-    username: 'root',
-    password: ''
+    username: 'OAAdmin',
+    password: 'w9E5F1Z9I6r1AHNA'
   };
 
   return config;
