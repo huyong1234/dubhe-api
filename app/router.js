@@ -15,5 +15,4 @@ module.exports = (app) => {
   router.get('/api/OSSConfig/Banner', controller.oss.getBannerUploadPathAndSignature);
   router.get('/api/OSSConfig/Apply', controller.oss.getApplyUploadPathAndSignature);
   router.get('/api/OSSConfig/ScenicStatis', controller.oss.getScenicStatisUploadPathAndSignature);
-  router.get('/api/ApplyGroups', controller.applyGroup.getApplyGroup);
 };
