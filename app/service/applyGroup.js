@@ -3,18 +3,50 @@
 const Service = require('egg').Service;
 
 class ApplyGroupService extends Service {
-  async getApplyGroup(params) {
-    // 分页参数
-    const page = { offset: params.offSet, limit: params.limit };
+  // 查询
+  async index(params) {
     // 查询参数
-    let where;
-    if (params.id) {
-      where = {
-        isDeleted: 0,
-        id: params.id
+    params.limit = parseInt(params.limit);
+    params.offSet = parseInt(params.offSet);
+    const id = params.id;
+    const name = params.name;
+    let whereSearch;
+    if (id !== undefined) {
+      whereSearch = {
+        sys_isDelete: 0,
+        id: parseInt(params.id)
       };
     }
-    const applyGroup = await this.app.model.ApplyGroup.findAll(where, page);
+    if (name !== undefined) {
+      whereSearch = {
+        sys_isDelete: 0,
+        name: params.name
+      };
+    }
+    const applyGroup = await this.app.model.ApplyGroup.findAll({
+      where: whereSearch,
+      limit: params.limit, // 将string 转 int
+      offset: params.offSet,
+      attributes: ['id', 'name', 'oderBy']
+    });
+    return applyGroup;
+  }
+  // 新建
+  async create(params) {
+    params.orderBy = parseInt(params.orderBy);
+    const applyGroup = await this.app.model.ApplyGroup.create(params);
+    return applyGroup;
+  }
+  // 修改
+  async update(params) {
+    // 设置where条件
+    const whereSearch = {
+      id: params.id
+    };
+    // 数据库更新操作
+    const applyGroup = await this.app.model.ApplyGroup.update(params, {
+      where: whereSearch
+    });
     return applyGroup;
   }
 }

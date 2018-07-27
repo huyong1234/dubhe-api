@@ -6,8 +6,9 @@ module.exports = (app) => {
     'applyGroup',
     {
       id: {
-        type: STRING(32),
-        primaryKey: true // 设置主键
+        type: INTEGER,
+        primaryKey: true, // 设置主键
+        autoIncrement: true // 设置自增
       },
       companyId: {
         type: STRING(32)
@@ -19,18 +20,24 @@ module.exports = (app) => {
       oderBy: {
         type: INTEGER
       },
-      isDeleted: {
+      sys_updator: {
         type: INTEGER
       },
-      insertTime: {
+      requestId: {
+        type: INTEGER
+      },
+      sys_isDelete: {
+        type: INTEGER
+      },
+      sys_addTime: {
         type: DATE
       },
-      updateTime: {
+      sys_updateTime: {
         type: DATE
       }
     },
     {
-      tableName: 'DUBHE_ApplyGroup',
+      tableName: 'uf_DUBHE_ApplyGroup',
       // 不要添加时间戳属性 (updatedAt, createdAt)
       timestamps: false
     }
