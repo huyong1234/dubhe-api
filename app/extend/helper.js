@@ -18,17 +18,22 @@ module.exports = {
     //   expiration: expTime.toISOString(),
     //   conditions: [['starts-with', '$key', dir]]
     // };
+
+    this.ctx.logger.info('Generation AliyunOSS signature beginning ...');
     const expTime = new Date(Date.now() + 30 * 1000);
     const defaultPolicy = {
       expiration: expTime.toISOString()
     };
     !policy && (policy = defaultPolicy);
-    const policyBase64 = Buffer.from(JSON.stringify(policy), 'utf8').toString(
-      'base64'
-    );
+    this.ctx.logger.info('policy:', policy);
+
+    const policyBase64 = Buffer.from(JSON.stringify(policy), 'utf8').toString('base64');
     const hmac = crypto.createHmac('sha1', accessKeySecret);
     hmac.update(policyBase64);
     const signature = hmac.digest('base64');
+
+    this.ctx.logger.info(`policyBase64:${policyBase64},signature:${signature}`);
+    this.ctx.logger.info('Generation AliyunOSS signature are successfully');
     return {
       policy: policyBase64,
       signature

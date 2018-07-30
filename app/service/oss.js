@@ -32,20 +32,25 @@ class OssService extends Service {
   async getUploadPathAndSignature(config) {
     const { accessKeyId, accessKeySecret, bucket, endpoint, policy } = config;
 
+    if (!accessKeyId) this.ctx.throw('accessKeyId必须存在');
+    if (!accessKeySecret) this.ctx.throw('accessKeySecret必须存在');
+    if (!bucket) this.ctx.throw('bucket必须存在');
+    if (!endpoint) this.ctx.throw('bucket必须存在');
+    if (!policy) this.ctx.throw('policys必须存在');
+
+    this.ctx.logger.info('Generation upload path and signature beginning ...');
     const expTime = new Date(Date.now() + policy.expiration * 1000);
     const policyObj = {
       expiration: expTime.toISOString(),
       conditions: [['starts-with', '$key', policy.dir]]
     };
-    const {
-      policy: policyBase64,
-      signature
-    } = this.ctx.helper.generationAliyunOSSSignature(
+
+    const { policy: policyBase64, signature } = this.ctx.helper.generationAliyunOSSSignature(
       accessKeySecret,
       policyObj
     );
 
-    return {
+    const result = {
       accessid: accessKeyId,
       dir: policy.dir,
       expire: expTime.getTime() / 1000,
@@ -53,6 +58,9 @@ class OssService extends Service {
       policy: policyBase64,
       signature
     };
+    this.ctx.logger.info('Return:', result);
+    this.ctx.logger.info('Generation upload path and signature are successfully');
+    return result;
   }
 }
 
