@@ -2,19 +2,20 @@
 
 const Service = require('egg').Service;
 
-class ApplyGroupService extends Service {
-  // 查询
+class ApplyService extends Service {
+// 查询
   async index(params) {
     // 查询参数
     params.limit = parseInt(params.limit); // string 转 int
     params.offSet = parseInt(params.offSet);
     const id = params.id;
     const name = params.name;
+    const actionType = params.actionType;
     let whereSearch;
     if (id !== undefined) {
       const id = parseInt(params.id);
-      const applyGroup = await this.app.model.ApplyGroup.findById(id);
-      return applyGroup;
+      const apply = await this.app.model.Apply.findById(id);
+      return apply;
     }
     if (name !== undefined) {
       whereSearch = {
@@ -70,4 +71,4 @@ class ApplyGroupService extends Service {
   }
 }
 
-module.exports = ApplyGroupService;
+module.exports = ApplyService;

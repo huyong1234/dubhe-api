@@ -2,8 +2,8 @@
 
 const Controller = require('egg').Controller;
 
-class ApplyGroupController extends Controller {
-  // 查询接口
+class ApplyController extends Controller {
+// 查询接口
   async index() {
     // 获取url参数
     const params = this.ctx.request.query;
@@ -24,13 +24,17 @@ class ApplyGroupController extends Controller {
       name: {
         required: false,
         type: 'string'
+      },
+      actionType: {
+        required: false,
+        type: 'string'
       }
     };
     const errors = this.app.validator.validate(rules, params);
     if (errors) {
       throw '参数错误';
     }
-    const applyGroup = await this.ctx.service.applyGroup.index(params);
+    const applyGroup = await this.ctx.service.apply.index(params);
     this.ctx.body = applyGroup;
   }
 
@@ -97,4 +101,4 @@ class ApplyGroupController extends Controller {
   }
 }
 
-module.exports = ApplyGroupController;
+module.exports = ApplyController;

@@ -22,5 +22,5 @@ module.exports = (app) => {
     '/api/OSSConfig/ScenicStatis',
     controller.oss.getScenicStatisUploadPathAndSignature
   );
-  router.get('/api/ApplyGroups', controller.applyGroup.getApplyGroup);
+  // router.get('/api/ApplyGroups', controller.applyGroup.getApplyGroup);
 };
