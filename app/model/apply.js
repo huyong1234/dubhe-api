@@ -16,14 +16,8 @@ module.exports = (app) => {
       sys_updator: {
         type: INTEGER
       },
-      sys_updateTime: {
-        type: DATE
-      },
       sys_isDelete: {
         type: INTEGER
-      },
-      sys_addTime: {
-        type: DATE
       },
       sys_adder: {
         type: INTEGER
@@ -44,16 +38,24 @@ module.exports = (app) => {
       icon: {
         type: STRING
       },
-
+      isDeleted: {
+        type: INTEGER
+      },
+      created_at: {
+        type: DATE,
+        field: 'sys_addTime'
+      },
+      updated_at: {
+        type: DATE,
+        field: 'sys_updateTime'
+      },
       // 这个字段数据库里写错了，应该是orderBy
       oderBy: {
         type: INTEGER
       }
     },
     {
-      tableName: 'uf_DUBHE_Apply',
-      // 不要添加时间戳属性 (updatedAt, createdAt)
-      timestamps: false
+      tableName: 'uf_DUBHE_Apply'
     }
   );
 

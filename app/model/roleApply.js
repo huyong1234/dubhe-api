@@ -1,8 +1,8 @@
 'use strict';
 module.exports = (app) => {
   const { STRING, INTEGER, DATE } = app.Sequelize;
-  const ScenicStatisType = app.model.define(
-    'scenicStatisType',
+  const RoleApply = app.model.define(
+    'roleApply',
     {
       id: {
         type: INTEGER,
@@ -37,23 +37,11 @@ module.exports = (app) => {
         allowNull: false,
         field: 'sys_addTime'
       },
-      scenicId: {
+      applyId: {
         type: STRING,
         allowNull: true
       },
-      parentId: {
-        type: STRING,
-        allowNull: true
-      },
-      name: {
-        type: STRING,
-        allowNull: true
-      },
-      subName: {
-        type: STRING,
-        allowNull: true
-      },
-      icon: {
+      roleId: {
         type: STRING,
         allowNull: true
       },
@@ -63,8 +51,8 @@ module.exports = (app) => {
       }
     },
     {
-      tableName: 'uf_DUBHE_ScenicStatisType'
+      tableName: 'uf_DUBHE_R_RoleApply'
     }
   );
-  return ScenicStatisType;
+  return RoleApply;
 };
