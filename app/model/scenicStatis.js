@@ -12,7 +12,7 @@ module.exports = (app) => {
       },
       requestId: {
         type: INTEGER,
-        allowNull: true
+        allowNull: false
       },
       sys_isDelete: {
         type: INTEGER,
@@ -21,7 +21,7 @@ module.exports = (app) => {
       },
       sys_updator: {
         type: INTEGER,
-        allowNull: true
+        allowNull: false
       },
       updated_at: {
         type: DATE,
@@ -30,7 +30,7 @@ module.exports = (app) => {
       },
       sys_adder: {
         type: INTEGER,
-        allowNull: true
+        allowNull: false
       },
       created_at: {
         type: DATE,
@@ -39,19 +39,19 @@ module.exports = (app) => {
       },
       scenicStatisTypeId: {
         type: STRING,
-        allowNull: true
+        allowNull: false
       },
       modelId: {
         type: STRING,
-        allowNull: true
+        allowNull: false
       },
       contents: {
         type: STRING,
-        allowNull: true
+        allowNull: false
       },
       name: {
         type: STRING,
-        allowNull: true
+        allowNull: false
       }
     },
     {

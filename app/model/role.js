@@ -11,17 +11,21 @@ module.exports = (app) => {
         autoIncrement: true // 设置自增
       },
       name: {
+        allowNull: false,
         type: STRING(20)
       },
       isDeleted: {
+        allowNull: false,
         type: INTEGER,
         field: 'sys_isDelete'
       },
       created_at: {
+        allowNull: false,
         type: DATE,
         field: 'sys_addTime'
       },
       updated_at: {
+        allowNull: false,
         type: DATE,
         field: 'sys_updateTime'
       }
