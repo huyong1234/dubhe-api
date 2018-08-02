@@ -3,23 +3,26 @@
 const Controller = require('egg').Controller;
 
 class ApplyController extends Controller {
-// 查询接口
+  // 查询列表
   async index() {
     // 获取url参数
     const params = this.ctx.request.query;
+    console.log(params);
+    // 将string类型转换成int类型
+    params.limit = parseInt(params.limit);
+    params.offSet = parseInt(params.offSet);
+    if (params.actionType) {
+      params.actionType = parseInt(params.actionType);
+    }
     // 配置校验规则
     const rules = {
       limit: {
         required: true,
-        type: 'string'
+        type: 'integer'
       },
       offSet: {
         required: true,
-        type: 'string'
-      },
-      id: {
-        required: false,
-        type: 'string'
+        type: 'integer'
       },
       name: {
         required: false,
@@ -27,15 +30,31 @@ class ApplyController extends Controller {
       },
       actionType: {
         required: false,
-        type: 'string'
+        type: 'integer'
       }
     };
+    // 参数验证
     const errors = this.app.validator.validate(rules, params);
+    // 抛出错误异常
     if (errors) {
-      throw '参数错误';
+      const messages = [];
+      // 组装错误信息
+      for (const index in errors) {
+        const message = errors[index].field + ' is ' + errors[index].message;
+        messages.push(message);
+      }
+      const err = JSON.stringify(messages);
+      this.ctx.throw(400, err);
     }
-    const applyGroup = await this.ctx.service.apply.index(params);
-    this.ctx.body = applyGroup;
+    const apply = await this.ctx.service.apply.getApplyList(params);
+    this.ctx.body = apply;
+  }
+
+  // // 查询单个
+  async show() {
+    const id = this.ctx.params.id;
+    const apply = await this.ctx.service.apply.getApply(id);
+    this.ctx.body = apply;
   }
 
   // 新建接口
@@ -44,24 +63,47 @@ class ApplyController extends Controller {
     const params = this.ctx.request.body;
     const rules = {
       name: {
-        required: false,
+        required: true,
+        type: 'string'
+      },
+      applyGroupId: {
+        required: true,
         type: 'string'
       },
       oderBy: {
-        required: false,
+        required: true,
         type: 'string'
       },
-      companyId: {
-        required: false,
+      actionType: {
+        required: true,
+        type: 'string'
+      },
+      icon: {
+        required: true,
+        type: 'string'
+      },
+      action: {
+        required: true,
         type: 'string'
       }
     };
     const errors = this.app.validator.validate(rules, params);
+    // 抛出错误异常
     if (errors) {
-      throw '参数错误';
+      const messages = [];
+      // 组装错误信息
+      for (const index in errors) {
+        const message = errors[index].field + ' is ' + errors[index].message;
+        messages.push(message);
+      }
+      const err = JSON.stringify(messages);
+      this.ctx.throw(400, err);
     }
-    const applyGroup = await this.ctx.service.applyGroup.create(params);
-    this.ctx.body = applyGroup;
+    params.oderBy = parseInt(params.oderBy);
+    params.applyGroupId = parseInt(params.applyGroupId);
+    params.actionType = parseInt(params.actionType);
+    const apply = await this.ctx.service.apply.createApply(params);
+    this.ctx.body = apply;
   }
 
   // 更新接口
@@ -76,28 +118,66 @@ class ApplyController extends Controller {
         type: 'string'
       },
       name: {
-        required: false,
+        required: true,
+        type: 'string'
+      },
+      applyGroupId: {
+        required: true,
         type: 'string'
       },
       oderBy: {
-        required: false,
+        required: true,
+        type: 'string'
+      },
+      actionType: {
+        required: true,
+        type: 'string'
+      },
+      icon: {
+        required: true,
+        type: 'string'
+      },
+      action: {
+        required: true,
         type: 'string'
       }
     };
     const errors = this.app.validator.validate(rules, params);
+    // 抛出错误异常
     if (errors) {
-      throw '参数错误';
+      const messages = [];
+      // 组装错误信息
+      for (const index in errors) {
+        const message = errors[index].field + ' is ' + errors[index].message;
+        messages.push(message);
+      }
+      const err = JSON.stringify(messages);
+      this.ctx.throw(400, err);
     }
-    const applyGroup = await this.ctx.service.applyGroup.update(params);
+    params.id = parseInt(params.id);
+    params.oderBy = parseInt(params.oderBy);
+    params.applyGroupId = parseInt(params.applyGroupId);
+    params.actionType = parseInt(params.actionType);
+    const result = await this.ctx.service.apply.updateApply(params);
+    // 判断数据库操作是否成功，操作失败则抛出异常
+    if (result[0] === 0) {
+      this.ctx.throw('数据更新失败');
+    }
+    // 返回更新后的applyGroup
+    const applyGroup = await this.ctx.service.apply.getApply(params.id);
+
     this.ctx.body = applyGroup;
   }
 
   // 删除接口
   async destroy() {
     // 获取url参数
-    const id = this.ctx.params.id;
-    const applyGroup = await this.ctx.service.applyGroup.destroy(id);
-    this.ctx.body = applyGroup;
+    const id = parseInt(this.ctx.params.id);
+    const apply = await this.ctx.service.apply.destroy(id);
+    if (apply === 0) {
+      this.ctx.throw('数据删除失败');
+    }
+    this.ctx.body = null;
   }
 }
 

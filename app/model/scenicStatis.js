@@ -1,8 +1,8 @@
 'use strict';
 module.exports = (app) => {
   const { STRING, INTEGER, DATE } = app.Sequelize;
-  const ScenicStatisType = app.model.define(
-    'scenicStatisType',
+  const ScenicStatis = app.model.define(
+    'scenicStatis',
     {
       id: {
         type: INTEGER,
@@ -37,34 +37,26 @@ module.exports = (app) => {
         allowNull: false,
         field: 'sys_addTime'
       },
-      scenicId: {
+      scenicStatisTypeId: {
         type: STRING,
         allowNull: true
       },
-      parentId: {
+      modelId: {
+        type: STRING,
+        allowNull: true
+      },
+      contents: {
         type: STRING,
         allowNull: true
       },
       name: {
         type: STRING,
         allowNull: true
-      },
-      subName: {
-        type: STRING,
-        allowNull: true
-      },
-      icon: {
-        type: STRING,
-        allowNull: true
-      },
-      orderBy: {
-        type: INTEGER,
-        allowNull: true
       }
     },
     {
-      tableName: 'uf_DUBHE_ScenicStatisType'
+      tableName: 'uf_DUBHE_ScenicStatis'
     }
   );
-  return ScenicStatisType;
+  return ScenicStatis;
 };
