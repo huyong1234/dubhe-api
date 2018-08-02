@@ -1,9 +1,9 @@
 'use strict';
 module.exports = (app) => {
   const { INTEGER, STRING, DATE } = app.Sequelize;
-  const TABLBE_NAME = 'uf_DUBHE_Banner';
-  const Banner = app.model.define(
-    'banner',
+  const TABLBE_NAME = 'uf_DUBHE_ScenicStatisType';
+  const DataLatitude = app.model.define(
+    'dataLatitude',
     {
       id: {
         type: INTEGER,
@@ -22,21 +22,23 @@ module.exports = (app) => {
         allowNull: false,
         type: INTEGER
       },
-      updated_at: {
-        type: DATE,
+      sys_updateTime: {
         allowNull: false,
-        field: 'sys_updateTime'
+        type: DATE
       },
       sys_adder: {
-        type: INTEGER,
-        allowNull: false
-      },
-      created_at: {
-        type: DATE,
         allowNull: false,
-        field: 'sys_addTime'
+        type: INTEGER
       },
-      companyId: {
+      sys_addTime: {
+        allowNull: false,
+        type: DATE
+      },
+      scenicId: {
+        allowNull: false,
+        type: STRING(32)
+      },
+      parentId: {
         allowNull: false,
         type: STRING(32)
       },
@@ -44,29 +46,21 @@ module.exports = (app) => {
         allowNull: false,
         type: STRING
       },
-      imgId: {
+      subName: {
+        allowNull: true,
+        type: STRING
+      },
+      icon: {
         allowNull: false,
         type: STRING(32)
-      },
-      actionType: {
-        allowNull: false,
-        type: INTEGER
-      },
-      action: {
-        allowNull: false,
-        type: STRING(100)
-      },
-      orderBy: {
-        allowNull: false,
-        type: INTEGER
       }
     },
     {
-      // timestamps: false,
+      timestamps: false,
       freezeTableName: true,
       tableName: TABLBE_NAME
     }
   );
 
-  return Banner;
+  return DataLatitude;
 };
