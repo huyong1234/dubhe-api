@@ -1,4 +1,4 @@
-# sso-api
+# dubhe-app-admin-api
 移动管理APP后台管理API
 
 ## 快速入门
