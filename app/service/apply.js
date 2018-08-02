@@ -51,11 +51,12 @@ class ApplyService extends Service {
       where: whereSearch,
       limit: params.limit,
       offset: params.offSet,
+      // 查询字段
       attributes: ['id', 'name', 'icon', 'action', 'oderBy', 'actionType']
     });
     return apply;
   }
-  // 返回apply对象
+  // 查询对象
   async getApply(id) {
     const apply = await this.app.model.Apply.findById(id, {
       attributes: ['id', 'name', 'icon', 'action', 'oderBy', 'actionType', 'sys_addTime', 'sys_updateTime']
@@ -165,6 +166,7 @@ class ApplyService extends Service {
   // 删除
   async destroy(param) {
     const apply = await this.app.model.Apply.update(
+      // 执行删除操作，并不是物理删除，而是把sys_isDelete的值改为1
       {
         sys_isDelete: 1
       },

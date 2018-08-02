@@ -61,6 +61,7 @@ class ApplyController extends Controller {
   async create() {
     // 获取post提交的参数
     const params = this.ctx.request.body;
+    // 配置校验规则
     const rules = {
       name: {
         required: true,
@@ -87,6 +88,7 @@ class ApplyController extends Controller {
         type: 'string'
       }
     };
+    // 按规则检验参数
     const errors = this.app.validator.validate(rules, params);
     // 抛出错误异常
     if (errors) {
@@ -99,6 +101,7 @@ class ApplyController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
+    // 将string类型的参数转为int类型
     params.oderBy = parseInt(params.oderBy);
     params.applyGroupId = parseInt(params.applyGroupId);
     params.actionType = parseInt(params.actionType);
@@ -160,7 +163,7 @@ class ApplyController extends Controller {
     params.actionType = parseInt(params.actionType);
     const result = await this.ctx.service.apply.updateApply(params);
     // 判断数据库操作是否成功，操作失败则抛出异常
-    if (result[0] === 0) {
+    if (result[0] === 0) { // result[0]表示数据库影响条数
       this.ctx.throw('数据更新失败');
     }
     // 返回更新后的applyGroup

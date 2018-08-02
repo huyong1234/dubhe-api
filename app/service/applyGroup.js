@@ -131,6 +131,7 @@ class ApplyGroupService extends Service {
   // 删除
   async destroy(param) {
     const applyGroup = await this.app.model.ApplyGroup.update(
+      // 执行删除操作，并不是物理删除，而是把sys_isDelete的值改为1
       {
         sys_isDelete: 1
       },

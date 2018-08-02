@@ -3,7 +3,9 @@
 const Service = require('egg').Service;
 
 class BannerService extends Service {
+  // 查询列表
   async getBannerList(params) {
+    // 配置校验规则
     const createRule = {
       name: {
         type: 'string',
@@ -14,11 +16,11 @@ class BannerService extends Service {
         required: false
       },
       insertTimeStart: {
-        type: 'dateTime',
+        type: 'string',
         required: false
       },
       insertTimeEnd: {
-        type: 'dateTime',
+        type: 'string',
         required: false
       },
       limit: {
@@ -30,6 +32,7 @@ class BannerService extends Service {
         required: true
       }
     };
+    // 参数校验
     const errors = this.app.validator.validate(createRule, params);
     if (errors) {
       const messages = [];
@@ -40,55 +43,45 @@ class BannerService extends Service {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
-    let whereSearch;
+    // 查询条件
+    const whereSearch = {
+      sys_isDelete: 0
+    };
+    // const between = {};
+    // 根据参数组装查询条件
     if (params.name) {
-      whereSearch = {
-        sys_isDelete: 0,
-        name: params.name
-      };
+      whereSearch.name = params.name;
     }
     if (params.actionType) {
-      whereSearch = {
-        sys_isDelete: 0,
-        actionType: +params.actionType
+      whereSearch.actionType = params.actionType;
+    }
+    if (params.insertTimeStart && params.insertTimeEnd) {
+      whereSearch.sys_addTime = {
+        $gt: params.insertTimeStart,
+        $lt: params.insertTimeEnd
       };
     }
-    if (params.insertTimeStart) {
-      whereSearch = {
-        sys_isDelete: 0,
-        insertTimeStart: params.insertTimeStart
-      };
-    }
-    if (params.insertTimeEnd) {
-      whereSearch = {
-        sys_isDelete: 0,
-        insertTimeEnd: params.insertTimeEnd
-      };
-    }
+
+    // 查询数据库
     const dbBanners = await this.app.model.Banner.findAll({
       where: whereSearch,
       limit: params.limit,
       offSet: params.offSet,
-      attributes: [
-        'id',
-        'name',
-        'imgId',
-        'action',
-        'orderBy',
-        'actionType',
-        'sys_addTime'
-      ]
+      attributes: ['id', 'name', 'imgId', 'action', 'orderBy', 'actionType', 'sys_addTime']
     });
 
     return dbBanners;
   }
 
+  // 根据id查询
   async getBanner(id) {
     const Banner = await this.app.model.Banner.findById(id);
     return Banner;
   }
 
+  // 添加
   async addBanner(params) {
+    // 配置校验规则
     const createRule = {
       name: {
         type: 'string',
@@ -119,7 +112,7 @@ class BannerService extends Service {
         required: true
       }
     };
-
+    // 参数校验
     const errors = this.app.validator.validate(createRule, params);
     if (errors) {
       const messages = [];
@@ -130,11 +123,13 @@ class BannerService extends Service {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
+    // 操作数据库，新增一条记录
     const dbBanners = await this.app.model.Banner.create(params);
 
     return dbBanners;
   }
 
+  // 更新
   async updateBanner(params) {
     const createRule = {
       id: {
@@ -166,7 +161,7 @@ class BannerService extends Service {
         required: true
       }
     };
-
+    // 参数校验
     const errors = this.app.validator.validate(createRule, params);
     if (errors) {
       const messages = [];
@@ -180,14 +175,17 @@ class BannerService extends Service {
     const whereSearch = {
       id: params.id
     };
+    // 操作数据库，进行更新操作
     const dbBanners = await this.app.model.Banner.update(params, {
       where: whereSearch
     });
     return dbBanners;
   }
 
+  // 删除
   async deleteBanner(param) {
     const dbBanners = await this.app.model.Banner.update(
+      // 执行删除操作，并不是物理删除，而是把sys_isDelete的值改为1
       {
         sys_isDelete: 1
       },

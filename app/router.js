@@ -18,10 +18,13 @@ module.exports = (app) => {
   router.resources('roleApplies', '/api/RoleApplies', controller.roleApply);
   // api/RoleScenicStatis
   router.resources('roleScenicStatises', '/api/RoleScenicStatis', controller.roleScenicStatis);
-  //
+  // api/Banners
   router.resources('banners', '/api/Banners', controller.banner);
+  // api/ScenicStatisType
   router.resources('ScenicStatisTypes', '/api/ScenicStatisTypes', controller.scenicStatisType);
+  // api/DataLatitudes
   router.resources('DataLatitudes', '/api/DataLatitudes', controller.dataLatitude);
+  // api/ScenicStatis
   router.resources('ScenicStatis', '/api/ScenicStatis', controller.scenicStatis);
   // oss上传
   router.get('/api/OSSConfig/Banner', controller.oss.getBannerUploadPathAndSignature);
