@@ -25,6 +25,7 @@
   },
   "scripts": {
     "start": "egg-scripts start --daemon --title=egg-server-sso-api",
+    "start-docker": "egg-scripts start --port 80 --title=egg-server-sso-api",
     "stop": "egg-scripts stop --title=egg-server-sso-api",
     "dev": "egg-bin dev",
     "debug": "export EGG_AGENT_DEBUG_PORT=8900 && egg-bin debug --port 7002 --proxy=9989",
