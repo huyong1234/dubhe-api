@@ -14,6 +14,9 @@ class ApplyController extends Controller {
     if (params.actionType) {
       params.actionType = parseInt(params.actionType);
     }
+    if (params.id) {
+      params.id = parseInt(params.id);
+    }
     // 配置校验规则
     const rules = {
       limit: {
@@ -31,7 +34,12 @@ class ApplyController extends Controller {
       actionType: {
         required: false,
         type: 'integer'
+      },
+      id: {
+        required: false,
+        type: 'integer'
       }
+
     };
     // 参数验证
     const errors = this.app.validator.validate(rules, params);
@@ -61,6 +69,7 @@ class ApplyController extends Controller {
   async create() {
     // 获取post提交的参数
     const params = this.ctx.request.body;
+    // 配置校验规则
     const rules = {
       name: {
         required: true,
@@ -70,7 +79,7 @@ class ApplyController extends Controller {
         required: true,
         type: 'string'
       },
-      oderBy: {
+      orderBy: {
         required: true,
         type: 'string'
       },
@@ -85,8 +94,13 @@ class ApplyController extends Controller {
       action: {
         required: true,
         type: 'string'
+      },
+      sys_adder: {
+        required: true,
+        type: 'string'
       }
     };
+    // 按规则检验参数
     const errors = this.app.validator.validate(rules, params);
     // 抛出错误异常
     if (errors) {
@@ -99,7 +113,8 @@ class ApplyController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
-    params.oderBy = parseInt(params.oderBy);
+    // 将string类型的参数转为int类型
+    params.orderBy = parseInt(params.orderBy);
     params.applyGroupId = parseInt(params.applyGroupId);
     params.actionType = parseInt(params.actionType);
     const apply = await this.ctx.service.apply.createApply(params);
@@ -125,7 +140,7 @@ class ApplyController extends Controller {
         required: true,
         type: 'string'
       },
-      oderBy: {
+      orderBy: {
         required: true,
         type: 'string'
       },
@@ -140,6 +155,10 @@ class ApplyController extends Controller {
       action: {
         required: true,
         type: 'string'
+      },
+      sys_updator: {
+        type: 'string',
+        required: true
       }
     };
     const errors = this.app.validator.validate(rules, params);
@@ -155,12 +174,12 @@ class ApplyController extends Controller {
       this.ctx.throw(400, err);
     }
     params.id = parseInt(params.id);
-    params.oderBy = parseInt(params.oderBy);
+    params.orderBy = parseInt(params.orderBy);
     params.applyGroupId = parseInt(params.applyGroupId);
     params.actionType = parseInt(params.actionType);
     const result = await this.ctx.service.apply.updateApply(params);
     // 判断数据库操作是否成功，操作失败则抛出异常
-    if (result[0] === 0) {
+    if (result[0] === 0) { // result[0]表示数据库影响条数
       this.ctx.throw('数据更新失败');
     }
     // 返回更新后的applyGroup

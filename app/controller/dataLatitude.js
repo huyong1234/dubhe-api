@@ -3,8 +3,11 @@
 const Controller = require('egg').Controller;
 
 class DataLatitudeController extends Controller {
+  // 新建接口
   async create() {
+    // 获取formBody参数
     const params = this.ctx.request.body;
+    // 配置校验规则
     const createRule = {
       scenicId: {
         type: 'string',
@@ -35,7 +38,7 @@ class DataLatitudeController extends Controller {
         required: true
       }
     };
-
+    // 参数校验
     const errors = this.app.validator.validate(createRule, params);
     if (errors) {
       const messages = [];
@@ -47,9 +50,11 @@ class DataLatitudeController extends Controller {
       this.ctx.throw(400, err);
     }
     params.orderBy = parseInt(params.orderBy);
+    // 调用service
     const dataLatitude = await this.ctx.service.dataLatitude.addDataLatitude(
       params
     );
+    // 新建返回对象
     const newDataLatitude = {};
     newDataLatitude.id = dataLatitude.id;
     newDataLatitude.name = dataLatitude.name;
@@ -57,8 +62,11 @@ class DataLatitudeController extends Controller {
     this.ctx.body = newDataLatitude;
   }
 
+  // 更新接口
   async update() {
+    // 获取url参数
     const id = this.ctx.params.id;
+    // 获取formBody参数
     const params = this.ctx.request.body;
     params.id = id;
     const createRule = {
@@ -83,7 +91,7 @@ class DataLatitudeController extends Controller {
         required: true
       }
     };
-
+    // 参数校验
     const errors = this.app.validator.validate(createRule, params);
     if (errors) {
       const messages = [];
@@ -95,15 +103,18 @@ class DataLatitudeController extends Controller {
       this.ctx.throw(400, err);
     }
     params.orderBy = parseInt(params.orderBy);
+    // 调用service,进行更新操作
     const dataLatitudeResult = await this.ctx.service.dataLatitude.updateDataLatitude(
       params
     );
     if (dataLatitudeResult[0] === 0) {
       this.ctx.throw('数据更新失败');
     }
+    // 调用service，获取更新后的数据
     const dataLatitude = await this.ctx.service.dataLatitude.getDataLatitude(
       params.id
     );
+    // 新建返回对象
     const newDataLatitude = {};
     newDataLatitude.id = dataLatitude.id;
     newDataLatitude.name = dataLatitude.name;
@@ -111,6 +122,7 @@ class DataLatitudeController extends Controller {
     this.ctx.body = newDataLatitude;
   }
 
+  // 删除接口
   async destroy() {
     // 获取url参数
     const id = parseInt(this.ctx.params.id);

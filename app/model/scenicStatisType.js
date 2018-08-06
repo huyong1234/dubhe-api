@@ -12,7 +12,7 @@ module.exports = (app) => {
       },
       requestId: {
         type: INTEGER,
-        allowNull: false
+        allowNull: true
       },
       sys_isDelete: {
         type: INTEGER,
@@ -21,7 +21,7 @@ module.exports = (app) => {
       },
       sys_updator: {
         type: INTEGER,
-        allowNull: false
+        allowNull: true
       },
       updated_at: {
         type: DATE,
@@ -30,7 +30,7 @@ module.exports = (app) => {
       },
       sys_adder: {
         type: INTEGER,
-        allowNull: false
+        allowNull: true
       },
       created_at: {
         type: DATE,
@@ -51,7 +51,7 @@ module.exports = (app) => {
       },
       subName: {
         type: STRING,
-        allowNull: false
+        allowNull: true
       },
       icon: {
         type: STRING,

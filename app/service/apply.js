@@ -22,6 +22,10 @@ class ApplyService extends Service {
       actionType: {
         required: false,
         type: 'integer'
+      },
+      id: {
+        required: false,
+        type: 'integer'
       }
     };
     // 参数验证
@@ -44,21 +48,25 @@ class ApplyService extends Service {
     if (params.name) {
       whereSearch.name = params.name;
     }
-    if (params.actionType) {
+    if (params.actionType || params.actionType === 0) {
       whereSearch.actionType = params.actionType;
+    }
+    if (params.id) {
+      whereSearch.applyGroupId = params.id;
     }
     const apply = await this.app.model.Apply.findAll({
       where: whereSearch,
       limit: params.limit,
       offset: params.offSet,
-      attributes: ['id', 'name', 'icon', 'action', 'oderBy', 'actionType']
+      // 查询字段
+      attributes: ['id', 'name', 'icon', 'action', 'orderBy', 'actionType']
     });
     return apply;
   }
-  // 返回apply对象
+  // 查询对象
   async getApply(id) {
     const apply = await this.app.model.Apply.findById(id, {
-      attributes: ['id', 'name', 'icon', 'action', 'oderBy', 'actionType', 'sys_addTime', 'sys_updateTime']
+      attributes: ['id', 'name', 'icon', 'action', 'orderBy', 'actionType', 'sys_addTime', 'sys_updateTime']
     });
     return apply;
   }
@@ -74,7 +82,7 @@ class ApplyService extends Service {
         required: true,
         type: 'int'
       },
-      oderBy: {
+      orderBy: {
         required: true,
         type: 'int'
       },
@@ -87,6 +95,10 @@ class ApplyService extends Service {
         type: 'string'
       },
       action: {
+        required: true,
+        type: 'string'
+      },
+      sys_adder: {
         required: true,
         type: 'string'
       }
@@ -103,7 +115,7 @@ class ApplyService extends Service {
       this.ctx.throw(err);
     }
     const applyGroup = await this.app.model.Apply.create(params, {
-      attributes: ['id', 'name', 'icon', 'action', 'oderBy', 'actionType']
+      attributes: ['id', 'name', 'icon', 'action', 'orderBy', 'actionType']
     });
     return applyGroup;
   }
@@ -122,7 +134,7 @@ class ApplyService extends Service {
         required: true,
         type: 'int'
       },
-      oderBy: {
+      orderBy: {
         required: true,
         type: 'int'
       },
@@ -137,6 +149,10 @@ class ApplyService extends Service {
       action: {
         required: true,
         type: 'string'
+      },
+      sys_updator: {
+        type: 'string',
+        required: true
       }
     };
     const errors = this.app.validator.validate(rules, params);
@@ -165,6 +181,7 @@ class ApplyService extends Service {
   // 删除
   async destroy(param) {
     const apply = await this.app.model.Apply.update(
+      // 执行删除操作，并不是物理删除，而是把sys_isDelete的值改为1
       {
         sys_isDelete: 1
       },

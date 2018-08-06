@@ -12,18 +12,19 @@ module.exports = (app) => {
       },
       requestId: {
         type: INTEGER,
-        allowNull: false
+        allowNull: true
       },
       sys_updator: {
-        allowNull: false,
+        allowNull: true,
         type: INTEGER
       },
       sys_isDelete: {
         allowNull: false,
-        type: INTEGER
+        type: INTEGER,
+        defaultValue: 0
       },
       sys_adder: {
-        allowNull: false,
+        allowNull: true,
         type: INTEGER
       },
       // 这个字段在数据库是string 类型
@@ -57,8 +58,7 @@ module.exports = (app) => {
         allowNull: false,
         field: 'sys_updateTime'
       },
-      // 这个字段数据库里写错了，应该是orderBy
-      oderBy: {
+      orderBy: {
         type: INTEGER
       }
     },

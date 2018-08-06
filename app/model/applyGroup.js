@@ -18,22 +18,26 @@ module.exports = (app) => {
         allowNull: false,
         type: STRING(20)
       },
-      // 这个字段数据库里写错了，应该是orderBy
-      oderBy: {
+      orderBy: {
         allowNull: false,
         type: INTEGER
       },
+      sys_adder: {
+        type: INTEGER,
+        allowNull: true
+      },
       sys_updator: {
-        allowNull: false,
+        allowNull: true,
         type: INTEGER
       },
       requestId: {
-        allowNull: false,
+        allowNull: true,
         type: INTEGER
       },
       sys_isDelete: {
         allowNull: false,
-        type: INTEGER
+        type: INTEGER,
+        defaultValue: 0
       },
       created_at: {
         type: DATE,

@@ -18,7 +18,8 @@ module.exports = (appInfo) => {
     host: 'localhost',
     port: '1433',
     username: 'OAAdmin',
-    password: 'w9E5F1Z9I6r1AHNA'
+    password: 'w9E5F1Z9I6r1AHNA',
+    timezone: '+08:00' // 设置为东八区时间，默认为零时区
   };
   // Aliyun OSS Config
   config.aliyunOSS = {

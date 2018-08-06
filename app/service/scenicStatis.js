@@ -26,6 +26,7 @@ class ScenicStatisService extends Service {
     const whereSearch = {
       sys_isDelete: 0
     };
+    // 根据参数组装查询条件
     if (param.id) {
       whereSearch.scenicStatisTypeId = param.id;
     }
@@ -61,12 +62,12 @@ class ScenicStatisService extends Service {
         required: true
       }
     };
-
+    // 参数校验
     const errors = this.app.validator.validate(createRule, params);
     if (errors) {
       const messages = [];
       for (const index in errors) {
-        const message = errors[index].field + 'is' + errors[index].message;
+        const message = errors[index].field + ' is ' + errors[index].message;
         messages.push(message);
       }
       const err = JSON.stringify(messages);
