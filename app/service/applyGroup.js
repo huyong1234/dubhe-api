@@ -44,7 +44,7 @@ class ApplyGroupService extends Service {
       where: whereSearch,
       limit: params.limit,
       offset: params.offSet,
-      attributes: ['id', 'name', 'oderBy']
+      attributes: ['id', 'name', 'orderBy']
     });
     return applyGroup;
   }
@@ -52,7 +52,7 @@ class ApplyGroupService extends Service {
   // 返回applyGroup对象
   async getApplyGroup(id) {
     const applyGroup = await this.app.model.ApplyGroup.findById(id, {
-      attributes: ['id', 'name', 'oderBy', 'sys_addTime', 'sys_updateTime']
+      attributes: ['id', 'name', 'orderBy', 'sys_addTime', 'sys_updateTime']
     });
     return applyGroup;
   }
@@ -64,11 +64,15 @@ class ApplyGroupService extends Service {
         required: true,
         type: 'string'
       },
-      oderBy: {
+      orderBy: {
         required: true,
         type: 'int'
       },
       companyId: {
+        required: true,
+        type: 'int'
+      },
+      sys_adder: {
         required: true,
         type: 'string'
       }
@@ -84,9 +88,7 @@ class ApplyGroupService extends Service {
       const err = JSON.stringify(messages);
       this.ctx.throw(err);
     }
-    const applyGroup = await this.app.model.ApplyGroup.create(params, {
-      attributes: ['id', 'name', 'oderBy']
-    });
+    const applyGroup = await this.app.model.ApplyGroup.create(params);
     return applyGroup;
   }
   // 修改
@@ -100,9 +102,13 @@ class ApplyGroupService extends Service {
         required: true,
         type: 'string'
       },
-      oderBy: {
+      orderBy: {
         required: true,
         type: 'int'
+      },
+      sys_updator: {
+        type: 'string',
+        required: true
       }
     };
     const errors = this.app.validator.validate(rules, params);

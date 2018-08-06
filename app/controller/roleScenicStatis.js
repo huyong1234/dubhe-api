@@ -19,8 +19,8 @@ class RoleScenicStatisController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
-    const roleId = parseInt(param.id);
-    const roleApply = await this.ctx.service.roleScenicStatis.getRoleScenicStatisList(roleId);
+    const userId = parseInt(param.id);
+    const roleApply = await this.ctx.service.roleScenicStatis.getRoleScenicStatisList(userId);
     this.ctx.body = roleApply;
   }
 
@@ -30,10 +30,6 @@ class RoleScenicStatisController extends Controller {
     const params = this.ctx.request.body;
     const rules = {
       userId: {
-        required: true,
-        type: 'string'
-      },
-      roleId: {
         required: true,
         type: 'string'
       },
@@ -59,7 +55,6 @@ class RoleScenicStatisController extends Controller {
       this.ctx.throw(400, err);
     }
     params.userId = parseInt(params.userId);
-    params.roleId = parseInt(params.roleId);
     params.scenicStatisId = parseInt(params.scenicStatisId);
     params.orderBy = parseInt(params.orderBy);
     const roleScenicStatis = await this.ctx.service.roleScenicStatis.createRoleScenicStatis(params);

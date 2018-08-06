@@ -1,8 +1,9 @@
 'use strict';
 module.exports = (app) => {
   const { STRING, INTEGER, DATE } = app.Sequelize;
-  const RoleScenicStatis = app.model.define(
-    'roleScenicStatis',
+
+  const RoleUser = app.model.define(
+    'roleUser',
     {
       id: {
         type: INTEGER,
@@ -37,22 +38,18 @@ module.exports = (app) => {
         allowNull: false,
         field: 'sys_addTime'
       },
-      roleId: {
-        type: STRING,
-        allowNull: false
-      },
-      scenicStatisId: {
-        type: STRING,
-        allowNull: false
-      },
-      orderBy: {
+      userId: {
         type: INTEGER,
-        allowNull: false
+        allowNull: true
+      },
+      roleId: {
+        type: INTEGER,
+        allowNull: true
       }
     },
     {
-      tableName: 'uf_DUBHE_R_RoleScenicStatis'
+      tableName: 'uf_DUBHE_R_RoleUser'
     }
   );
-  return RoleScenicStatis;
+  return RoleUser;
 };

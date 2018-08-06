@@ -59,11 +59,15 @@ class ApplyGroupController extends Controller {
         required: true,
         type: 'string'
       },
-      oderBy: {
+      orderBy: {
         required: true,
         type: 'string'
       },
       companyId: {
+        required: true,
+        type: 'string'
+      },
+      sys_adder: {
         required: true,
         type: 'string'
       }
@@ -80,9 +84,16 @@ class ApplyGroupController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
-    params.oderBy = parseInt(params.oderBy);
+    params.orderBy = parseInt(params.orderBy);
+    params.companyId = parseInt(params.companyId);
     const applyGroup = await this.ctx.service.applyGroup.createApplyGroup(params);
-    this.ctx.body = applyGroup;
+    // 创建返回对象
+    const result = {};
+    result.id = applyGroup.id;
+    result.name = applyGroup.name;
+    result.orderBy = applyGroup.orderBy;
+    result.sys_addTime = applyGroup.created_at;
+    this.ctx.body = result;
   }
 
   // 更新接口
@@ -92,7 +103,7 @@ class ApplyGroupController extends Controller {
     const params = this.ctx.request.body;
     params.id = id;
     params.id = parseInt(params.id);
-    params.oderBy = parseInt(params.oderBy);
+    params.orderBy = parseInt(params.orderBy);
     const rules = {
       id: {
         required: true,
@@ -102,9 +113,13 @@ class ApplyGroupController extends Controller {
         required: true,
         type: 'string'
       },
-      oderBy: {
+      orderBy: {
         required: true,
         type: 'integer'
+      },
+      sys_updator: {
+        type: 'string',
+        required: true
       }
     };
     const errors = this.app.validator.validate(rules, params);

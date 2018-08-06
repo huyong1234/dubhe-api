@@ -13,15 +13,24 @@ class RoleApplyService extends Service {
       this.ctx.throw('id should be an INTEGER');
     }
     // 查询条件
-    const whereSearch = {
+    const whereSearchRoleUser = {
       sys_isDelete: 0,
-      roleId: id
+      userId: id
     };
-    // 根据roleId查询角色信息
-    const role = await this.app.model.Role.findById(id);
+    // 根据用户id，查询角色id
+    const roleUser = await this.app.model.RoleUser.findAll({
+      where: whereSearchRoleUser,
+      attributes: ['userId', 'roleId']
+    });
+    const roleid = roleUser[0].roleId;
+    // 查询条件
+    const whereSearchRoleApply = {
+      sys_isDelete: 0,
+      roleId: roleid
+    };
     // 按roleId查询RoleApply表
     const roleApplies = await this.app.model.RoleApply.findAll({
-      where: whereSearch,
+      where: whereSearchRoleApply,
       attributes: ['applyId', 'roleId', 'orderBy']
     });
 
@@ -31,7 +40,6 @@ class RoleApplyService extends Service {
       const roleApply = {};
       roleApply.applyId = roleApplies[o].applyId;
       roleApply.roleId = roleApplies[o].roleId;
-      roleApply.roleName = role.name;
       roleApply.orderBy = roleApplies[o].orderBy;
       // 根据applyId查询apply表
       const apply = await this.app.model.Apply.findById(roleApplies[o].applyId, {
@@ -42,10 +50,10 @@ class RoleApplyService extends Service {
       roleApply.applyGroupId = apply.applyGroupId;
       // 根据applyGroupId查询applyGroup表
       const applyGroup = await this.app.model.ApplyGroup.findById(apply.applyGroupId, {
-        attributes: ['id', 'name', 'oderBy']
+        attributes: ['id', 'name', 'orderBy']
       });
       roleApply.applyGroupName = applyGroup.name;
-      roleApply.applyGroupOrderBy = applyGroup.oderBy;
+      roleApply.applyGroupOrderBy = applyGroup.orderBy;
 
       // 将roleApply对象放入roleApplyList
       roleApplyList.push(roleApply);
@@ -59,10 +67,6 @@ class RoleApplyService extends Service {
   async createRoleApply(params) {
     const rules = {
       userId: {
-        required: true,
-        type: 'int'
-      },
-      roleId: {
         required: true,
         type: 'int'
       },
@@ -94,11 +98,19 @@ class RoleApplyService extends Service {
       const err = JSON.stringify(messages);
       this.ctx.throw(err);
     }
+    const whereSearch = {
+      userId: params.userId
+    };
+    // 根据用户id，查询角色id
+    const roleUser = await this.app.model.RoleUser.findAll({
+      where: whereSearch,
+      attributes: ['userId', 'roleId']
+    });
 
     // 组装新建roleApply的参数
     const applyParam = {};
     applyParam.sys_adder = params.userId;
-    applyParam.roleId = params.roleId;
+    applyParam.roleId = roleUser[0].roleId;
     applyParam.applyId = params.applyId;
     applyParam.orderBy = params.applyOrderBy;
 
@@ -108,7 +120,7 @@ class RoleApplyService extends Service {
 
     // 创建返回对象
     const result = {};
-    result.roleId = params.roleId;
+    result.roleId = roleApply.roleId;
     result.applyId = roleApply.applyId;
     result.applyOrderBy = roleApply.orderBy;
     result.applyGroupId = params.applyGroupId;

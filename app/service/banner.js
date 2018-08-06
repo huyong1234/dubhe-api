@@ -52,7 +52,7 @@ class BannerService extends Service {
     if (params.name) {
       whereSearch.name = params.name;
     }
-    if (params.actionType) {
+    if (params.actionType || params.actionType === 0) {
       whereSearch.actionType = params.actionType;
     }
     if (params.insertTimeStart && params.insertTimeEnd) {
@@ -87,12 +87,12 @@ class BannerService extends Service {
         type: 'string',
         required: true
       },
-      sys_updator: {
+      sys_adder: {
         type: 'string',
         required: true
       },
       companyId: {
-        type: 'string',
+        type: 'int',
         required: true
       },
       imgId: {
@@ -140,8 +140,12 @@ class BannerService extends Service {
         type: 'string',
         required: true
       },
-      companyId: {
+      sys_updator: {
         type: 'string',
+        required: true
+      },
+      companyId: {
+        type: 'int',
         required: true
       },
       imgId: {

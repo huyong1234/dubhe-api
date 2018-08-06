@@ -3,6 +3,7 @@
 const Service = require('egg').Service;
 
 class ScenicStatisTypeService extends Service {
+  // 查询列表
   async getScenicStatisTypeList(params) {
     const createRule = {
       name: {
@@ -45,6 +46,7 @@ class ScenicStatisTypeService extends Service {
     return dbScenicStatisTypes;
   }
 
+  // 查询单个
   async getScenicStatisType(id) {
     const dbScenicStatisTypes = await this.app.model.ScenicStatisType.findById(
       id
@@ -52,6 +54,7 @@ class ScenicStatisTypeService extends Service {
     return dbScenicStatisTypes;
   }
 
+  // 新建
   async addScenicStatisType(params) {
     const createRule = {
       scenicId: {
@@ -72,11 +75,15 @@ class ScenicStatisTypeService extends Service {
       },
       subName: {
         type: 'string',
-        required: true
+        required: false
       },
       icon: {
         type: 'string',
         required: true
+      },
+      sys_adder: {
+        required: true,
+        type: 'string'
       }
     };
 
@@ -96,6 +103,7 @@ class ScenicStatisTypeService extends Service {
     return dbScenicStatisTypes;
   }
 
+  // 修改
   async updateScenicStatisType(params) {
     const createRule = {
       id: {
@@ -115,6 +123,10 @@ class ScenicStatisTypeService extends Service {
         required: true
       },
       subName: {
+        type: 'string',
+        required: false
+      },
+      sys_updator: {
         type: 'string',
         required: true
       }
@@ -142,6 +154,7 @@ class ScenicStatisTypeService extends Service {
     return dbScenicStatisTypes;
   }
 
+  // 删除
   async deleteScenicStatisType(param) {
     const dbScenicStatisTypes = await this.app.model.ScenicStatisType.update(
       {

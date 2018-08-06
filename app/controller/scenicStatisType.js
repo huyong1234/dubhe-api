@@ -83,7 +83,11 @@ class ScenicStatisTypeController extends Controller {
       },
       subName: {
         type: 'string',
-        required: true
+        required: false
+      },
+      sys_adder: {
+        required: true,
+        type: 'string'
       }
     };
 
@@ -134,6 +138,10 @@ class ScenicStatisTypeController extends Controller {
         required: true
       },
       subName: {
+        type: 'string',
+        required: false
+      },
+      sys_updator: {
         type: 'string',
         required: true
       }

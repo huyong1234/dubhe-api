@@ -13,15 +13,24 @@ class RoleScenicStatisService extends Service {
       this.ctx.throw('id should be an INTEGER');
     }
     // 查询条件
-    const whereSearch = {
+    const whereSearchRoleUser = {
       sys_isDelete: 0,
-      roleId: id
+      userId: id
     };
-    // 根据roleId查询角色信息
-    const role = await this.app.model.Role.findById(id);
+    // 根据用户id，查询角色id
+    const roleUser = await this.app.model.RoleUser.findAll({
+      where: whereSearchRoleUser,
+      attributes: ['userId', 'roleId']
+    });
+    const roleid = roleUser[0].roleId;
+    // 查询条件
+    const whereSearchRoleScenicStatis = {
+      sys_isDelete: 0,
+      roleId: roleid
+    };
     // 按roleId查询roleScenicStatis表
     const roleScenicStatises = await this.app.model.RoleScenicStatis.findAll({
-      where: whereSearch,
+      where: whereSearchRoleScenicStatis,
       attributes: ['scenicStatisId', 'roleId', 'orderBy']
     });
 
@@ -31,7 +40,6 @@ class RoleScenicStatisService extends Service {
       const roleScenicStatis = {};
       roleScenicStatis.scenicStatisId = roleScenicStatises[o].scenicStatisId;
       roleScenicStatis.roleId = roleScenicStatises[o].roleId;
-      roleScenicStatis.roleName = role.name;
       roleScenicStatis.orderBy = roleScenicStatises[o].orderBy;
       // 根据scenicStatisId查询ScenicStatis表
       const scenicStatis = await this.app.model.ScenicStatis.findById(roleScenicStatises[o].scenicStatisId, {
@@ -70,10 +78,6 @@ class RoleScenicStatisService extends Service {
         required: true,
         type: 'int'
       },
-      roleId: {
-        required: true,
-        type: 'int'
-      },
       scenicStatisId: {
         required: true,
         type: 'int'
@@ -94,22 +98,28 @@ class RoleScenicStatisService extends Service {
       const err = JSON.stringify(messages);
       this.ctx.throw(err);
     }
+    const whereSearch = {
+      userId: params.userId
+    };
+    // 根据用户id，查询角色id
+    const roleUser = await this.app.model.RoleUser.findAll({
+      where: whereSearch,
+      attributes: ['userId', 'roleId']
+    });
     // 组装新建roleScenicStatis的参数
     const applyParam = {};
     applyParam.sys_adder = params.userId;
-    applyParam.roleId = params.roleId;
-    applyParam.applyId = params.applyId;
-    applyParam.orderBy = params.applyOrderBy;
+    applyParam.roleId = roleUser[0].roleId;
+    applyParam.scenicStatisId = params.scenicStatisId;
+    applyParam.orderBy = params.orderBy;
     // 新增一条roleScenicStatis数据
-    const roleScenicStatis = await this.app.model.RoleScenicStatis.create(params);
-
+    const roleScenicStatis = await this.app.model.RoleScenicStatis.create(applyParam);
 
     // 组装返回信息
     const result = {};
-    result.roleId = params.roleId;
+    result.roleId = roleScenicStatis.roleId;
     result.scenicStatisId = roleScenicStatis.scenicStatisId;
     result.scenicStatisOrderBy = roleScenicStatis.orderBy;
-
 
     return result;
   }

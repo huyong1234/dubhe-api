@@ -81,7 +81,7 @@ class BannerController extends Controller {
         type: 'string',
         required: true
       },
-      sys_updator: {
+      sys_adder: {
         type: 'string',
         required: true
       },
@@ -119,6 +119,7 @@ class BannerController extends Controller {
     }
     // 将string转为int类型
     params.orderBy = parseInt(params.orderBy);
+    params.companyId = parseInt(params.companyId);
     params.actionType = parseInt(params.actionType);
     const banner = await this.ctx.service.banner.addBanner(params);
     // 新建返回对象
@@ -146,6 +147,10 @@ class BannerController extends Controller {
         required: true
       },
       name: {
+        type: 'string',
+        required: true
+      },
+      sys_updator: {
         type: 'string',
         required: true
       },
@@ -183,6 +188,7 @@ class BannerController extends Controller {
     }
     params.id = parseInt(params.id);
     params.orderBy = parseInt(params.orderBy);
+    params.companyId = parseInt(params.companyId);
     params.actionType = parseInt(params.actionType);
     const bannerResult = await this.ctx.service.banner.updateBanner(params);
     if (bannerResult[0] === 0) {

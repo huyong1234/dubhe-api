@@ -14,6 +14,9 @@ class ApplyController extends Controller {
     if (params.actionType) {
       params.actionType = parseInt(params.actionType);
     }
+    if (params.id) {
+      params.id = parseInt(params.id);
+    }
     // 配置校验规则
     const rules = {
       limit: {
@@ -31,7 +34,12 @@ class ApplyController extends Controller {
       actionType: {
         required: false,
         type: 'integer'
+      },
+      id: {
+        required: false,
+        type: 'integer'
       }
+
     };
     // 参数验证
     const errors = this.app.validator.validate(rules, params);
@@ -71,7 +79,7 @@ class ApplyController extends Controller {
         required: true,
         type: 'string'
       },
-      oderBy: {
+      orderBy: {
         required: true,
         type: 'string'
       },
@@ -84,6 +92,10 @@ class ApplyController extends Controller {
         type: 'string'
       },
       action: {
+        required: true,
+        type: 'string'
+      },
+      sys_adder: {
         required: true,
         type: 'string'
       }
@@ -102,7 +114,7 @@ class ApplyController extends Controller {
       this.ctx.throw(400, err);
     }
     // 将string类型的参数转为int类型
-    params.oderBy = parseInt(params.oderBy);
+    params.orderBy = parseInt(params.orderBy);
     params.applyGroupId = parseInt(params.applyGroupId);
     params.actionType = parseInt(params.actionType);
     const apply = await this.ctx.service.apply.createApply(params);
@@ -128,7 +140,7 @@ class ApplyController extends Controller {
         required: true,
         type: 'string'
       },
-      oderBy: {
+      orderBy: {
         required: true,
         type: 'string'
       },
@@ -143,6 +155,10 @@ class ApplyController extends Controller {
       action: {
         required: true,
         type: 'string'
+      },
+      sys_updator: {
+        type: 'string',
+        required: true
       }
     };
     const errors = this.app.validator.validate(rules, params);
@@ -158,7 +174,7 @@ class ApplyController extends Controller {
       this.ctx.throw(400, err);
     }
     params.id = parseInt(params.id);
-    params.oderBy = parseInt(params.oderBy);
+    params.orderBy = parseInt(params.orderBy);
     params.applyGroupId = parseInt(params.applyGroupId);
     params.actionType = parseInt(params.actionType);
     const result = await this.ctx.service.apply.updateApply(params);

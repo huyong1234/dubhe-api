@@ -11,16 +11,13 @@ module.exports = (app) => {
         autoIncrement: true // 设置自增
       },
       requestId: {
-        allowNull: false,
+        allowNull: true,
         type: INTEGER
       },
       sys_isDelete: {
         allowNull: false,
-        type: INTEGER
-      },
-      sys_updator: {
-        allowNull: false,
-        type: INTEGER
+        type: INTEGER,
+        defaultValue: 0
       },
       updated_at: {
         type: DATE,
