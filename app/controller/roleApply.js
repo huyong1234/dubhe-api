@@ -20,8 +20,8 @@ class RoleApplyController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
-    const userId = parseInt(param.id);
-    const roleApply = await this.ctx.service.roleApply.getRoleApplyList(userId);
+    const roleId = parseInt(param.id);
+    const roleApply = await this.ctx.service.roleApply.getRoleApplyList(roleId);
     this.ctx.body = roleApply;
   }
 
@@ -30,7 +30,7 @@ class RoleApplyController extends Controller {
     // 获取post提交的参数
     const params = this.ctx.request.body;
     const rules = {
-      userId: {
+      roleId: {
         required: true,
         type: 'string'
       },
@@ -63,7 +63,7 @@ class RoleApplyController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
-    params.userId = parseInt(params.userId);
+    params.roleId = parseInt(params.roleId);
     params.applyId = parseInt(params.applyId);
     params.applyOrderBy = parseInt(params.applyOrderBy);
     params.applyGroupId = parseInt(params.applyGroupId);

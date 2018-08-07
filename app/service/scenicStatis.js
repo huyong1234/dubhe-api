@@ -3,6 +3,7 @@
 const Service = require('egg').Service;
 
 class ScenicStatisService extends Service {
+  // 查询列表
   async getScenicStatisList(param) {
     const createRule = {
       id: {
@@ -32,31 +33,34 @@ class ScenicStatisService extends Service {
     }
     const dbScenicStatis = await this.app.model.ScenicStatis.findAll({
       where: whereSearch,
-      attributes: ['id', 'contents', 'name', 'modelId']
+      attributes: ['id', 'contents', 'name', 'modelId', 'orderBy']
     });
 
     return dbScenicStatis;
   }
 
+  // 查询单个
   async getScenicStatis(id) {
-    const ScenicStatis = await this.app.model.ScenicStatis.findById(id);
+    const ScenicStatis = await this.app.model.ScenicStatis.findById(id, {
+      attributes: ['id', 'contents', 'name', 'modelId', 'orderBy']
+    });
     return ScenicStatis;
   }
 
   async updateScenicStatis(params) {
     const createRule = {
       id: {
-        type: 'string',
+        type: 'int',
         required: true
       },
       name: {
         type: 'string',
         required: true
       },
-      // orderBy: {
-      //   type: 'int',
-      //   required: true
-      // },
+      orderBy: {
+        type: 'int',
+        required: true
+      },
       modelId: {
         type: 'string',
         required: true

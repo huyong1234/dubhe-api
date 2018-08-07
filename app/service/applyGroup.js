@@ -9,11 +9,11 @@ class ApplyGroupService extends Service {
     const rules = {
       limit: {
         required: true,
-        type: 'integer'
+        type: 'int'
       },
       offSet: {
         required: true,
-        type: 'integer'
+        type: 'int'
       },
       name: {
         required: false,

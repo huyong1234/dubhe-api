@@ -9,11 +9,11 @@ class ApplyService extends Service {
     const rules = {
       limit: {
         required: true,
-        type: 'integer'
+        type: 'int'
       },
       offSet: {
         required: true,
-        type: 'integer'
+        type: 'int'
       },
       name: {
         required: false,
@@ -21,11 +21,11 @@ class ApplyService extends Service {
       },
       actionType: {
         required: false,
-        type: 'integer'
+        type: 'int'
       },
       id: {
         required: false,
-        type: 'integer'
+        type: 'int'
       }
     };
     // 参数验证

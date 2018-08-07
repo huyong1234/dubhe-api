@@ -38,14 +38,7 @@ class ScenicStatisController extends Controller {
     const id = this.ctx.params.id;
     // 调用service,根据id查询
     const scenicStatis = await this.ctx.service.scenicStatis.getScenicStatis(id);
-    // 新建返回对象
-    const newScenicStatis = {};
-    newScenicStatis.id = scenicStatis.id;
-    newScenicStatis.contents = scenicStatis.contents;
-    newScenicStatis.name = scenicStatis.name;
-    // newScenicStatis.orderBy = scenicStatis.orderBy;
-    newScenicStatis.modelId = scenicStatis.modelId;
-    this.ctx.body = newScenicStatis;
+    this.ctx.body = scenicStatis;
   }
 
   // 更新接口
@@ -64,10 +57,10 @@ class ScenicStatisController extends Controller {
         type: 'string',
         required: true
       },
-      // orderBy: {
-      //   type: 'string',
-      //   required: true
-      // },
+      orderBy: {
+        type: 'string',
+        required: true
+      },
       modelId: {
         type: 'string',
         required: true
@@ -84,7 +77,8 @@ class ScenicStatisController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
-    params.oderBy = parseInt(params.oderBy);
+    params.id = parseInt(params.id);
+    params.orderBy = parseInt(params.orderBy);
     // 调用service，更新数据
     const result = await this.ctx.service.scenicStatis.updateScenicStatis(params);
     if (result[0] === 0) {
@@ -97,7 +91,7 @@ class ScenicStatisController extends Controller {
     newScenicStatis.id = scenicStatis.id;
     newScenicStatis.contents = scenicStatis.contents;
     newScenicStatis.name = scenicStatis.name;
-    // newScenicStatis.orderBy = scenicStatis.orderBy;
+    newScenicStatis.orderBy = scenicStatis.orderBy;
     newScenicStatis.modelId = scenicStatis.modelId;
     this.ctx.body = newScenicStatis;
   }

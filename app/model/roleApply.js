@@ -38,11 +38,11 @@ module.exports = (app) => {
         field: 'sys_addTime'
       },
       applyId: {
-        type: STRING,
+        type: INTEGER,
         allowNull: false
       },
       roleId: {
-        type: STRING,
+        type: INTEGER,
         allowNull: false
       },
       orderBy: {

@@ -39,11 +39,11 @@ module.exports = (app) => {
       },
       scenicId: {
         allowNull: false,
-        type: STRING(32)
+        type: INTEGER
       },
       parentId: {
         allowNull: false,
-        type: STRING(32)
+        type: INTEGER
       },
       name: {
         allowNull: false,
