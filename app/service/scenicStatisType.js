@@ -29,10 +29,12 @@ class ScenicStatisTypeService extends Service {
       const err = JSON.stringify(errors);
       this.ctx.throw(400, err);
     }
-    let whereSearch;
+    let whereSearch = {
+      parentId: 0,
+      sys_isDelete: 0
+    };
     if (params.name) {
       whereSearch = {
-        sys_isDelete: 0,
         name: params.name
       };
     }

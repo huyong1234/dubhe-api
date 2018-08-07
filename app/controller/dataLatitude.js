@@ -3,6 +3,12 @@
 const Controller = require('egg').Controller;
 
 class DataLatitudeController extends Controller {
+  // 查询接口
+  async show() {
+    const id = this.ctx.params.id;
+    const dataLatitude = await this.ctx.service.dataLatitude.getDataLatitudes(id);
+    this.ctx.body = dataLatitude;
+  }
   // 新建接口
   async create() {
     // 获取formBody参数
@@ -27,13 +33,9 @@ class DataLatitudeController extends Controller {
       },
       subName: {
         type: 'string',
-        required: true
+        required: false
       },
-      icon: {
-        type: 'string',
-        required: true
-      },
-      sys_addTime: {
+      sys_adder: {
         type: 'string',
         required: true
       }
@@ -50,10 +52,9 @@ class DataLatitudeController extends Controller {
       this.ctx.throw(400, err);
     }
     params.orderBy = parseInt(params.orderBy);
+    params.sys_adder = parseInt(params.sys_adder);
     // 调用service
-    const dataLatitude = await this.ctx.service.dataLatitude.addDataLatitude(
-      params
-    );
+    const dataLatitude = await this.ctx.service.dataLatitude.addDataLatitude(params);
     // 新建返回对象
     const newDataLatitude = {};
     newDataLatitude.id = dataLatitude.id;
@@ -82,11 +83,11 @@ class DataLatitudeController extends Controller {
         type: 'string',
         required: true
       },
-      icon: {
-        type: 'string',
-        required: true
-      },
       subName: {
+        type: 'string',
+        required: false
+      },
+      sys_updator: {
         type: 'string',
         required: true
       }
@@ -102,18 +103,15 @@ class DataLatitudeController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
+    params.id = parseInt(params.id);
     params.orderBy = parseInt(params.orderBy);
     // 调用service,进行更新操作
-    const dataLatitudeResult = await this.ctx.service.dataLatitude.updateDataLatitude(
-      params
-    );
+    const dataLatitudeResult = await this.ctx.service.dataLatitude.updateDataLatitude(params);
     if (dataLatitudeResult[0] === 0) {
       this.ctx.throw('数据更新失败');
     }
     // 调用service，获取更新后的数据
-    const dataLatitude = await this.ctx.service.dataLatitude.getDataLatitude(
-      params.id
-    );
+    const dataLatitude = await this.ctx.service.dataLatitude.getDataLatitude(params.id);
     // 新建返回对象
     const newDataLatitude = {};
     newDataLatitude.id = dataLatitude.id;

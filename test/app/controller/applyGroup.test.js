@@ -12,23 +12,22 @@ describe('test/app/controller/applyGroup.test.js', () => {
   // 新建applyGroup接口
 
   let testobj = {};
+  testobj.name = '测试管理123';
+  testobj.orderBy = 10;
+  testobj.companyId = 1;
   it('should POST /api/ApplyGroups', () => {
     return app
       .httpRequest()
       .post('/api/ApplyGroups')
       .type('form')
-      .send({
-        name: '测试管理345',
-        oderBy: 10,
-        companyId: '1'
-      })
+      .send(testobj)
       .expect((res) => {
         const { body } = res;
         // 测试返回字段
         assert(body.id);
         testobj = { id: body.id };
-        assert(body.name === '测试管理345');
-        assert(body.orderBy === 10);
+        assert(body.name, testobj.name);
+        assert(body.orderBy, testobj.orderBy);
         assert(body.sys_addTime);
       })
       .expect(200);
@@ -36,21 +35,18 @@ describe('test/app/controller/applyGroup.test.js', () => {
 
   // 修改applyGroup接口
   it('should PATCH /api/ApplyGroups/:id', () => {
+    testobj.name = '测试管理456';
     return app
       .httpRequest()
-      .patch(`/api/ApplyGroups/${testobj}`)
+      .patch(`/api/ApplyGroups/${testobj.id}`)
       .type('form')
-      .send({
-        name: '测试管理123',
-        oderBy: 7,
-        companyId: '1'
-      })
+      .send(testobj)
       .expect((res) => {
         const { body } = res;
         // 测试返回字段
         assert(body.id);
-        assert(body.name, '测试管理123');
-        assert(body.orderBy, 7);
+        assert(body.name, testobj.name);
+        assert(body.orderBy, testobj.orderBy);
         assert(body.sys_updateTime);
       })
       .expect(200);

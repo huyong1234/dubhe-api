@@ -11,28 +11,31 @@ module.exports = (app) => {
         autoIncrement: true // 设置自增
       },
       requestId: {
-        allowNull: false,
+        allowNull: true,
         type: INTEGER
       },
       sys_isDelete: {
         allowNull: false,
-        type: INTEGER
+        type: INTEGER,
+        defaultValue: 0
       },
       sys_updator: {
-        allowNull: false,
+        allowNull: true,
         type: INTEGER
       },
-      sys_updateTime: {
+      updated_at: {
+        type: DATE,
         allowNull: false,
-        type: DATE
+        field: 'sys_updateTime'
       },
       sys_adder: {
-        allowNull: false,
-        type: INTEGER
+        type: INTEGER,
+        allowNull: true
       },
-      sys_addTime: {
+      created_at: {
+        type: DATE,
         allowNull: false,
-        type: DATE
+        field: 'sys_addTime'
       },
       scenicId: {
         allowNull: false,
@@ -51,12 +54,15 @@ module.exports = (app) => {
         type: STRING
       },
       icon: {
-        allowNull: false,
+        allowNull: true,
         type: STRING(32)
+      },
+      orderBy: {
+        type: INTEGER,
+        allowNull: false
       }
     },
     {
-      timestamps: false,
       freezeTableName: true,
       tableName: TABLBE_NAME
     }
