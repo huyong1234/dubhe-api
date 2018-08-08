@@ -49,9 +49,15 @@ class BannerController extends Controller {
     if (params.actionType) params.actionType = parseInt(params.actionType);
     params.limit = parseInt(params.limit);
     params.offSet = parseInt(params.offSet);
+    // 调用service，获取返回列表
     const banner = await this.ctx.service.banner.getBannerList(params);
+    // 调用service，查询总数据条数
+    const total = await this.ctx.service.banner.getTotal();
+    // 将数据总条数，放入响应头
+    this.ctx.response.set('total', total);
     this.ctx.body = banner;
   }
+
 
   // 查询单个接口
   async show() {
@@ -208,7 +214,7 @@ class BannerController extends Controller {
 
     this.ctx.body = newBanner;
   }
-
+  // 删除接口
   async destroy() {
     // 获取url参数
     const id = parseInt(this.ctx.params.id);

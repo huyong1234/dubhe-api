@@ -149,6 +149,17 @@ class ApplyGroupService extends Service {
     );
     return applyGroup;
   }
+
+  // 查询数据总量
+  async getTotal() {
+    const whereSearch = {
+      sys_isDelete: 0
+    };
+    const total = await this.app.model.ApplyGroup.count({
+      where: whereSearch
+    });
+    return total;
+  }
 }
 
 module.exports = ApplyGroupService;

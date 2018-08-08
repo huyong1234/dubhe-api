@@ -39,7 +39,12 @@ class ApplyGroupController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
+    // 调用service，获取数据列表
     const applyGroup = await this.ctx.service.applyGroup.getApplyGroupList(params);
+    // 调用service，查询总数据条数
+    const total = await this.ctx.service.applyGroup.getTotal();
+    // 将数据总条数，放入响应头
+    this.ctx.response.set('total', total);
     this.ctx.body = applyGroup;
   }
 

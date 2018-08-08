@@ -165,6 +165,17 @@ class ScenicStatisTypeService extends Service {
     );
     return dbScenicStatisTypes;
   }
+
+  // 查询数据总量
+  async getTotal() {
+    const whereSearch = {
+      sys_isDelete: 0
+    };
+    const total = await this.app.model.ScenicStatisType.count({
+      where: whereSearch
+    });
+    return total;
+  }
 }
 
 module.exports = ScenicStatisTypeService;

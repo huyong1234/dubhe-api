@@ -47,6 +47,7 @@ class ScenicStatisService extends Service {
     return ScenicStatis;
   }
 
+  // 更新数据
   async updateScenicStatis(params) {
     const createRule = {
       id: {
@@ -86,6 +87,7 @@ class ScenicStatisService extends Service {
     return dbScenicStatis;
   }
 
+  // 删除接口
   async deleteScenicStatis(param) {
     const dbScenicStatis = await this.app.model.ScenicStatis.update(
       {

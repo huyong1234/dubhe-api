@@ -193,6 +193,17 @@ class ApplyService extends Service {
     );
     return apply;
   }
+
+  // 查询数据总量
+  async getTotal() {
+    const whereSearch = {
+      sys_isDelete: 0
+    };
+    const total = await this.app.model.Apply.count({
+      where: whereSearch
+    });
+    return total;
+  }
 }
 
 module.exports = ApplyService;

@@ -36,8 +36,12 @@ class ScenicStatisTypeController extends Controller {
     // params.actionType = parseInt(params.actionType);
     params.limit = parseInt(params.limit);
     params.offSet = parseInt(params.offSet);
-    // 调用service
+    // 调用service，获取数据列表
     const scenicStatisType = await this.ctx.service.scenicStatisType.getScenicStatisTypeList(params);
+    // 调用service，查询总数据条数
+    const total = await this.ctx.service.scenicStatisType.getTotal();
+    // 将数据总条数，放入响应头
+    this.ctx.response.set('total', total);
     this.ctx.body = scenicStatisType;
   }
 
