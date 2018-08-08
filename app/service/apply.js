@@ -66,7 +66,7 @@ class ApplyService extends Service {
   // 查询对象
   async getApply(id) {
     const apply = await this.app.model.Apply.findById(id, {
-      attributes: ['id', 'name', 'icon', 'action', 'orderBy', 'actionType', 'sys_addTime', 'sys_updateTime']
+      attributes: ['id', 'name', 'applyGroupId', 'icon', 'action', 'orderBy', 'actionType', 'sys_addTime', 'sys_updateTime']
     });
     return apply;
   }

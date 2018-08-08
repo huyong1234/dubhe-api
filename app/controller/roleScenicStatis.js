@@ -66,7 +66,7 @@ class RoleScenicStatisController extends Controller {
   async destroy() {
     // 获取url参数
     const scenicStatisId = this.ctx.params.id;
-    const roleId = this.ctx.request.body.roleId;
+    const roleId = this.ctx.request.query.roleId;
     const params = {};
     params.scenicStatisId = scenicStatisId;
     params.roleId = roleId;

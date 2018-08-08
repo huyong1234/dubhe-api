@@ -71,7 +71,7 @@ class RoleApplyService extends Service {
         required: true,
         type: 'int'
       },
-      applyGroupOderBy: {
+      applyGroupOrderBy: {
         required: true,
         type: 'int'
       }
