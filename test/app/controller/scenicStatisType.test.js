@@ -16,7 +16,7 @@ describe('test/app/controller/scenicStatisTypes.test.js', () => {
     sys_adder: 1,
     sys_updator: 2
   };
-  // 新建applyGroup接口
+  // 新建ScenicStatisTypes接口
   it('should POST /api/ScenicStatisTypes', () => {
     return app
       .httpRequest()
@@ -36,7 +36,7 @@ describe('test/app/controller/scenicStatisTypes.test.js', () => {
       .expect(200);
   });
 
-  // 修改applyGroup接口
+  // 修改ScenicStatisTypes接口
   it('should PATCH /api/ScenicStatisTypes/:id', () => {
     testobj.name = '单元数据123';
     return app
@@ -56,7 +56,7 @@ describe('test/app/controller/scenicStatisTypes.test.js', () => {
       .expect(200);
   });
 
-  // 查询applyGroup列表接口
+  // 查询ScenicStatisTypes列表接口
   it('should GET /api/ScenicStatisTypes', () => {
     return (
       app
@@ -73,7 +73,7 @@ describe('test/app/controller/scenicStatisTypes.test.js', () => {
     );
   });
 
-  // 查询applyGroup对象接口
+  // 查询ScenicStatisTypes对象接口
   it('should GET /api/ScenicStatisTypes/:id', () => {
     return app
       .httpRequest()
@@ -90,7 +90,7 @@ describe('test/app/controller/scenicStatisTypes.test.js', () => {
       });
   });
 
-  // 删除applyGroup对象接口
+  // 删除ScenicStatisTypes对象接口
   it('should DELETE /api/ScenicStatisTypes/:id', () => {
     return app
       .httpRequest()

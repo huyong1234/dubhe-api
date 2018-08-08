@@ -14,7 +14,7 @@ describe('test/app/controller/scenicStatis.test.js', () => {
     modelId: 1
   };
 
-  // 修改applyGroup接口
+  // 修改ScenicStatis接口
   it('should PATCH /api/ScenicStatis/:id', () => {
     return app
       .httpRequest()
@@ -35,7 +35,7 @@ describe('test/app/controller/scenicStatis.test.js', () => {
       .expect(200);
   });
 
-  // 查询applyGroup列表接口
+  // 查询ScenicStatis列表接口
   it('should GET /api/ScenicStatis', () => {
     return (
       app
@@ -52,7 +52,7 @@ describe('test/app/controller/scenicStatis.test.js', () => {
     );
   });
 
-  // 查询applyGroup对象接口
+  // 查询ScenicStatis对象接口
   it('should GET /api/ScenicStatis/:id', () => {
     return app
       .httpRequest()
@@ -70,7 +70,7 @@ describe('test/app/controller/scenicStatis.test.js', () => {
       });
   });
 
-  // 删除applyGroup对象接口
+  // 删除ScenicStatis对象接口
   it('should DELETE /api/ScenicStatis/:id', () => {
     return app
       .httpRequest()
