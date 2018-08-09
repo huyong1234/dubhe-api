@@ -43,5 +43,6 @@ module.exports = (appInfo) => {
     }
   };
 
+
   return config;
 };

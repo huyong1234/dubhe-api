@@ -86,14 +86,7 @@ class ScenicStatisController extends Controller {
     }
     // 调用service，获取更新后的数据
     const scenicStatis = await this.ctx.service.scenicStatis.getScenicStatis(id);
-    // 新建返回对象
-    const newScenicStatis = {};
-    newScenicStatis.id = scenicStatis.id;
-    newScenicStatis.contents = scenicStatis.contents;
-    newScenicStatis.name = scenicStatis.name;
-    newScenicStatis.orderBy = scenicStatis.orderBy;
-    newScenicStatis.modelId = scenicStatis.modelId;
-    this.ctx.body = newScenicStatis;
+    this.ctx.body = scenicStatis;
   }
 
   // 删除接口

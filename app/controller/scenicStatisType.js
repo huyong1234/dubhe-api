@@ -107,10 +107,12 @@ class ScenicStatisTypeController extends Controller {
     const scenicStatisType = await this.ctx.service.scenicStatisType.addScenicStatisType(params);
     // 新建返回对象
     const newScenicStatisType = {};
-    newScenicStatisType.id = scenicStatisType.id;
-    newScenicStatisType.name = scenicStatisType.name;
-    newScenicStatisType.orderBy = scenicStatisType.orderBy;
-    newScenicStatisType.icon = scenicStatisType.icon;
+    if (scenicStatisType) {
+      newScenicStatisType.id = scenicStatisType.id;
+      newScenicStatisType.name = scenicStatisType.name;
+      newScenicStatisType.orderBy = scenicStatisType.orderBy;
+      newScenicStatisType.icon = scenicStatisType.icon;
+    }
     this.ctx.body = newScenicStatisType;
   }
 
@@ -168,13 +170,7 @@ class ScenicStatisTypeController extends Controller {
     }
     // 调用service,获取更新后的数据
     const scenicStatisType = await this.ctx.service.scenicStatisType.getScenicStatisType(id);
-    // 新建返回对象
-    const newScenicStatisType = {};
-    newScenicStatisType.id = scenicStatisType.id;
-    newScenicStatisType.name = scenicStatisType.name;
-    newScenicStatisType.orderBy = scenicStatisType.orderBy;
-    newScenicStatisType.icon = scenicStatisType.icon;
-    this.ctx.body = newScenicStatisType;
+    this.ctx.body = scenicStatisType;
   }
 
   // 删除接口
