@@ -35,6 +35,7 @@ class BannerController extends Controller {
       }
     };
     // 参数校验
+    this.app.logger.debug('valid params begin...');
     const errors = this.app.validator.validate(createRule, params);
     if (errors) {
       const messages = [];
@@ -45,6 +46,8 @@ class BannerController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
+
+    this.app.logger.debug('valid params end');
     // 将string类型转为int类型
     if (params.actionType) params.actionType = parseInt(params.actionType);
     params.limit = parseInt(params.limit);
@@ -57,7 +60,6 @@ class BannerController extends Controller {
     this.ctx.response.set('total', total);
     this.ctx.body = banner;
   }
-
 
   // 查询单个接口
   async show() {
