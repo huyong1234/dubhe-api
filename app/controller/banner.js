@@ -64,17 +64,7 @@ class BannerController extends Controller {
     // 获取参数
     const id = this.ctx.params.id;
     const banner = await this.ctx.service.banner.getBanner(id);
-    // 新建返回对象
-    const newBanner = {};
-    // 根据API文档，组装返回对象属性
-    newBanner.id = banner.id;
-    newBanner.name = banner.name;
-    newBanner.imgId = banner.imgId;
-    newBanner.action = banner.action;
-    newBanner.orderBy = banner.orderBy;
-    newBanner.actionType = banner.actionType;
-    newBanner.sys_addTime = banner.created_at;
-    this.ctx.body = newBanner;
+    this.ctx.body = banner;
   }
 
   // 新建接口

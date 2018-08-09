@@ -24,7 +24,7 @@
     "node": ">=8.9.0"
   },
   "scripts": {
-    "start": "egg-scripts start --daemon --title=egg-server-dubhe-app-admin-api",
+    "start": "egg-scripts start --title=egg-server-dubhe-app-admin-api",
     "start-docker": "egg-scripts start --port 80 --title=egg-server-dubhe-app-admin-api",
     "stop": "egg-scripts stop --title=egg-server-dubhe-app-admin-api",
     "dev": "egg-bin dev",

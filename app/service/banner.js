@@ -75,7 +75,9 @@ class BannerService extends Service {
 
   // 根据id查询
   async getBanner(id) {
-    const Banner = await this.app.model.Banner.findById(id);
+    const Banner = await this.app.model.Banner.findById(id, {
+      attributes: ['id', 'name', 'imgId', 'action', 'orderBy', 'actionType', 'sys_addTime']
+    });
     return Banner;
   }
 
