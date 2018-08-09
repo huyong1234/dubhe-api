@@ -10,6 +10,9 @@
       }
     ],
     "comma-dangle": ["error", "never"],
-    "array-bracket-spacing": ["error", "never"]
+    "class-methods-use-this": "off",
+    "prefer-destructuring": "off",
+    "no-unused-vars": ["error", { "args": "none" }],
+    "no-continue": "off"
   }
 }
