@@ -35,6 +35,7 @@ class BannerController extends Controller {
       }
     };
     // 参数校验
+    this.app.logger.debug('valid params begin...');
     const errors = this.app.validator.validate(createRule, params);
     if (errors) {
       const messages = [];
@@ -45,6 +46,8 @@ class BannerController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
+
+    this.app.logger.debug('valid params end');
     // 将string类型转为int类型
     if (params.actionType) params.actionType = parseInt(params.actionType);
     params.limit = parseInt(params.limit);
@@ -58,23 +61,12 @@ class BannerController extends Controller {
     this.ctx.body = banner;
   }
 
-
   // 查询单个接口
   async show() {
     // 获取参数
     const id = this.ctx.params.id;
     const banner = await this.ctx.service.banner.getBanner(id);
-    // 新建返回对象
-    const newBanner = {};
-    // 根据API文档，组装返回对象属性
-    newBanner.id = banner.id;
-    newBanner.name = banner.name;
-    newBanner.imgId = banner.imgId;
-    newBanner.action = banner.action;
-    newBanner.orderBy = banner.orderBy;
-    newBanner.actionType = banner.actionType;
-    newBanner.sys_addTime = banner.created_at;
-    this.ctx.body = newBanner;
+    this.ctx.body = banner;
   }
 
   // 新建接口

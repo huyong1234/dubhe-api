@@ -42,7 +42,7 @@ class OssService extends Service {
     const expTime = new Date(Date.now() + policy.expiration * 1000);
     const policyObj = {
       expiration: expTime.toISOString(),
-      conditions: [['starts-with', '$key', policy.dir]]
+      conditions: [[ 'starts-with', '$key', policy.dir ]]
     };
 
     const { policy: policyBase64, signature } = this.ctx.helper.generationAliyunOSSSignature(
