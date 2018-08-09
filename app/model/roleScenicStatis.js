@@ -38,11 +38,11 @@ module.exports = (app) => {
         field: 'sys_addTime'
       },
       roleId: {
-        type: STRING,
+        type: INTEGER,
         allowNull: false
       },
       scenicStatisId: {
-        type: STRING,
+        type: INTEGER,
         allowNull: false
       },
       orderBy: {

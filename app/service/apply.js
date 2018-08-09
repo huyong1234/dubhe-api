@@ -9,11 +9,11 @@ class ApplyService extends Service {
     const rules = {
       limit: {
         required: true,
-        type: 'integer'
+        type: 'int'
       },
       offSet: {
         required: true,
-        type: 'integer'
+        type: 'int'
       },
       name: {
         required: false,
@@ -21,11 +21,11 @@ class ApplyService extends Service {
       },
       actionType: {
         required: false,
-        type: 'integer'
+        type: 'int'
       },
       id: {
         required: false,
-        type: 'integer'
+        type: 'int'
       }
     };
     // 参数验证
@@ -66,7 +66,7 @@ class ApplyService extends Service {
   // 查询对象
   async getApply(id) {
     const apply = await this.app.model.Apply.findById(id, {
-      attributes: ['id', 'name', 'icon', 'action', 'orderBy', 'actionType', 'sys_addTime', 'sys_updateTime']
+      attributes: ['id', 'name', 'applyGroupId', 'icon', 'action', 'orderBy', 'actionType', 'sys_addTime', 'sys_updateTime']
     });
     return apply;
   }
@@ -192,6 +192,17 @@ class ApplyService extends Service {
       }
     );
     return apply;
+  }
+
+  // 查询数据总量
+  async getTotal() {
+    const whereSearch = {
+      sys_isDelete: 0
+    };
+    const total = await this.app.model.Apply.count({
+      where: whereSearch
+    });
+    return total;
   }
 }
 

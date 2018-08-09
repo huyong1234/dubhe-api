@@ -39,7 +39,6 @@ class ApplyController extends Controller {
         required: false,
         type: 'integer'
       }
-
     };
     // 参数验证
     const errors = this.app.validator.validate(rules, params);
@@ -54,7 +53,13 @@ class ApplyController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
+    // 调用service,获取数据列表
     const apply = await this.ctx.service.apply.getApplyList(params);
+    // 调用service，查询总数据条数
+    const total = await this.ctx.service.apply.getTotal();
+    // 将数据总条数，放入响应头
+    this.ctx.response.set('total', total);
+
     this.ctx.body = apply;
   }
 
@@ -179,7 +184,8 @@ class ApplyController extends Controller {
     params.actionType = parseInt(params.actionType);
     const result = await this.ctx.service.apply.updateApply(params);
     // 判断数据库操作是否成功，操作失败则抛出异常
-    if (result[0] === 0) { // result[0]表示数据库影响条数
+    if (result[0] === 0) {
+      // result[0]表示数据库影响条数
       this.ctx.throw('数据更新失败');
     }
     // 返回更新后的applyGroup

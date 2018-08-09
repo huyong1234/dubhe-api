@@ -1,24 +1,26 @@
 'use strict';
 
 const { app, assert } = require('egg-mock/bootstrap');
-describe('test/app/controller/applyGroup.test.js', () => {
+describe('test/app/controller/apply.test.js', () => {
   it('should assert', function*() {
     const pkg = require('../../../package.json');
     assert(app.config.keys.startsWith(pkg.name));
-
   });
   const testobj = {
+    applyGroupId: 1,
     name: '单元测试',
+    actionType: 1,
+    action: 1,
+    icon: 1,
     orderBy: 10,
-    companyId: 1,
     sys_adder: 1,
     sys_updator: 1
   };
-  // 新建applyGroup接口
-  it('should POST /api/ApplyGroups', () => {
+  // 新建apply接口
+  it('should POST /api/Applies', () => {
     return app
       .httpRequest()
-      .post('/api/ApplyGroups')
+      .post('/api/Applies')
       .type('form')
       .send(testobj)
       .expect((res) => {
@@ -27,19 +29,24 @@ describe('test/app/controller/applyGroup.test.js', () => {
         assert(body);
         assert(body.id);
         testobj.id = body.id;
+        assert(body.applyGroupId, testobj.applyGroupId);
         assert(body.name, testobj.name);
+        assert(body.actionType, testobj.actionType);
+        assert(body.action, testobj.action);
+        assert(body.icon, testobj.icon);
         assert(body.orderBy, testobj.orderBy);
-        assert(body.sys_addTime);
+        assert(body.updated_at, testobj.updated_at);
+        assert(body.created_at);
       })
       .expect(200);
   });
 
-  // 修改applyGroup接口
-  it('should PATCH /api/ApplyGroups/:id', () => {
+  // 修改apply接口
+  it('should PATCH /api/Applies/:id', () => {
     testobj.name = '单元测试123';
     return app
       .httpRequest()
-      .patch(`/api/ApplyGroups/${testobj.id}`)
+      .patch(`/api/Applies/${testobj.id}`)
       .type('form')
       .send(testobj)
       .expect((res) => {
@@ -47,20 +54,25 @@ describe('test/app/controller/applyGroup.test.js', () => {
         // 测试返回字段
         assert(body);
         assert(body.id);
+        assert(body.applyGroupId, testobj.applyGroupId);
         assert(body.name, testobj.name);
+        assert(body.actionType, testobj.actionType);
+        assert(body.action, testobj.action);
+        assert(body.icon, testobj.icon);
         assert(body.orderBy, testobj.orderBy);
-        assert(body.sys_updateTime);
+        assert(body.sys_updateTime, testobj.sys_updateTime);
+        assert(body.sys_addTime);
       })
       .expect(200);
   });
 
-  // 查询applyGroup列表接口
-  it('should GET /api/ApplyGroups', () => {
+  // 查询apply列表接口
+  it('should GET /api/Applies', () => {
     return (
       app
         .httpRequest()
         // 用encodeURI()方法对url进行转码
-        .get(encodeURI('/api/ApplyGroups/?limit=4&offSet=0'))
+        .get(encodeURI('/api/Applies/?limit=4&offSet=0'))
         .expect((res) => {
           const { body } = res;
           assert(body);
@@ -71,11 +83,11 @@ describe('test/app/controller/applyGroup.test.js', () => {
     );
   });
 
-  // 查询applyGroup对象接口
-  it('should GET /api/ApplyGroups/:id', () => {
+  // 查询apply对象接口
+  it('should GET /api/Applies/:id', () => {
     return app
       .httpRequest()
-      .get(`/api/ApplyGroups/${testobj.id}`)
+      .get(`/api/Applies/${testobj.id}`)
       .expect(200)
       .expect((res) => {
         const { body } = res;
@@ -83,15 +95,18 @@ describe('test/app/controller/applyGroup.test.js', () => {
         assert(body);
         assert(body.id, testobj.id);
         assert(body.name, testobj.name);
+        assert(body.actionType, testobj.actionType);
+        assert(body.action, testobj.action);
+        assert(body.icon, testobj.icon);
         assert(body.orderBy, testobj.orderBy);
       });
   });
 
-  // 删除applyGroup对象接口
-  it('should DELETE /api/ApplyGroups/:id', () => {
+  // 删除apply对象接口
+  it('should DELETE /api/Applies/:id', () => {
     return app
       .httpRequest()
-      .delete(`/api/ApplyGroups/${testobj.id}`)
+      .delete(`/api/Applies/${testobj.id}`)
       .expect({})
       .expect(204);
   });

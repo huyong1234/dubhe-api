@@ -3,6 +3,18 @@
 const Service = require('egg').Service;
 
 class DataLatitudeService extends Service {
+  // 查询数据纬度列表
+  async getDataLatitudes(id) {
+    const whereSearch = {
+      parentId: id,
+      sys_isDelete: 0
+    };
+    const dataLatitudes = await this.app.model.DataLatitude.findAll({
+      where: whereSearch,
+      attributes: ['id', 'parentId', 'name', 'subName', 'orderBy']
+    });
+    return dataLatitudes;
+  }
   // 根据id查询
   async getDataLatitude(id) {
     const dbDataLatitudes = await this.app.model.DataLatitude.findById(id);
@@ -31,14 +43,10 @@ class DataLatitudeService extends Service {
       },
       subName: {
         type: 'string',
-        required: true
+        required: false
       },
-      icon: {
-        type: 'string',
-        required: true
-      },
-      sys_addTime: {
-        type: 'string',
+      sys_adder: {
+        type: 'int',
         required: true
       }
     };
@@ -63,7 +71,7 @@ class DataLatitudeService extends Service {
   async updateDataLatitude(params) {
     const createRule = {
       id: {
-        type: 'string',
+        type: 'int',
         required: true
       },
       name: {
@@ -74,11 +82,11 @@ class DataLatitudeService extends Service {
         type: 'int',
         required: true
       },
-      icon: {
-        type: 'string',
-        required: true
-      },
       subName: {
+        type: 'string',
+        required: false
+      },
+      sys_updator: {
         type: 'string',
         required: true
       }

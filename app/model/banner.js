@@ -35,7 +35,7 @@ module.exports = (app) => {
       },
       companyId: {
         allowNull: false,
-        type: STRING(32)
+        type: INTEGER
       },
       name: {
         allowNull: false,

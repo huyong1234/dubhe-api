@@ -29,10 +29,12 @@ class ScenicStatisTypeService extends Service {
       const err = JSON.stringify(errors);
       this.ctx.throw(400, err);
     }
-    let whereSearch;
+    let whereSearch = {
+      parentId: 0,
+      sys_isDelete: 0
+    };
     if (params.name) {
       whereSearch = {
-        sys_isDelete: 0,
         name: params.name
       };
     }
@@ -48,9 +50,9 @@ class ScenicStatisTypeService extends Service {
 
   // 查询单个
   async getScenicStatisType(id) {
-    const dbScenicStatisTypes = await this.app.model.ScenicStatisType.findById(
-      id
-    );
+    const dbScenicStatisTypes = await this.app.model.ScenicStatisType.findById(id, {
+      attributes: ['id', 'name', 'orderBy', 'icon']
+    });
     return dbScenicStatisTypes;
   }
 
@@ -58,11 +60,11 @@ class ScenicStatisTypeService extends Service {
   async addScenicStatisType(params) {
     const createRule = {
       scenicId: {
-        type: 'string',
+        type: 'int',
         required: true
       },
       parentId: {
-        type: 'string',
+        type: 'int',
         required: true
       },
       name: {
@@ -83,7 +85,7 @@ class ScenicStatisTypeService extends Service {
       },
       sys_adder: {
         required: true,
-        type: 'string'
+        type: 'int'
       }
     };
 
@@ -97,9 +99,7 @@ class ScenicStatisTypeService extends Service {
       const err = JSON.stringify(errors);
       this.ctx.throw(400, err);
     }
-    const dbScenicStatisTypes = await this.app.model.ScenicStatisType.create(
-      params
-    );
+    const dbScenicStatisTypes = await this.app.model.ScenicStatisType.create(params);
     return dbScenicStatisTypes;
   }
 
@@ -107,7 +107,7 @@ class ScenicStatisTypeService extends Service {
   async updateScenicStatisType(params) {
     const createRule = {
       id: {
-        type: 'string',
+        type: 'int',
         required: true
       },
       name: {
@@ -127,7 +127,7 @@ class ScenicStatisTypeService extends Service {
         required: false
       },
       sys_updator: {
-        type: 'string',
+        type: 'int',
         required: true
       }
     };
@@ -139,18 +139,15 @@ class ScenicStatisTypeService extends Service {
         const message = errors[index].field + 'is' + errors[index].message;
         messages.push(message);
       }
-      const err = JSON.stringify(errors);
+      const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
     const whereSearch = {
       id: params.id
     };
-    const dbScenicStatisTypes = await this.app.model.ScenicStatisType.update(
-      params,
-      {
-        where: whereSearch
-      }
-    );
+    const dbScenicStatisTypes = await this.app.model.ScenicStatisType.update(params, {
+      where: whereSearch
+    });
     return dbScenicStatisTypes;
   }
 
@@ -167,6 +164,17 @@ class ScenicStatisTypeService extends Service {
       }
     );
     return dbScenicStatisTypes;
+  }
+
+  // 查询数据总量
+  async getTotal() {
+    const whereSearch = {
+      sys_isDelete: 0
+    };
+    const total = await this.app.model.ScenicStatisType.count({
+      where: whereSearch
+    });
+    return total;
   }
 }
 

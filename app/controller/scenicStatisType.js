@@ -36,8 +36,12 @@ class ScenicStatisTypeController extends Controller {
     // params.actionType = parseInt(params.actionType);
     params.limit = parseInt(params.limit);
     params.offSet = parseInt(params.offSet);
-    // 调用service
+    // 调用service，获取数据列表
     const scenicStatisType = await this.ctx.service.scenicStatisType.getScenicStatisTypeList(params);
+    // 调用service，查询总数据条数
+    const total = await this.ctx.service.scenicStatisType.getTotal();
+    // 将数据总条数，放入响应头
+    this.ctx.response.set('total', total);
     this.ctx.body = scenicStatisType;
   }
 
@@ -46,13 +50,7 @@ class ScenicStatisTypeController extends Controller {
     const id = this.ctx.params.id;
     // 调用service，根据id查询
     const scenicStatisType = await this.ctx.service.scenicStatisType.getScenicStatisType(id);
-    // 新建返回对象
-    const newScenicStatisType = {};
-    newScenicStatisType.id = scenicStatisType.id;
-    newScenicStatisType.name = scenicStatisType.name;
-    newScenicStatisType.orderBy = scenicStatisType.orderBy;
-    newScenicStatisType.icon = scenicStatisType.icon;
-    this.ctx.body = newScenicStatisType;
+    this.ctx.body = scenicStatisType;
   }
 
   // 新建接口
@@ -101,6 +99,9 @@ class ScenicStatisTypeController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
+    params.scenicId = parseInt(params.scenicId);
+    params.parentId = parseInt(params.parentId);
+    params.sys_adder = parseInt(params.sys_adder);
     params.orderBy = parseInt(params.orderBy);
     // 调用service，添加数据
     const scenicStatisType = await this.ctx.service.scenicStatisType.addScenicStatisType(params);
@@ -157,6 +158,8 @@ class ScenicStatisTypeController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
+    params.id = parseInt(params.id);
+    params.sys_updator = parseInt(params.sys_updator);
     params.orderBy = parseInt(params.orderBy);
     // 调用service,更新数据
     const result = await this.ctx.service.scenicStatisType.updateScenicStatisType(params);

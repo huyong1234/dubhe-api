@@ -9,11 +9,11 @@ class ApplyGroupService extends Service {
     const rules = {
       limit: {
         required: true,
-        type: 'integer'
+        type: 'int'
       },
       offSet: {
         required: true,
-        type: 'integer'
+        type: 'int'
       },
       name: {
         required: false,
@@ -148,6 +148,17 @@ class ApplyGroupService extends Service {
       }
     );
     return applyGroup;
+  }
+
+  // 查询数据总量
+  async getTotal() {
+    const whereSearch = {
+      sys_isDelete: 0
+    };
+    const total = await this.app.model.ApplyGroup.count({
+      where: whereSearch
+    });
+    return total;
   }
 }
 
