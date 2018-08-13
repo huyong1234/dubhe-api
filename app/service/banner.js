@@ -1,6 +1,20 @@
 'use strict';
 
 const Service = require('egg').Service;
+// 查询字段
+const fields = [
+  'id',
+  'companyId',
+  'name',
+  'imgId',
+  'actionType',
+  'action',
+  'orderBy',
+  'sys_adder',
+  'sys_updator',
+  'created_at',
+  'updated_at'
+];
 
 class BannerService extends Service {
   // 查询列表
@@ -30,6 +44,10 @@ class BannerService extends Service {
       offSet: {
         type: 'int',
         required: true
+      },
+      companyId: {
+        type: 'int',
+        required: true
       }
     };
     // 参数校验
@@ -45,7 +63,8 @@ class BannerService extends Service {
     }
     // 查询条件
     const whereSearch = {
-      sys_isDelete: 0
+      sys_isDelete: 0,
+      companyId: params.companyId
     };
     // const between = {};
     // 根据参数组装查询条件
@@ -67,7 +86,7 @@ class BannerService extends Service {
       where: whereSearch,
       limit: params.limit,
       offSet: params.offSet,
-      attributes: ['id', 'name', 'imgId', 'action', 'orderBy', 'actionType', 'sys_addTime']
+      attributes: fields
     });
 
     return dbBanners;
@@ -76,7 +95,7 @@ class BannerService extends Service {
   // 根据id查询
   async getBanner(id) {
     const Banner = await this.app.model.Banner.findById(id, {
-      attributes: ['id', 'name', 'imgId', 'action', 'orderBy', 'actionType', 'sys_addTime']
+      attributes: fields
     });
     return Banner;
   }
@@ -127,8 +146,22 @@ class BannerService extends Service {
     }
     // 操作数据库，新增一条记录
     const dbBanners = await this.app.model.Banner.create(params);
+    // 新建返回对象,根据API文档，组装返回对象属性
+    const newBanner = {
+      id: dbBanners.id,
+      companyId: dbBanners.companyId,
+      name: dbBanners.name,
+      imgId: dbBanners.imgId,
+      actionType: dbBanners.actionType,
+      action: dbBanners.action,
+      orderBy: dbBanners.orderBy,
+      sys_adder: dbBanners.sys_adder,
+      sys_updator: dbBanners.sys_updator,
+      created_at: dbBanners.created_at,
+      updated_at: dbBanners.updated_at
+    };
 
-    return dbBanners;
+    return newBanner;
   }
 
   // 更新
@@ -215,6 +248,5 @@ class BannerService extends Service {
     return total;
   }
 }
-
 
 module.exports = BannerService;

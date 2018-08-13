@@ -32,6 +32,10 @@ class BannerController extends Controller {
       offSet: {
         type: 'string',
         required: true
+      },
+      companyId: {
+        type: 'string',
+        required: true
       }
     };
     // 参数校验
@@ -52,6 +56,7 @@ class BannerController extends Controller {
     if (params.actionType) params.actionType = parseInt(params.actionType);
     params.limit = parseInt(params.limit);
     params.offSet = parseInt(params.offSet);
+    params.companyId = parseInt(params.companyId);
     // 调用service，获取返回列表
     const banner = await this.ctx.service.banner.getBannerList(params);
     // 调用service，查询总数据条数
@@ -120,17 +125,7 @@ class BannerController extends Controller {
     params.companyId = parseInt(params.companyId);
     params.actionType = parseInt(params.actionType);
     const banner = await this.ctx.service.banner.addBanner(params);
-    // 新建返回对象
-    const newBanner = {};
-    // 根据API文档，组装返回对象属性
-    newBanner.id = banner.id;
-    newBanner.name = banner.name;
-    newBanner.imgId = banner.imgId;
-    newBanner.action = banner.action;
-    newBanner.orderBy = banner.orderBy;
-    newBanner.actionType = banner.actionType;
-    newBanner.sys_addTime = banner.created_at;
-    this.ctx.body = newBanner;
+    this.ctx.body = banner;
   }
   // 修改接口
   async update() {
@@ -193,18 +188,8 @@ class BannerController extends Controller {
       this.ctx.throw('数据更新失败');
     }
     const banner = await this.ctx.service.banner.getBanner(params.id);
-    // 新建返回对象
-    const newBanner = {};
-    // 根据API文档，组装返回对象属性
-    newBanner.id = banner.id;
-    newBanner.name = banner.name;
-    newBanner.imgId = banner.imgId;
-    newBanner.action = banner.action;
-    newBanner.orderBy = banner.orderBy;
-    newBanner.actionType = banner.actionType;
-    newBanner.sys_addTime = banner.created_at;
 
-    this.ctx.body = newBanner;
+    this.ctx.body = banner;
   }
   // 删除接口
   async destroy() {

@@ -1,6 +1,8 @@
 'use strict';
 
 const Service = require('egg').Service;
+// 查询字段
+const fields = [ 'id', 'companyId', 'name', 'orderBy', 'sys_adder', 'sys_updator', 'created_at', 'updated_at' ];
 
 class ApplyGroupService extends Service {
   // 查询列表
@@ -14,6 +16,10 @@ class ApplyGroupService extends Service {
       offSet: {
         required: true,
         type: 'int'
+      },
+      companyId: {
+        type: 'int',
+        required: true
       },
       name: {
         required: false,
@@ -34,7 +40,8 @@ class ApplyGroupService extends Service {
       this.ctx.throw(err);
     }
     const whereSearch = {
-      sys_isDelete: 0
+      sys_isDelete: 0,
+      companyId: params.companyId
     };
     // 对参数进行判断，拼接查询条件
     if (params.name) {
@@ -44,7 +51,7 @@ class ApplyGroupService extends Service {
       where: whereSearch,
       limit: params.limit,
       offset: params.offSet,
-      attributes: ['id', 'name', 'orderBy']
+      attributes: fields
     });
     return applyGroup;
   }
@@ -52,7 +59,7 @@ class ApplyGroupService extends Service {
   // 返回applyGroup对象
   async getApplyGroup(id) {
     const applyGroup = await this.app.model.ApplyGroup.findById(id, {
-      attributes: ['id', 'name', 'orderBy', 'sys_addTime', 'sys_updateTime']
+      attributes: fields
     });
     return applyGroup;
   }
@@ -89,7 +96,18 @@ class ApplyGroupService extends Service {
       this.ctx.throw(err);
     }
     const applyGroup = await this.app.model.ApplyGroup.create(params);
-    return applyGroup;
+    // 创建返回对象
+    const result = {
+      id: applyGroup.id,
+      companyId: applyGroup.companyId,
+      name: applyGroup.name,
+      orderBy: applyGroup.orderBy,
+      sys_adder: applyGroup.sys_adder,
+      sys_updator: applyGroup.sys_updator,
+      created_at: applyGroup.created_at,
+      updated_at: applyGroup.updated_at
+    };
+    return result;
   }
   // 修改
   async update(params) {
@@ -101,6 +119,10 @@ class ApplyGroupService extends Service {
       name: {
         required: true,
         type: 'string'
+      },
+      companyId: {
+        required: true,
+        type: 'int'
       },
       orderBy: {
         required: true,

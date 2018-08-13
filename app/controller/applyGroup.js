@@ -8,18 +8,19 @@ class ApplyGroupController extends Controller {
     // 获取url参数
     const params = this.ctx.request.query;
     console.log(params);
-    // 将string类型转换成int类型
-    params.limit = parseInt(params.limit);
-    params.offSet = parseInt(params.offSet);
     // 配置校验规则
     const rules = {
       limit: {
         required: true,
-        type: 'integer'
+        type: 'string'
       },
       offSet: {
         required: true,
-        type: 'integer'
+        type: 'string'
+      },
+      companyId: {
+        type: 'string',
+        required: true
       },
       name: {
         required: false,
@@ -39,6 +40,10 @@ class ApplyGroupController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
+    // sting转int
+    params.limit = parseInt(params.limit);
+    params.offSet = parseInt(params.offSet);
+    params.companyId = parseInt(params.companyId);
     // 调用service，获取数据列表
     const applyGroup = await this.ctx.service.applyGroup.getApplyGroupList(params);
     // 调用service，查询总数据条数
@@ -92,13 +97,7 @@ class ApplyGroupController extends Controller {
     params.orderBy = parseInt(params.orderBy);
     params.companyId = parseInt(params.companyId);
     const applyGroup = await this.ctx.service.applyGroup.createApplyGroup(params);
-    // 创建返回对象
-    const result = {};
-    result.id = applyGroup.id;
-    result.name = applyGroup.name;
-    result.orderBy = applyGroup.orderBy;
-    result.sys_addTime = applyGroup.created_at;
-    this.ctx.body = result;
+    this.ctx.body = applyGroup;
   }
 
   // 更新接口
@@ -107,20 +106,22 @@ class ApplyGroupController extends Controller {
     // 获取post提交的参数
     const params = this.ctx.request.body;
     params.id = id;
-    params.id = parseInt(params.id);
-    params.orderBy = parseInt(params.orderBy);
     const rules = {
       id: {
         required: true,
-        type: 'integer'
+        type: 'string'
       },
       name: {
         required: true,
         type: 'string'
       },
+      companyId: {
+        required: true,
+        type: 'string'
+      },
       orderBy: {
         required: true,
-        type: 'integer'
+        type: 'string'
       },
       sys_updator: {
         type: 'string',
@@ -139,6 +140,9 @@ class ApplyGroupController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
+    params.id = parseInt(params.id);
+    params.companyId = parseInt(params.companyId);
+    params.orderBy = parseInt(params.orderBy);
     const result = await this.ctx.service.applyGroup.update(params);
     // 判断数据库操作是否成功，操作失败则抛出异常
     if (result[0] === 0) {

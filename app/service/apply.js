@@ -1,6 +1,20 @@
 'use strict';
 
 const Service = require('egg').Service;
+// 查询字段
+const fields = [
+  'id',
+  'applyGroupId',
+  'name',
+  'actionType',
+  'action',
+  'icon',
+  'orderBy',
+  'sys_adder',
+  'sys_updator',
+  'created_at',
+  'updated_at'
+];
 
 class ApplyService extends Service {
   // 查询列表
@@ -59,14 +73,14 @@ class ApplyService extends Service {
       limit: params.limit,
       offset: params.offSet,
       // 查询字段
-      attributes: ['id', 'name', 'icon', 'action', 'orderBy', 'actionType']
+      attributes: fields
     });
     return apply;
   }
   // 查询对象
   async getApply(id) {
     const apply = await this.app.model.Apply.findById(id, {
-      attributes: ['id', 'name', 'applyGroupId', 'icon', 'action', 'orderBy', 'actionType', 'sys_addTime', 'sys_updateTime']
+      attributes: fields
     });
     return apply;
   }
@@ -114,10 +128,22 @@ class ApplyService extends Service {
       const err = JSON.stringify(messages);
       this.ctx.throw(err);
     }
-    const applyGroup = await this.app.model.Apply.create(params, {
-      attributes: ['id', 'name', 'icon', 'action', 'orderBy', 'actionType']
-    });
-    return applyGroup;
+    const apply = await this.app.model.Apply.create(params);
+    // 创建返回对象
+    const newApply = {
+      id: apply.id,
+      applyGroupId: apply.applyGroupId,
+      name: apply.name,
+      actionType: apply.actionType,
+      action: apply.action,
+      icon: apply.icon,
+      orderBy: apply.orderBy,
+      sys_adder: apply.sys_adder,
+      sys_updator: apply.sys_updator,
+      created_at: apply.created_at,
+      updated_at: apply.updated_at
+    };
+    return newApply;
   }
   // 修改
   async updateApply(params) {

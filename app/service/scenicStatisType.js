@@ -17,6 +17,10 @@ class ScenicStatisTypeService extends Service {
       offSet: {
         type: 'int',
         required: true
+      },
+      scenicId: {
+        type: 'int',
+        required: false
       }
     };
     const errors = this.app.validator.validate(createRule, params);
@@ -29,20 +33,21 @@ class ScenicStatisTypeService extends Service {
       const err = JSON.stringify(errors);
       this.ctx.throw(400, err);
     }
-    let whereSearch = {
+    const whereSearch = {
       parentId: 0,
       sys_isDelete: 0
     };
+    if (params.scenicId) {
+      whereSearch.scenicId = params.scenicId;
+    }
     if (params.name) {
-      whereSearch = {
-        name: params.name
-      };
+      whereSearch.name = params.name;
     }
     const dbScenicStatisTypes = await this.app.model.ScenicStatisType.findAll({
       where: whereSearch,
       limit: params.limit,
       offSet: params.offSet,
-      attributes: ['id', 'name', 'orderBy', 'icon']
+      attributes: [ 'id', 'name', 'scenicId', 'orderBy', 'icon' ]
     });
 
     return dbScenicStatisTypes;
@@ -51,7 +56,7 @@ class ScenicStatisTypeService extends Service {
   // 查询单个
   async getScenicStatisType(id) {
     const dbScenicStatisTypes = await this.app.model.ScenicStatisType.findById(id, {
-      attributes: ['id', 'name', 'orderBy', 'icon']
+      attributes: [ 'id', 'name', 'scenicId', 'orderBy', 'icon' ]
     });
     return dbScenicStatisTypes;
   }

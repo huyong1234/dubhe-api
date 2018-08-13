@@ -26,6 +26,8 @@ module.exports = (app) => {
   router.resources('DataLatitudes', '/api/DataLatitudes', controller.dataLatitude);
   // api/ScenicStatis
   router.resources('ScenicStatis', '/api/ScenicStatis', controller.scenicStatis);
+  // api/Scenic
+  router.resources('Scenic', '/api/Scenics', controller.scenic);
   // oss上传
   router.get('/api/OSSConfig/Banner', controller.oss.getBannerUploadPathAndSignature);
   router.get('/api/OSSConfig/Apply', controller.oss.getApplyUploadPathAndSignature);

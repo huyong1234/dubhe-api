@@ -10,10 +10,6 @@ module.exports = (app) => {
         primaryKey: true, // 设置主键
         autoIncrement: true // 设置自增
       },
-      requestId: {
-        type: INTEGER,
-        allowNull: true
-      },
       sys_updator: {
         allowNull: true,
         type: INTEGER
