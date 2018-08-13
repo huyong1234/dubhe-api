@@ -111,15 +111,7 @@ class ScenicStatisTypeController extends Controller {
     params.orderBy = parseInt(params.orderBy);
     // 调用service，添加数据
     const scenicStatisType = await this.ctx.service.scenicStatisType.addScenicStatisType(params);
-    // 新建返回对象
-    const newScenicStatisType = {};
-    if (scenicStatisType) {
-      newScenicStatisType.id = scenicStatisType.id;
-      newScenicStatisType.name = scenicStatisType.name;
-      newScenicStatisType.orderBy = scenicStatisType.orderBy;
-      newScenicStatisType.icon = scenicStatisType.icon;
-    }
-    this.ctx.body = newScenicStatisType;
+    this.ctx.body = scenicStatisType;
   }
 
   // 更新接口

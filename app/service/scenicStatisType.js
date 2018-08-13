@@ -1,6 +1,20 @@
 'use strict';
 
 const Service = require('egg').Service;
+// 查询字段
+const fields = [
+  'id',
+  'scenicId',
+  'parentId',
+  'name',
+  'subName',
+  'icon',
+  'orderBy',
+  'sys_adder',
+  'sys_updator',
+  'created_at',
+  'updated_at'
+];
 
 class ScenicStatisTypeService extends Service {
   // 查询列表
@@ -47,7 +61,7 @@ class ScenicStatisTypeService extends Service {
       where: whereSearch,
       limit: params.limit,
       offSet: params.offSet,
-      attributes: [ 'id', 'name', 'scenicId', 'orderBy', 'icon' ]
+      attributes: fields
     });
 
     return dbScenicStatisTypes;
@@ -56,7 +70,7 @@ class ScenicStatisTypeService extends Service {
   // 查询单个
   async getScenicStatisType(id) {
     const dbScenicStatisTypes = await this.app.model.ScenicStatisType.findById(id, {
-      attributes: [ 'id', 'name', 'scenicId', 'orderBy', 'icon' ]
+      attributes: fields
     });
     return dbScenicStatisTypes;
   }
@@ -105,7 +119,21 @@ class ScenicStatisTypeService extends Service {
       this.ctx.throw(400, err);
     }
     const dbScenicStatisTypes = await this.app.model.ScenicStatisType.create(params);
-    return dbScenicStatisTypes;
+    // 新建返回对象
+    const scenicStatisTypes = {
+      id: dbScenicStatisTypes.id,
+      scenicId: dbScenicStatisTypes.scenicId,
+      parentId: dbScenicStatisTypes.parentId,
+      name: dbScenicStatisTypes.name,
+      subName: dbScenicStatisTypes.subName,
+      icon: dbScenicStatisTypes.icon,
+      orderBy: dbScenicStatisTypes.orderBy,
+      sys_adder: dbScenicStatisTypes.sys_adder,
+      sys_updator: dbScenicStatisTypes.sys_updator,
+      created_at: dbScenicStatisTypes.created_at,
+      updated_at: dbScenicStatisTypes.updated_at
+    };
+    return scenicStatisTypes;
   }
 
   // 修改

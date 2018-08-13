@@ -1,6 +1,19 @@
 'use strict';
 
 const Service = require('egg').Service;
+// 查询字段
+const fields = [
+  'id',
+  'scenicStatisTypeId',
+  'name',
+  'contents',
+  'modelId',
+  'orderBy',
+  'sys_adder',
+  'sys_updator',
+  'created_at',
+  'updated_at'
+];
 
 class ScenicStatisService extends Service {
   // 查询列表
@@ -33,7 +46,7 @@ class ScenicStatisService extends Service {
     }
     const dbScenicStatis = await this.app.model.ScenicStatis.findAll({
       where: whereSearch,
-      attributes: ['id', 'contents', 'name', 'modelId', 'orderBy']
+      attributes: fields
     });
 
     return dbScenicStatis;
@@ -42,7 +55,7 @@ class ScenicStatisService extends Service {
   // 查询单个
   async getScenicStatis(id) {
     const ScenicStatis = await this.app.model.ScenicStatis.findById(id, {
-      attributes: ['id', 'contents', 'name', 'modelId', 'orderBy']
+      attributes: fields
     });
     return ScenicStatis;
   }
