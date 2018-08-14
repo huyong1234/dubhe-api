@@ -20,6 +20,10 @@ class ScenicStatisTypeController extends Controller {
       offSet: {
         type: 'string',
         required: true
+      },
+      scenicId: {
+        type: 'string',
+        required: false
       }
     };
     // 校验参数
@@ -33,9 +37,11 @@ class ScenicStatisTypeController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
-    // params.actionType = parseInt(params.actionType);
     params.limit = parseInt(params.limit);
     params.offSet = parseInt(params.offSet);
+    if (params.scenicId) {
+      params.scenicId = parseInt(params.scenicId);
+    }
     // 调用service，获取数据列表
     const scenicStatisType = await this.ctx.service.scenicStatisType.getScenicStatisTypeList(params);
     // 调用service，查询总数据条数
@@ -105,15 +111,7 @@ class ScenicStatisTypeController extends Controller {
     params.orderBy = parseInt(params.orderBy);
     // 调用service，添加数据
     const scenicStatisType = await this.ctx.service.scenicStatisType.addScenicStatisType(params);
-    // 新建返回对象
-    const newScenicStatisType = {};
-    if (scenicStatisType) {
-      newScenicStatisType.id = scenicStatisType.id;
-      newScenicStatisType.name = scenicStatisType.name;
-      newScenicStatisType.orderBy = scenicStatisType.orderBy;
-      newScenicStatisType.icon = scenicStatisType.icon;
-    }
-    this.ctx.body = newScenicStatisType;
+    this.ctx.body = scenicStatisType;
   }
 
   // 更新接口

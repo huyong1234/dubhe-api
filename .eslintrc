@@ -13,6 +13,7 @@
     "class-methods-use-this": "off",
     "prefer-destructuring": "off",
     "no-unused-vars": ["error", { "args": "none" }],
-    "no-continue": "off"
+    "no-continue": "off",
+    "array-bracket-spacing": "off"
   }
 }

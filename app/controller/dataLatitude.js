@@ -55,12 +55,7 @@ class DataLatitudeController extends Controller {
     params.sys_adder = parseInt(params.sys_adder);
     // 调用service
     const dataLatitude = await this.ctx.service.dataLatitude.addDataLatitude(params);
-    // 新建返回对象
-    const newDataLatitude = {};
-    newDataLatitude.id = dataLatitude.id;
-    newDataLatitude.name = dataLatitude.name;
-    newDataLatitude.orderBy = dataLatitude.orderBy;
-    this.ctx.body = newDataLatitude;
+    this.ctx.body = dataLatitude;
   }
 
   // 更新接口
@@ -112,12 +107,7 @@ class DataLatitudeController extends Controller {
     }
     // 调用service，获取更新后的数据
     const dataLatitude = await this.ctx.service.dataLatitude.getDataLatitude(params.id);
-    // 新建返回对象
-    const newDataLatitude = {};
-    newDataLatitude.id = dataLatitude.id;
-    newDataLatitude.name = dataLatitude.name;
-    newDataLatitude.orderBy = dataLatitude.orderBy;
-    this.ctx.body = newDataLatitude;
+    this.ctx.body = dataLatitude;
   }
 
   // 删除接口

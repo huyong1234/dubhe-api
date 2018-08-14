@@ -43,6 +43,15 @@ module.exports = (appInfo) => {
     }
   };
 
+  config.oss = {
+    client: {
+      accessKeyId: 'LTAI6eaMwrZ3cOof',
+      accessKeySecret: 'dKZQ0HoKvRDuCg3gZr0ryGhoYDCWSS',
+      bucket: 'test-dubhe-app',
+      endpoint: 'oss-cn-shanghai.aliyuncs.com',
+      timeout: '60s'
+    }
+  };
 
   return config;
 };

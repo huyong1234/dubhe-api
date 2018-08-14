@@ -104,6 +104,15 @@ class OssController extends Controller {
     });
     this.ctx.body = result;
   }
+  /**
+   * 获取加密后的OSS访问地址
+   */
+  async getSignatureUrl() {
+    const { path } = this.ctx.params;
+    // 调用service
+    const result = await this.service.oss.getSignatureUrl(path);
+    this.ctx.body = result;
+  }
 }
 
 module.exports = OssController;

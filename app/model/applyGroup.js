@@ -30,10 +30,6 @@ module.exports = (app) => {
         allowNull: true,
         type: INTEGER
       },
-      requestId: {
-        allowNull: true,
-        type: INTEGER
-      },
       sys_isDelete: {
         allowNull: false,
         type: INTEGER,

@@ -35,14 +35,14 @@ class OssService extends Service {
     if (!accessKeyId) this.ctx.throw('accessKeyId必须存在');
     if (!accessKeySecret) this.ctx.throw('accessKeySecret必须存在');
     if (!bucket) this.ctx.throw('bucket必须存在');
-    if (!endpoint) this.ctx.throw('bucket必须存在');
+    if (!endpoint) this.ctx.throw('endpoint必须存在');
     if (!policy) this.ctx.throw('policys必须存在');
 
     this.ctx.logger.info('Generation upload path and signature beginning ...');
     const expTime = new Date(Date.now() + policy.expiration * 1000);
     const policyObj = {
       expiration: expTime.toISOString(),
-      conditions: [[ 'starts-with', '$key', policy.dir ]]
+      conditions: [['starts-with', '$key', policy.dir]]
     };
 
     const { policy: policyBase64, signature } = this.ctx.helper.generationAliyunOSSSignature(
@@ -61,6 +61,16 @@ class OssService extends Service {
     this.ctx.logger.info('Return:', result);
     this.ctx.logger.info('Generation upload path and signature are successfully');
     return result;
+  }
+  /**
+   * 获取加密的OSS地址
+   * @param {String} objectName OSS ObjectName
+   * @return {String} SinatureUrl
+   */
+  async getSignatureUrl(objectName) {
+    const sinatureUrl = this.ctx.oss.signatureUrl(objectName);
+    this.ctx.logger.info(`${objectName} --> sinatureUrl:${sinatureUrl}`);
+    return sinatureUrl;
   }
 }
 

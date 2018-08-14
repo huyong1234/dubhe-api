@@ -1,6 +1,20 @@
 'use strict';
 
 const Service = require('egg').Service;
+// 查询字段
+const fields = [
+  'id',
+  'scenicId',
+  'parentId',
+  'name',
+  'subName',
+  'icon',
+  'orderBy',
+  'sys_adder',
+  'sys_updator',
+  'created_at',
+  'updated_at'
+];
 
 class DataLatitudeService extends Service {
   // 查询数据纬度列表
@@ -11,13 +25,15 @@ class DataLatitudeService extends Service {
     };
     const dataLatitudes = await this.app.model.DataLatitude.findAll({
       where: whereSearch,
-      attributes: ['id', 'parentId', 'name', 'subName', 'orderBy']
+      attributes: fields
     });
     return dataLatitudes;
   }
   // 根据id查询
   async getDataLatitude(id) {
-    const dbDataLatitudes = await this.app.model.DataLatitude.findById(id);
+    const dbDataLatitudes = await this.app.model.DataLatitude.findById(id, {
+      attributes: fields
+    });
     return dbDataLatitudes;
   }
 
@@ -63,8 +79,22 @@ class DataLatitudeService extends Service {
     }
     //
     const dbDataLatitudes = await this.app.model.DataLatitude.create(params);
+    // 新建返回对象
+    const newDataLatitude = {
+      id: dbDataLatitudes.id,
+      scenicId: dbDataLatitudes.scenicId,
+      parentId: dbDataLatitudes.parentId,
+      name: dbDataLatitudes.name,
+      subName: dbDataLatitudes.subName,
+      icon: dbDataLatitudes.icon,
+      orderBy: dbDataLatitudes.orderBy,
+      sys_adder: dbDataLatitudes.sys_adder,
+      sys_updator: dbDataLatitudes.sys_updator,
+      created_at: dbDataLatitudes.created_at,
+      updated_at: dbDataLatitudes.updated_at
+    };
 
-    return dbDataLatitudes;
+    return newDataLatitude;
   }
 
   // 更新
