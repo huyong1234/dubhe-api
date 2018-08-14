@@ -11,15 +11,6 @@ module.exports = (app) => {
         primaryKey: true,
         autoIncrement: true
       },
-      requestId: {
-        type: INTEGER,
-        allowNull: true
-      },
-      sys_isDelete: {
-        type: INTEGER,
-        allowNull: false,
-        defaultValue: 0
-      },
       sys_updator: {
         type: INTEGER,
         allowNull: true
