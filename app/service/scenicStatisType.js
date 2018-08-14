@@ -1,6 +1,20 @@
 'use strict';
 
 const Service = require('egg').Service;
+// 查询字段
+const fields = [
+  'id',
+  'scenicId',
+  'parentId',
+  'name',
+  'subName',
+  'icon',
+  'orderBy',
+  'sys_adder',
+  'sys_updator',
+  'created_at',
+  'updated_at'
+];
 
 class ScenicStatisTypeService extends Service {
   // 查询列表
@@ -17,6 +31,10 @@ class ScenicStatisTypeService extends Service {
       offSet: {
         type: 'int',
         required: true
+      },
+      scenicId: {
+        type: 'int',
+        required: false
       }
     };
     const errors = this.app.validator.validate(createRule, params);
@@ -29,20 +47,21 @@ class ScenicStatisTypeService extends Service {
       const err = JSON.stringify(errors);
       this.ctx.throw(400, err);
     }
-    let whereSearch = {
+    const whereSearch = {
       parentId: 0,
       sys_isDelete: 0
     };
+    if (params.scenicId) {
+      whereSearch.scenicId = params.scenicId;
+    }
     if (params.name) {
-      whereSearch = {
-        name: params.name
-      };
+      whereSearch.name = params.name;
     }
     const dbScenicStatisTypes = await this.app.model.ScenicStatisType.findAll({
       where: whereSearch,
       limit: params.limit,
       offSet: params.offSet,
-      attributes: ['id', 'name', 'orderBy', 'icon']
+      attributes: fields
     });
 
     return dbScenicStatisTypes;
@@ -51,7 +70,7 @@ class ScenicStatisTypeService extends Service {
   // 查询单个
   async getScenicStatisType(id) {
     const dbScenicStatisTypes = await this.app.model.ScenicStatisType.findById(id, {
-      attributes: ['id', 'name', 'orderBy', 'icon']
+      attributes: fields
     });
     return dbScenicStatisTypes;
   }
@@ -100,7 +119,21 @@ class ScenicStatisTypeService extends Service {
       this.ctx.throw(400, err);
     }
     const dbScenicStatisTypes = await this.app.model.ScenicStatisType.create(params);
-    return dbScenicStatisTypes;
+    // 新建返回对象
+    const scenicStatisTypes = {
+      id: dbScenicStatisTypes.id,
+      scenicId: dbScenicStatisTypes.scenicId,
+      parentId: dbScenicStatisTypes.parentId,
+      name: dbScenicStatisTypes.name,
+      subName: dbScenicStatisTypes.subName,
+      icon: dbScenicStatisTypes.icon,
+      orderBy: dbScenicStatisTypes.orderBy,
+      sys_adder: dbScenicStatisTypes.sys_adder,
+      sys_updator: dbScenicStatisTypes.sys_updator,
+      created_at: dbScenicStatisTypes.created_at,
+      updated_at: dbScenicStatisTypes.updated_at
+    };
+    return scenicStatisTypes;
   }
 
   // 修改
