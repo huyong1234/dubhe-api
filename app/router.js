@@ -30,6 +30,8 @@ module.exports = (app) => {
   router.get('/api/OSSConfig/Banner', controller.oss.getBannerUploadPathAndSignature);
   router.get('/api/OSSConfig/Apply', controller.oss.getApplyUploadPathAndSignature);
   router.get('/api/OSSConfig/ScenicStatis', controller.oss.getScenicStatisUploadPathAndSignature);
+  // oss访问
+  router.get('/api/OSSConfig/SignatureUrl/:path', controller.oss.getSignatureUrl);
   // 健康检查接口
   router.get('/healthy', controller.healthy.getHealthy);
   router.get('/ready', controller.healthy.getReady);
