@@ -29,26 +29,31 @@ class RoleApplyController extends Controller {
   async create() {
     // 获取post提交的参数
     const params = this.ctx.request.body;
+    params.roleId = parseInt(params.roleId);
+    params.applyId = parseInt(params.applyId);
+    params.applyOrderBy = parseInt(params.applyOrderBy);
+    params.applyGroupId = parseInt(params.applyGroupId);
+    params.applyGroupOrderBy = parseInt(params.applyGroupOrderBy);
     const rules = {
       roleId: {
         required: true,
-        type: 'string'
+        type: 'int'
       },
       applyId: {
         required: true,
-        type: 'string'
+        type: 'int'
       },
       applyOrderBy: {
         required: true,
-        type: 'string'
+        type: 'int'
       },
       applyGroupId: {
         required: true,
-        type: 'string'
+        type: 'int'
       },
       applyGroupOrderBy: {
         required: true,
-        type: 'string'
+        type: 'int'
       }
     };
     const errors = this.app.validator.validate(rules, params);
@@ -63,11 +68,6 @@ class RoleApplyController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
-    params.roleId = parseInt(params.roleId);
-    params.applyId = parseInt(params.applyId);
-    params.applyOrderBy = parseInt(params.applyOrderBy);
-    params.applyGroupId = parseInt(params.applyGroupId);
-    params.applyGroupOrderBy = parseInt(params.applyGroupOrderBy);
     const apply = await this.ctx.service.roleApply.createRoleApply(params);
     this.ctx.body = apply;
   }
@@ -78,17 +78,17 @@ class RoleApplyController extends Controller {
     const applyId = this.ctx.params.id;
     const roleId = this.ctx.request.query.roleId;
     const params = {};
-    params.applyId = applyId;
-    params.roleId = roleId;
+    params.applyId = parseInt(applyId);
+    params.roleId = parseInt(roleId);
     // 配置校验规则
     const rules = {
       roleId: {
         required: true,
-        type: 'string'
+        type: 'int'
       },
       applyId: {
         required: true,
-        type: 'string'
+        type: 'int'
       }
     };
     // 参数校验
@@ -104,8 +104,6 @@ class RoleApplyController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
-    params.roleId = parseInt(params.roleId);
-    params.applyId = parseInt(params.applyId);
     const result = await this.ctx.service.roleApply.destroy(params);
     if (result[0] === 0) {
       this.ctx.throw('数据删除失败');

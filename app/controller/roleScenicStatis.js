@@ -29,18 +29,21 @@ class RoleScenicStatisController extends Controller {
   async create() {
     // 获取post提交的参数
     const params = this.ctx.request.body;
+    params.roleId = parseInt(params.roleId);
+    params.scenicStatisId = parseInt(params.scenicStatisId);
+    params.orderBy = parseInt(params.orderBy);
     const rules = {
       roleId: {
         required: true,
-        type: 'string'
+        type: 'int'
       },
       scenicStatisId: {
         required: true,
-        type: 'string'
+        type: 'int'
       },
       orderBy: {
         required: true,
-        type: 'string'
+        type: 'int'
       }
     };
     const errors = this.app.validator.validate(rules, params);
@@ -55,9 +58,6 @@ class RoleScenicStatisController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
-    params.roleId = parseInt(params.roleId);
-    params.scenicStatisId = parseInt(params.scenicStatisId);
-    params.orderBy = parseInt(params.orderBy);
     const roleScenicStatis = await this.ctx.service.roleScenicStatis.createRoleScenicStatis(params);
     this.ctx.body = roleScenicStatis;
   }
@@ -68,8 +68,8 @@ class RoleScenicStatisController extends Controller {
     const scenicStatisId = this.ctx.params.id;
     const roleId = this.ctx.request.query.roleId;
     const params = {};
-    params.scenicStatisId = scenicStatisId;
-    params.roleId = roleId;
+    params.scenicStatisId = parseInt(scenicStatisId);
+    params.roleId = parseInt(roleId);
     // 配置校验规则
     const rules = {
       roleId: {
@@ -94,8 +94,6 @@ class RoleScenicStatisController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
-    params.roleId = parseInt(params.roleId);
-    params.scenicStatisId = parseInt(params.scenicStatisId);
     const result = await this.ctx.service.roleScenicStatis.destroy(params);
     if (result[0] === 0) {
       this.ctx.throw('数据删除失败');

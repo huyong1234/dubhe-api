@@ -63,14 +63,18 @@ class ScenicStatisTypeController extends Controller {
   async create() {
     // 获取formBody参数
     const params = this.ctx.request.body;
+    params.scenicId = parseInt(params.scenicId);
+    params.parentId = parseInt(params.parentId);
+    params.sys_adder = parseInt(params.sys_adder);
+    params.orderBy = parseInt(params.orderBy);
     // 配置校验规则
     const rules = {
       scenicId: {
-        type: 'string',
+        type: 'int',
         required: true
       },
       parentId: {
-        type: 'string',
+        type: 'int',
         required: true
       },
       name: {
@@ -78,7 +82,7 @@ class ScenicStatisTypeController extends Controller {
         required: true
       },
       orderBy: {
-        type: 'string',
+        type: 'int',
         required: true
       },
       icon: {
@@ -91,7 +95,7 @@ class ScenicStatisTypeController extends Controller {
       },
       sys_adder: {
         required: true,
-        type: 'string'
+        type: 'int'
       }
     };
 
@@ -105,10 +109,6 @@ class ScenicStatisTypeController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
-    params.scenicId = parseInt(params.scenicId);
-    params.parentId = parseInt(params.parentId);
-    params.sys_adder = parseInt(params.sys_adder);
-    params.orderBy = parseInt(params.orderBy);
     // 调用service，添加数据
     const scenicStatisType = await this.ctx.service.scenicStatisType.addScenicStatisType(params);
     this.ctx.body = scenicStatisType;
@@ -121,9 +121,12 @@ class ScenicStatisTypeController extends Controller {
     // 获取formBody参数
     const params = this.ctx.request.body;
     params.id = id;
+    params.id = parseInt(params.id);
+    params.sys_updator = parseInt(params.sys_updator);
+    params.orderBy = parseInt(params.orderBy);
     const createRule = {
       id: {
-        type: 'string',
+        type: 'int',
         required: true
       },
       name: {
@@ -131,7 +134,7 @@ class ScenicStatisTypeController extends Controller {
         required: true
       },
       orderBy: {
-        type: 'string',
+        type: 'int',
         required: true
       },
       icon: {
@@ -143,7 +146,7 @@ class ScenicStatisTypeController extends Controller {
         required: false
       },
       sys_updator: {
-        type: 'string',
+        type: 'int',
         required: true
       }
     };

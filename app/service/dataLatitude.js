@@ -42,11 +42,11 @@ class DataLatitudeService extends Service {
     // 配置校验规则
     const createRule = {
       scenicId: {
-        type: 'string',
+        type: 'int',
         required: true
       },
       parentId: {
-        type: 'string',
+        type: 'int',
         required: true
       },
       name: {
@@ -117,7 +117,7 @@ class DataLatitudeService extends Service {
         required: false
       },
       sys_updator: {
-        type: 'string',
+        type: 'int',
         required: true
       }
     };

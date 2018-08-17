@@ -6,9 +6,12 @@ class ScenicStatisController extends Controller {
   // 查询列表接口
   async index() {
     const param = this.ctx.request.query;
+    if (param.id) {
+      param.id = parseInt(param.id);
+    }
     const createRule = {
       id: {
-        type: 'string',
+        type: 'int',
         required: false
       }
     };
@@ -24,9 +27,6 @@ class ScenicStatisController extends Controller {
       }
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
-    }
-    if (param.id) {
-      param.id = parseInt(param.id);
     }
     // 调用service,查询
     const scenicStatis = await this.ctx.service.scenicStatis.getScenicStatisList(param);
@@ -48,9 +48,11 @@ class ScenicStatisController extends Controller {
     // 获取formBody参数
     const params = this.ctx.request.body;
     params.id = id;
+    params.id = parseInt(params.id);
+    params.orderBy = parseInt(params.orderBy);
     const createRule = {
       id: {
-        type: 'string',
+        type: 'int',
         required: true
       },
       name: {
@@ -58,7 +60,7 @@ class ScenicStatisController extends Controller {
         required: true
       },
       orderBy: {
-        type: 'string',
+        type: 'int',
         required: true
       },
       modelId: {
@@ -77,8 +79,6 @@ class ScenicStatisController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
-    params.id = parseInt(params.id);
-    params.orderBy = parseInt(params.orderBy);
     // 调用service，更新数据
     const result = await this.ctx.service.scenicStatis.updateScenicStatis(params);
     if (result[0] === 0) {

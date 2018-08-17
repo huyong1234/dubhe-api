@@ -64,6 +64,9 @@ class ApplyGroupController extends Controller {
   async create() {
     // 获取post提交的参数
     const params = this.ctx.request.body;
+    params.orderBy = parseInt(params.orderBy);
+    params.companyId = parseInt(params.companyId);
+    params.sys_adder = parseInt(params.sys_adder);
     const rules = {
       name: {
         required: true,
@@ -71,15 +74,15 @@ class ApplyGroupController extends Controller {
       },
       orderBy: {
         required: true,
-        type: 'string'
+        type: 'int'
       },
       companyId: {
         required: true,
-        type: 'string'
+        type: 'int'
       },
       sys_adder: {
         required: true,
-        type: 'string'
+        type: 'int'
       }
     };
     const errors = this.app.validator.validate(rules, params);
@@ -94,8 +97,6 @@ class ApplyGroupController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
-    params.orderBy = parseInt(params.orderBy);
-    params.companyId = parseInt(params.companyId);
     const applyGroup = await this.ctx.service.applyGroup.createApplyGroup(params);
     this.ctx.body = applyGroup;
   }
@@ -106,10 +107,14 @@ class ApplyGroupController extends Controller {
     // 获取post提交的参数
     const params = this.ctx.request.body;
     params.id = id;
+    params.id = parseInt(params.id);
+    params.companyId = parseInt(params.companyId);
+    params.orderBy = parseInt(params.orderBy);
+    params.sys_updator = parseInt(params.sys_updator);
     const rules = {
       id: {
         required: true,
-        type: 'string'
+        type: 'int'
       },
       name: {
         required: true,
@@ -117,14 +122,14 @@ class ApplyGroupController extends Controller {
       },
       companyId: {
         required: true,
-        type: 'string'
+        type: 'int'
       },
       orderBy: {
         required: true,
-        type: 'string'
+        type: 'int'
       },
       sys_updator: {
-        type: 'string',
+        type: 'int',
         required: true
       }
     };
@@ -140,9 +145,6 @@ class ApplyGroupController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
-    params.id = parseInt(params.id);
-    params.companyId = parseInt(params.companyId);
-    params.orderBy = parseInt(params.orderBy);
     const result = await this.ctx.service.applyGroup.update(params);
     // 判断数据库操作是否成功，操作失败则抛出异常
     if (result[0] === 0) {
