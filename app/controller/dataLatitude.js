@@ -13,14 +13,18 @@ class DataLatitudeController extends Controller {
   async create() {
     // 获取formBody参数
     const params = this.ctx.request.body;
+    params.scenicId = parseInt(params.scenicId);
+    params.parentId = parseInt(params.parentId);
+    params.orderBy = parseInt(params.orderBy);
+    params.sys_adder = parseInt(params.sys_adder);
     // 配置校验规则
     const createRule = {
       scenicId: {
-        type: 'string',
+        type: 'int',
         required: true
       },
       parentId: {
-        type: 'string',
+        type: 'int',
         required: true
       },
       name: {
@@ -28,7 +32,7 @@ class DataLatitudeController extends Controller {
         required: true
       },
       orderBy: {
-        type: 'string',
+        type: 'int',
         required: true
       },
       subName: {
@@ -36,7 +40,7 @@ class DataLatitudeController extends Controller {
         required: false
       },
       sys_adder: {
-        type: 'string',
+        type: 'int',
         required: true
       }
     };
@@ -51,8 +55,6 @@ class DataLatitudeController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
-    params.orderBy = parseInt(params.orderBy);
-    params.sys_adder = parseInt(params.sys_adder);
     // 调用service
     const dataLatitude = await this.ctx.service.dataLatitude.addDataLatitude(params);
     this.ctx.body = dataLatitude;
@@ -65,9 +67,12 @@ class DataLatitudeController extends Controller {
     // 获取formBody参数
     const params = this.ctx.request.body;
     params.id = id;
+    params.id = parseInt(params.id);
+    params.sys_updator = parseInt(params.sys_updator);
+    params.orderBy = parseInt(params.orderBy);
     const createRule = {
       id: {
-        type: 'string',
+        type: 'int',
         required: true
       },
       name: {
@@ -75,7 +80,7 @@ class DataLatitudeController extends Controller {
         required: true
       },
       orderBy: {
-        type: 'string',
+        type: 'int',
         required: true
       },
       subName: {
@@ -83,7 +88,7 @@ class DataLatitudeController extends Controller {
         required: false
       },
       sys_updator: {
-        type: 'string',
+        type: 'int',
         required: true
       }
     };
@@ -98,8 +103,6 @@ class DataLatitudeController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
-    params.id = parseInt(params.id);
-    params.orderBy = parseInt(params.orderBy);
     // 调用service,进行更新操作
     const dataLatitudeResult = await this.ctx.service.dataLatitude.updateDataLatitude(params);
     if (dataLatitudeResult[0] === 0) {

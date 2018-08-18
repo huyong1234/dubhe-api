@@ -114,7 +114,7 @@ class ApplyService extends Service {
       },
       sys_adder: {
         required: true,
-        type: 'string'
+        type: 'int'
       }
     };
     const errors = this.app.validator.validate(rules, params);
@@ -177,7 +177,7 @@ class ApplyService extends Service {
         type: 'string'
       },
       sys_updator: {
-        type: 'string',
+        type: 'int',
         required: true
       }
     };

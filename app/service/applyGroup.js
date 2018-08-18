@@ -81,7 +81,7 @@ class ApplyGroupService extends Service {
       },
       sys_adder: {
         required: true,
-        type: 'string'
+        type: 'int'
       }
     };
     const errors = this.app.validator.validate(rules, params);
@@ -129,7 +129,7 @@ class ApplyGroupService extends Service {
         type: 'int'
       },
       sys_updator: {
-        type: 'string',
+        type: 'int',
         required: true
       }
     };

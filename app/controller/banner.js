@@ -78,6 +78,11 @@ class BannerController extends Controller {
   async create() {
     // 获取参数
     const params = this.ctx.request.body;
+    // 将string转为int类型
+    params.sys_adder = parseInt(params.sys_adder);
+    params.orderBy = parseInt(params.orderBy);
+    params.companyId = parseInt(params.companyId);
+    params.actionType = parseInt(params.actionType);
     // 配置验证规则
     const createRule = {
       name: {
@@ -85,11 +90,11 @@ class BannerController extends Controller {
         required: true
       },
       sys_adder: {
-        type: 'string',
+        type: 'int',
         required: true
       },
       companyId: {
-        type: 'string',
+        type: 'int',
         required: true
       },
       imgId: {
@@ -101,11 +106,11 @@ class BannerController extends Controller {
         required: true
       },
       orderBy: {
-        type: 'string',
+        type: 'int',
         required: true
       },
       actionType: {
-        type: 'string',
+        type: 'int',
         required: true
       }
     };
@@ -120,10 +125,6 @@ class BannerController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
-    // 将string转为int类型
-    params.orderBy = parseInt(params.orderBy);
-    params.companyId = parseInt(params.companyId);
-    params.actionType = parseInt(params.actionType);
     const banner = await this.ctx.service.banner.addBanner(params);
     this.ctx.body = banner;
   }
@@ -134,6 +135,11 @@ class BannerController extends Controller {
     // 获取formBody参数
     const params = this.ctx.request.body;
     params.id = id;
+    params.id = parseInt(params.id);
+    params.sys_updator = parseInt(params.sys_updator);
+    params.orderBy = parseInt(params.orderBy);
+    params.companyId = parseInt(params.companyId);
+    params.actionType = parseInt(params.actionType);
     const createRule = {
       id: {
         type: 'string',
@@ -179,10 +185,6 @@ class BannerController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
-    params.id = parseInt(params.id);
-    params.orderBy = parseInt(params.orderBy);
-    params.companyId = parseInt(params.companyId);
-    params.actionType = parseInt(params.actionType);
     const bannerResult = await this.ctx.service.banner.updateBanner(params);
     if (bannerResult[0] === 0) {
       this.ctx.throw('数据更新失败');

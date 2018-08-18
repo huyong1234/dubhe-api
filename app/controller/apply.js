@@ -74,6 +74,11 @@ class ApplyController extends Controller {
   async create() {
     // 获取post提交的参数
     const params = this.ctx.request.body;
+    // 将string类型的参数转为int类型
+    params.sys_adder = parseInt(params.sys_adder);
+    params.orderBy = parseInt(params.orderBy);
+    params.applyGroupId = parseInt(params.applyGroupId);
+    params.actionType = parseInt(params.actionType);
     // 配置校验规则
     const rules = {
       name: {
@@ -82,15 +87,15 @@ class ApplyController extends Controller {
       },
       applyGroupId: {
         required: true,
-        type: 'string'
+        type: 'int'
       },
       orderBy: {
         required: true,
-        type: 'string'
+        type: 'int'
       },
       actionType: {
         required: true,
-        type: 'string'
+        type: 'int'
       },
       icon: {
         required: true,
@@ -102,7 +107,7 @@ class ApplyController extends Controller {
       },
       sys_adder: {
         required: true,
-        type: 'string'
+        type: 'int'
       }
     };
     // 按规则检验参数
@@ -118,10 +123,6 @@ class ApplyController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
-    // 将string类型的参数转为int类型
-    params.orderBy = parseInt(params.orderBy);
-    params.applyGroupId = parseInt(params.applyGroupId);
-    params.actionType = parseInt(params.actionType);
     const apply = await this.ctx.service.apply.createApply(params);
     this.ctx.body = apply;
   }
@@ -132,10 +133,15 @@ class ApplyController extends Controller {
     // 获取post提交的参数
     const params = this.ctx.request.body;
     params.id = id;
+    params.id = parseInt(params.id);
+    params.sys_updator = parseInt(params.sys_updator);
+    params.orderBy = parseInt(params.orderBy);
+    params.applyGroupId = parseInt(params.applyGroupId);
+    params.actionType = parseInt(params.actionType);
     const rules = {
       id: {
         required: true,
-        type: 'string'
+        type: 'int'
       },
       name: {
         required: true,
@@ -143,15 +149,15 @@ class ApplyController extends Controller {
       },
       applyGroupId: {
         required: true,
-        type: 'string'
+        type: 'int'
       },
       orderBy: {
         required: true,
-        type: 'string'
+        type: 'int'
       },
       actionType: {
         required: true,
-        type: 'string'
+        type: 'int'
       },
       icon: {
         required: true,
@@ -162,7 +168,7 @@ class ApplyController extends Controller {
         type: 'string'
       },
       sys_updator: {
-        type: 'string',
+        type: 'int',
         required: true
       }
     };
@@ -178,10 +184,6 @@ class ApplyController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
-    params.id = parseInt(params.id);
-    params.orderBy = parseInt(params.orderBy);
-    params.applyGroupId = parseInt(params.applyGroupId);
-    params.actionType = parseInt(params.actionType);
     const result = await this.ctx.service.apply.updateApply(params);
     // 判断数据库操作是否成功，操作失败则抛出异常
     if (result[0] === 0) {

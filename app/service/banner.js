@@ -109,7 +109,7 @@ class BannerService extends Service {
         required: true
       },
       sys_adder: {
-        type: 'string',
+        type: 'int',
         required: true
       },
       companyId: {
