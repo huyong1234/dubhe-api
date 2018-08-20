@@ -142,7 +142,7 @@ class BannerController extends Controller {
     params.actionType = parseInt(params.actionType);
     const createRule = {
       id: {
-        type: 'string',
+        type: 'int',
         required: true
       },
       name: {
@@ -150,11 +150,11 @@ class BannerController extends Controller {
         required: true
       },
       sys_updator: {
-        type: 'string',
+        type: 'int',
         required: true
       },
       companyId: {
-        type: 'string',
+        type: 'int',
         required: true
       },
       imgId: {
@@ -166,11 +166,11 @@ class BannerController extends Controller {
         required: true
       },
       orderBy: {
-        type: 'string',
+        type: 'int',
         required: true
       },
       actionType: {
-        type: 'string',
+        type: 'int',
         required: true
       }
     };
