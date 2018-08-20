@@ -176,7 +176,7 @@ class BannerService extends Service {
         required: true
       },
       sys_updator: {
-        type: 'string',
+        type: 'int',
         required: true
       },
       companyId: {
