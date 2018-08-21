@@ -85,7 +85,7 @@ class BannerService extends Service {
     const dbBanners = await this.app.model.Banner.findAll({
       where: whereSearch,
       limit: params.limit,
-      offSet: params.offSet,
+      offset: params.offSet,
       attributes: fields
     });
 
