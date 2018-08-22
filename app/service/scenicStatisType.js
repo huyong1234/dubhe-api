@@ -200,8 +200,9 @@ class ScenicStatisTypeService extends Service {
   }
 
   // 查询数据总量
-  async getTotal() {
+  async getTotal(scenicId) {
     const whereSearch = {
+      scenicId,
       sys_isDelete: 0
     };
     const total = await this.app.model.ScenicStatisType.count({

@@ -7,6 +7,11 @@ class ScenicStatisTypeController extends Controller {
   async index() {
     // 获取查询参数
     const params = this.ctx.request.query;
+    params.limit = parseInt(params.limit);
+    params.offSet = parseInt(params.offSet);
+    if (params.scenicId) {
+      params.scenicId = parseInt(params.scenicId);
+    }
     // 配置校验规则
     const createRule = {
       name: {
@@ -14,15 +19,15 @@ class ScenicStatisTypeController extends Controller {
         required: false
       },
       limit: {
-        type: 'string',
+        type: 'int',
         required: true
       },
       offSet: {
-        type: 'string',
+        type: 'int',
         required: true
       },
       scenicId: {
-        type: 'string',
+        type: 'int',
         required: false
       }
     };
@@ -37,15 +42,10 @@ class ScenicStatisTypeController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
-    params.limit = parseInt(params.limit);
-    params.offSet = parseInt(params.offSet);
-    if (params.scenicId) {
-      params.scenicId = parseInt(params.scenicId);
-    }
     // 调用service，获取数据列表
     const scenicStatisType = await this.ctx.service.scenicStatisType.getScenicStatisTypeList(params);
     // 调用service，查询总数据条数
-    const total = await this.ctx.service.scenicStatisType.getTotal();
+    const total = await this.ctx.service.scenicStatisType.getTotal(params.scenicId);
     // 将数据总条数，放入响应头
     this.ctx.response.set('total', total);
     this.ctx.body = scenicStatisType;
