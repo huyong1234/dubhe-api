@@ -238,10 +238,10 @@ class BannerService extends Service {
   }
 
   // 查询数据总量
-  async getTotal(company_id) {
+  async getTotal(companyId) {
     const whereSearch = {
       sys_isDelete: 0,
-      companyId: company_id
+      companyId
     };
     const total = await this.app.model.Banner.count({
       where: whereSearch
