@@ -74,11 +74,11 @@ class RoleScenicStatisController extends Controller {
     const rules = {
       roleId: {
         required: true,
-        type: 'string'
+        type: 'int'
       },
       scenicStatisId: {
         required: true,
-        type: 'string'
+        type: 'int'
       }
     };
     // 参数校验
