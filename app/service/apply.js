@@ -221,8 +221,9 @@ class ApplyService extends Service {
   }
 
   // 查询数据总量
-  async getTotal() {
+  async getTotal(id) {
     const whereSearch = {
+      applyGroupId: id,
       sys_isDelete: 0
     };
     const total = await this.app.model.Apply.count({

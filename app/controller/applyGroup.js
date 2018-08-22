@@ -7,19 +7,23 @@ class ApplyGroupController extends Controller {
   async index() {
     // 获取url参数
     const params = this.ctx.request.query;
+    // sting转int
+    params.limit = parseInt(params.limit);
+    params.offSet = parseInt(params.offSet);
+    params.companyId = parseInt(params.companyId);
     console.log(params);
     // 配置校验规则
     const rules = {
       limit: {
         required: true,
-        type: 'string'
+        type: 'int'
       },
       offSet: {
         required: true,
-        type: 'string'
+        type: 'int'
       },
       companyId: {
-        type: 'string',
+        type: 'int',
         required: true
       },
       name: {
@@ -40,14 +44,10 @@ class ApplyGroupController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
-    // sting转int
-    params.limit = parseInt(params.limit);
-    params.offSet = parseInt(params.offSet);
-    params.companyId = parseInt(params.companyId);
     // 调用service，获取数据列表
     const applyGroup = await this.ctx.service.applyGroup.getApplyGroupList(params);
     // 调用service，查询总数据条数
-    const total = await this.ctx.service.applyGroup.getTotal();
+    const total = await this.ctx.service.applyGroup.getTotal(params.companyId);
     // 将数据总条数，放入响应头
     this.ctx.response.set('total', total);
     this.ctx.body = applyGroup;

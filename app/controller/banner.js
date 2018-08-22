@@ -7,6 +7,11 @@ class BannerController extends Controller {
   async index() {
     // 获取参数
     const params = this.ctx.request.query;
+    // 将string类型转为int类型
+    if (params.actionType) params.actionType = parseInt(params.actionType);
+    params.limit = parseInt(params.limit);
+    params.offSet = parseInt(params.offSet);
+    params.companyId = parseInt(params.companyId);
     // 配置校验规则
     const createRule = {
       name: {
@@ -14,7 +19,7 @@ class BannerController extends Controller {
         required: false
       },
       actionType: {
-        type: 'string',
+        type: 'int',
         required: false
       },
       insertTimeStart: {
@@ -26,15 +31,15 @@ class BannerController extends Controller {
         required: false
       },
       limit: {
-        type: 'string',
+        type: 'int',
         required: true
       },
       offSet: {
-        type: 'string',
+        type: 'int',
         required: true
       },
       companyId: {
-        type: 'string',
+        type: 'int',
         required: true
       }
     };
@@ -52,15 +57,10 @@ class BannerController extends Controller {
     }
 
     this.app.logger.debug('valid params end');
-    // 将string类型转为int类型
-    if (params.actionType) params.actionType = parseInt(params.actionType);
-    params.limit = parseInt(params.limit);
-    params.offSet = parseInt(params.offSet);
-    params.companyId = parseInt(params.companyId);
     // 调用service，获取返回列表
     const banner = await this.ctx.service.banner.getBannerList(params);
     // 调用service，查询总数据条数
-    const total = await this.ctx.service.banner.getTotal();
+    const total = await this.ctx.service.banner.getTotal(params.companyId);
     // 将数据总条数，放入响应头
     this.ctx.response.set('total', total);
     this.ctx.body = banner;
