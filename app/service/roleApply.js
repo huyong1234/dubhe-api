@@ -1,6 +1,7 @@
 'use strict';
 
 const Service = require('egg').Service;
+const Op = require('Sequelize').Op;
 
 class RoleApplyService extends Service {
   // 查询列表
@@ -103,6 +104,24 @@ class RoleApplyService extends Service {
     // 新增一条roleApply数据
     const roleApply = await this.app.model.RoleApply.create(applyParam);
 
+    // 封装查询参数
+    const roleApplyGroupParams = {
+      applyGroupId: params.applyGroupId,
+      roleId: params.roleId
+    };
+    // 查询roleApplyGroup表，判断apply对应的applyGroup是否存在该表中
+    const dbRoleApplyGroup = await this.ctx.service.roleApplyGroup.getRoleApplyGroupList(roleApplyGroupParams);
+    // 若dbRoleApplyGroup集合长度等于0，表示apply对应的applyGroup还没有权限，则需要执行添加操作
+    if (dbRoleApplyGroup.length === 0) {
+      // 封装添加参数
+      const addRoleApplyGroupParams = {
+        roleId: params.roleId,
+        applyGroupId: params.applyGroupId,
+        sys_adder: params.sys_adder,
+        orderBy: params.applyGroupOrderBy
+      };
+      await this.service.roleApplyGroup.addRoleApplyGroup(addRoleApplyGroupParams);
+    }
 
     // 创建返回对象
     const result = {};
@@ -128,6 +147,10 @@ class RoleApplyService extends Service {
         required: true,
         type: 'int'
       },
+      applyGroupId: {
+        required: true,
+        type: 'int'
+      },
       sys_updator: {
         required: true,
         type: 'int'
@@ -149,12 +172,49 @@ class RoleApplyService extends Service {
       roleId: params.roleId,
       applyId: params.applyId
     };
-    const result = await this.app.model.RoleApply.update({
-      sys_isDelete: 1,
-      sys_updator: params.sys_updator
-    }, {
-      where: whereSearch
+    // 操作数据库，执行删除操作，删除角色应用权限
+    const result = await this.app.model.RoleApply.update(
+      {
+        sys_isDelete: 1,
+        sys_updator: params.sys_updator
+      },
+      {
+        where: whereSearch
+      }
+    );
+    /** *
+     * 判断是否需要及联删除roleApplyGroup中的数据
+     */
+    // 根据applyGroupId查询对应的applyId
+    const apply = await this.app.model.Apply.findAll({
+      where: {
+        applyGroupId: params.applyGroupId
+      }
     });
+    // 遍历apply集合，将applyId放入数组
+    const applyIdList = [];
+    for (const o in apply) {
+      applyIdList.push(apply[o].id);
+    }
+    // 查询roleApply表，判断roleId对应的applyId是否在applyIdList这个数组中
+    const roleApply = await this.app.model.RoleApply.findAll({
+      where: {
+        sys_isDelete: 0,
+        roleId: params.roleId,
+        applyId: {
+          [Op.in]: applyIdList
+        }
+      }
+    });
+    // 若roleApply集合长度等于0，则证明applyGroupId下对应的应用，在roleApply表中已无权限，则需要级联删除roleApplyGroup中的数据
+    if (roleApply.length === 0) {
+      const deleteRoleApplyGroupParams = {
+        roleId: params.roleId,
+        applyGroupId: params.applyGroupId,
+        sys_updator: params.sys_updator
+      };
+      await this.service.roleApplyGroup.deleteRoleApplyGroup(deleteRoleApplyGroupParams);
+    }
     return result;
   }
 }
