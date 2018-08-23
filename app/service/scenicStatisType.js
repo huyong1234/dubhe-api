@@ -203,6 +203,7 @@ class ScenicStatisTypeService extends Service {
   async getTotal(scenicId) {
     const whereSearch = {
       scenicId,
+      parentId: 0,
       sys_isDelete: 0
     };
     const total = await this.app.model.ScenicStatisType.count({
