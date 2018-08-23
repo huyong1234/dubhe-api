@@ -74,6 +74,10 @@ class RoleApplyService extends Service {
       applyGroupOrderBy: {
         required: true,
         type: 'int'
+      },
+      sys_adder: {
+        required: true,
+        type: 'int'
       }
     };
     const errors = this.app.validator.validate(rules, params);
@@ -94,6 +98,7 @@ class RoleApplyService extends Service {
     applyParam.roleId = params.roleId;
     applyParam.applyId = params.applyId;
     applyParam.orderBy = params.applyOrderBy;
+    applyParam.sys_adder = params.sys_adder;
 
     // 新增一条roleApply数据
     const roleApply = await this.app.model.RoleApply.create(applyParam);
@@ -103,9 +108,10 @@ class RoleApplyService extends Service {
     const result = {};
     result.roleId = roleApply.roleId;
     result.applyId = roleApply.applyId;
+    result.sys_adder = roleApply.sys_adder;
     result.applyOrderBy = roleApply.orderBy;
     result.applyGroupId = params.applyGroupId;
-    result.applyGroupOderBy = params.applyGroupOderBy;
+    result.applyGroupOderBy = params.applyGroupOrderBy;
 
     return result;
   }
@@ -119,6 +125,10 @@ class RoleApplyService extends Service {
         type: 'int'
       },
       applyId: {
+        required: true,
+        type: 'int'
+      },
+      sys_updator: {
         required: true,
         type: 'int'
       }
@@ -135,10 +145,15 @@ class RoleApplyService extends Service {
       const err = JSON.stringify(messages);
       this.ctx.throw(err);
     }
+    const whereSearch = {
+      roleId: params.roleId,
+      applyId: params.applyId
+    };
     const result = await this.app.model.RoleApply.update({
-      sys_isDelete: 1
+      sys_isDelete: 1,
+      sys_updator: params.sys_updator
     }, {
-      where: params
+      where: whereSearch
     });
     return result;
   }

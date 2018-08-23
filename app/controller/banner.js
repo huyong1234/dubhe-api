@@ -12,6 +12,7 @@ class BannerController extends Controller {
     params.limit = parseInt(params.limit);
     params.offSet = parseInt(params.offSet);
     params.companyId = parseInt(params.companyId);
+
     // 配置校验规则
     const createRule = {
       name: {

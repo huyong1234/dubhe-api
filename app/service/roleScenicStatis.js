@@ -43,16 +43,17 @@ class RoleScenicStatisService extends Service {
       const scenicStatisType = await this.app.model.ScenicStatisType.findById(scenicStatis.scenicStatisTypeId, {
         attributes: ['id', 'parentId', 'name', 'subName', 'icon', 'orderBy']
       });
-      roleScenicStatis.dataLatitudes = scenicStatisType.name;
+      roleScenicStatis.dataLatitudesNmae = scenicStatisType.name;
+      roleScenicStatis.dataLatitudesId = scenicStatisType.id;
       roleScenicStatis.scenicStatisTypeSubName = scenicStatisType.subName;
       roleScenicStatis.scenicStatisTypeOrderBy = scenicStatisType.orderBy;
       roleScenicStatis.scenicStatisTypeIcon = scenicStatisType.icon;
+      roleScenicStatis.scenicStatisTypeId = scenicStatisType.parentId;
 
       // 根据parentId查询scenicStatisType表，获取统计数据类型名称
       const scenicStatisTypeParent = await this.app.model.ScenicStatisType.findById(scenicStatisType.parentId, {
         attributes: ['id', 'name']
       });
-      roleScenicStatis.scenicStatisTypeId = scenicStatisType.id;
       roleScenicStatis.scenicStatisTypeName = scenicStatisTypeParent.name;
       // 将roleApply对象放入roleApplyList
       roleScenicStatisList.push(roleScenicStatis);
@@ -74,6 +75,10 @@ class RoleScenicStatisService extends Service {
         type: 'int'
       },
       orderBy: {
+        required: true,
+        type: 'int'
+      },
+      sys_adder: {
         required: true,
         type: 'int'
       }

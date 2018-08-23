@@ -31,6 +31,7 @@ class RoleApplyController extends Controller {
     const params = this.ctx.request.body;
     params.roleId = parseInt(params.roleId);
     params.applyId = parseInt(params.applyId);
+    params.sys_adder = parseInt(params.sys_adder);
     params.applyOrderBy = parseInt(params.applyOrderBy);
     params.applyGroupId = parseInt(params.applyGroupId);
     params.applyGroupOrderBy = parseInt(params.applyGroupOrderBy);
@@ -52,6 +53,10 @@ class RoleApplyController extends Controller {
         type: 'int'
       },
       applyGroupOrderBy: {
+        required: true,
+        type: 'int'
+      },
+      sys_adder: {
         required: true,
         type: 'int'
       }
@@ -76,10 +81,12 @@ class RoleApplyController extends Controller {
   async destroy() {
     // 获取url参数
     const applyId = this.ctx.params.id;
-    const roleId = this.ctx.request.query.roleId;
+    const roleId = this.ctx.request.body.roleId;
+    const sys_updator = this.ctx.request.body.sys_updator;
     const params = {};
     params.applyId = parseInt(applyId);
     params.roleId = parseInt(roleId);
+    params.sys_updator = parseInt(sys_updator);
     // 配置校验规则
     const rules = {
       roleId: {
@@ -87,6 +94,10 @@ class RoleApplyController extends Controller {
         type: 'int'
       },
       applyId: {
+        required: true,
+        type: 'int'
+      },
+      sys_updator: {
         required: true,
         type: 'int'
       }

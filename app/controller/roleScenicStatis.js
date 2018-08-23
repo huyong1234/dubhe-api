@@ -32,6 +32,7 @@ class RoleScenicStatisController extends Controller {
     params.roleId = parseInt(params.roleId);
     params.scenicStatisId = parseInt(params.scenicStatisId);
     params.orderBy = parseInt(params.orderBy);
+    params.sys_adder = parseInt(params.sys_adder);
     const rules = {
       roleId: {
         required: true,
@@ -42,6 +43,10 @@ class RoleScenicStatisController extends Controller {
         type: 'int'
       },
       orderBy: {
+        required: true,
+        type: 'int'
+      },
+      sys_adder: {
         required: true,
         type: 'int'
       }
