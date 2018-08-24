@@ -52,6 +52,16 @@ module.exports = (appInfo) => {
       timeout: '60s'
     }
   };
+  config.onerror = {
+    all(err, ctx) {
+      // 在此处定义针对所有响应类型的错误处理方法
+      // 注意，定义了 config.all 之后，其他错误处理方法不会再生效
+      // 错误状态吗大于等于500则不返回前端错误信息
+      if (this.status < 500) {
+        ctx.body = err.message;
+      }
+    }
+  };
 
   return config;
 };
