@@ -1,7 +1,7 @@
 'use strict';
 
 const Service = require('egg').Service;
-
+const Op = require('Sequelize').Op;
 class RoleScenicStatisService extends Service {
   // 查询列表
   async getRoleScenicStatisList(id) {
@@ -74,7 +74,15 @@ class RoleScenicStatisService extends Service {
         required: true,
         type: 'int'
       },
-      orderBy: {
+      scenicStatisOrderBy: {
+        required: true,
+        type: 'int'
+      },
+      scenicStatisTypeId: {
+        type: 'int',
+        required: true
+      },
+      scenicStatisTypeOrderBy: {
         required: true,
         type: 'int'
       },
@@ -94,8 +102,35 @@ class RoleScenicStatisService extends Service {
       const err = JSON.stringify(messages);
       this.ctx.throw(err);
     }
+    const roleScenicStatisParams = {
+      roleId: params.roleId,
+      scenicStatisId: params.scenicStatisId,
+      orderBy: params.scenicStatisOrderBy,
+      sys_adder: params.sys_adder
+    };
     // 新增一条roleScenicStatis数据
-    const roleScenicStatis = await this.app.model.RoleScenicStatis.create(params);
+    const roleScenicStatis = await this.app.model.RoleScenicStatis.create(roleScenicStatisParams);
+    /**
+     * 判断是否需要及联在RoleScenicStatisType中添加数据
+     */
+    // 封装查询参数
+    const roleScenicStatisTypeListParams = {
+      scenicStatisTypeId: params.scenicStatisTypeId,
+      roleId: params.roleId
+    };
+    // 查询roleApplyGroup表，判断apply对应的applyGroup是否存在该表中
+    const dbRoleScenicStatisType = await this.ctx.service.roleScenicStatisType.getRoleScenicStatisTypeList(roleScenicStatisTypeListParams);
+    // 若dbRoleApplyGroup集合长度等于0，表示apply对应的applyGroup还没有权限，则需要执行添加操作
+    if (dbRoleScenicStatisType.length === 0) {
+      // 封装添加参数
+      const addRoleScenicStatisTypeParams = {
+        roleId: params.roleId,
+        scenicStatisTypeId: params.scenicStatisTypeId,
+        sys_adder: params.sys_adder,
+        orderBy: params.scenicStatisTypeOrderBy
+      };
+      await this.ctx.service.roleScenicStatisType.addRoleScenicStatisType(addRoleScenicStatisTypeParams);
+    }
 
     // 组装返回信息
     const result = {};
@@ -117,6 +152,14 @@ class RoleScenicStatisService extends Service {
       scenicStatisId: {
         required: true,
         type: 'int'
+      },
+      scenicStatisTypeId: {
+        required: true,
+        type: 'int'
+      },
+      sys_updator: {
+        required: true,
+        type: 'int'
       }
     };
     // 参数校验
@@ -131,14 +174,52 @@ class RoleScenicStatisService extends Service {
       const err = JSON.stringify(messages);
       this.ctx.throw(err);
     }
+    const whereSearch = {
+      roleId: params.roleId,
+      scenicStatisId: params.scenicStatisId
+    };
     const result = await this.app.model.RoleScenicStatis.update(
       {
-        sys_isDelete: 1
+        sys_isDelete: 1,
+        sys_updator: params.sys_updator
       },
       {
-        where: params
+        where: whereSearch
       }
     );
+    /** *
+     * 判断是否需要及联删除RoleScenicStatisType中的数据
+     */
+    // 根据scenicStatisTypeId查询对应的scenicStatisId
+    const scenicStatis = await this.app.model.ScenicStatis.findAll({
+      where: {
+        scenicStatisTypeId: params.scenicStatisTypeId
+      }
+    });
+    // 遍历scenicStatis集合，将scenicStatisId放入数组
+    const scenicStatisIdList = [];
+    for (const o in scenicStatis) {
+      scenicStatisIdList.push(scenicStatis[o].id);
+    }
+    // 查询roleScenicStatis表，判断roleId对应的scenicStatisTypeId是否在scenicStatisIdList这个数组中
+    const roleScenicStatis = await this.app.model.RoleScenicStatis.findAll({
+      where: {
+        sys_isDelete: 0,
+        roleId: params.roleId,
+        scenicStatisId: {
+          [Op.in]: scenicStatisIdList
+        }
+      }
+    });
+    // 若roleScenicStatis集合长度等于0，则证明scenicStatisTypeId下对应的具体数据，在roleScenicStatis表中已无权限，则需要级联删除RoleScenicStatisType中的数据
+    if (roleScenicStatis.length === 0) {
+      const deleteRoleApplyGroupParams = {
+        roleId: params.roleId,
+        scenicStatisTypeId: params.scenicStatisTypeId,
+        sys_updator: params.sys_updator
+      };
+      await this.service.roleScenicStatisType.deleteRoleScenicStatisType(deleteRoleApplyGroupParams);
+    }
     return result;
   }
 }
