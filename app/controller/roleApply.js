@@ -81,9 +81,9 @@ class RoleApplyController extends Controller {
   async destroy() {
     // 获取url参数
     const applyId = this.ctx.params.id;
-    const roleId = this.ctx.request.body.roleId;
-    const applyGroupId = this.ctx.request.body.applyGroupId;
-    const sys_updator = this.ctx.request.body.sys_updator;
+    const roleId = this.ctx.request.query.roleId;
+    const applyGroupId = this.ctx.request.query.applyGroupId;
+    const sys_updator = this.ctx.request.query.sys_updator;
     const params = {};
     params.applyId = parseInt(applyId);
     params.roleId = parseInt(roleId);
