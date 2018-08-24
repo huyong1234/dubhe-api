@@ -1,7 +1,6 @@
 'use strict';
 
 const Service = require('egg').Service;
-const Op = require('Sequelize').Op;
 class RoleScenicStatisService extends Service {
   // 查询列表
   async getRoleScenicStatisList(id) {
@@ -202,6 +201,7 @@ class RoleScenicStatisService extends Service {
       scenicStatisIdList.push(scenicStatis[o].id);
     }
     // 查询roleScenicStatis表，判断roleId对应的scenicStatisTypeId是否在scenicStatisIdList这个数组中
+    const Op = this.app.Sequelize.Op;
     const roleScenicStatis = await this.app.model.RoleScenicStatis.findAll({
       where: {
         sys_isDelete: 0,

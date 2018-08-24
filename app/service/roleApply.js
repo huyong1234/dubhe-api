@@ -1,7 +1,7 @@
 'use strict';
 
 const Service = require('egg').Service;
-const Op = require('Sequelize').Op;
+
 
 class RoleApplyService extends Service {
   // 查询列表
@@ -197,6 +197,7 @@ class RoleApplyService extends Service {
       applyIdList.push(apply[o].id);
     }
     // 查询roleApply表，判断roleId对应的applyId是否在applyIdList这个数组中
+    const Op = this.app.Sequelize.Op;
     const roleApply = await this.app.model.RoleApply.findAll({
       where: {
         sys_isDelete: 0,
