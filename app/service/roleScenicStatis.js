@@ -77,6 +77,14 @@ class RoleScenicStatisService extends Service {
         required: true,
         type: 'int'
       },
+      dataLatitudeId: {
+        required: true,
+        type: 'int'
+      },
+      dataLatitudeOrderBy: {
+        required: true,
+        type: 'int'
+      },
       scenicStatisTypeId: {
         type: 'int',
         required: true
@@ -112,23 +120,61 @@ class RoleScenicStatisService extends Service {
     /**
      * 判断是否需要及联在RoleScenicStatisType中添加数据
      */
-    // 封装查询参数
+    // 封装一级菜单查询参数
     const roleScenicStatisTypeListParams = {
       scenicStatisTypeId: params.scenicStatisTypeId,
       roleId: params.roleId
     };
-    // 查询roleApplyGroup表，判断apply对应的applyGroup是否存在该表中
-    const dbRoleScenicStatisType = await this.ctx.service.roleScenicStatisType.getRoleScenicStatisTypeList(roleScenicStatisTypeListParams);
-    // 若dbRoleApplyGroup集合长度等于0，表示apply对应的applyGroup还没有权限，则需要执行添加操作
+    // 查询roleScenicStatisType表，判断scenicStatis对应的scenicStatisType是否存在该表中(一级菜单)
+    const dbRoleScenicStatisType = await this.ctx.service.roleScenicStatisType.getRoleScenicStatisTypeList(
+      roleScenicStatisTypeListParams
+    );
+    // 若dbRoleScenicStatisType集合长度等于0，表示scenicStatis对应的scenicStatisType还没有权限，则需要执行添加操作
+    // 如果一级菜单需要添加权限，则正面下面的二级菜单也需要添加权限
     if (dbRoleScenicStatisType.length === 0) {
+      const scenicStatisType = {
+        scenicStatisTypeId: params.scenicStatisTypeId,
+        scenicStatisTypeOrderBy: params.scenicStatisTypeOrderBy
+      };
+      const dataLatitude = {
+        scenicStatisTypeId: params.dataLatitudeId,
+        scenicStatisTypeOrderBy: params.dataLatitudeOrderBy
+      };
+      const array = [scenicStatisType, dataLatitude];
       // 封装添加参数
       const addRoleScenicStatisTypeParams = {
         roleId: params.roleId,
-        scenicStatisTypeId: params.scenicStatisTypeId,
-        sys_adder: params.sys_adder,
-        orderBy: params.scenicStatisTypeOrderBy
+        sys_adder: params.sys_adder
       };
-      await this.ctx.service.roleScenicStatisType.addRoleScenicStatisType(addRoleScenicStatisTypeParams);
+      for (const o in array) {
+        addRoleScenicStatisTypeParams.scenicStatisTypeId = array[o].scenicStatisTypeId;
+        addRoleScenicStatisTypeParams.orderBy = array[o].scenicStatisTypeOrderBy;
+        // 往权限表插入数据
+        await this.ctx.service.roleScenicStatisType.addRoleScenicStatisType(addRoleScenicStatisTypeParams);
+      }
+    }
+
+    // 如果一级菜单已经有权限，则判断二级菜单是否需要添加权限
+    if (dbRoleScenicStatisType.length > 0) {
+      // 封装二级菜单查询参数
+      const dataLatitudeParams = {
+        scenicStatisTypeId: params.dataLatitudeId,
+        roleId: params.dataLatitudeOrderBy
+      };
+      const dataLatitudeList = await this.ctx.service.roleScenicStatisType.getRoleScenicStatisTypeList(
+        dataLatitudeParams
+      );
+      if (dataLatitudeList.length === 0) {
+        // 封装添加参数
+        const addDataLatitudeParams = {
+          roleId: params.roleId,
+          sys_adder: params.sys_adder,
+          scenicStatisTypeId: params.dataLatitudeId,
+          orderBy: params.dataLatitudeOrderBy
+        };
+        // 往权限表插入数据
+        await this.ctx.service.roleScenicStatisType.addRoleScenicStatisType(addDataLatitudeParams);
+      }
     }
 
     // 组装返回信息
@@ -149,6 +195,10 @@ class RoleScenicStatisService extends Service {
         type: 'int'
       },
       scenicStatisId: {
+        required: true,
+        type: 'int'
+      },
+      dataLatitudeId: {
         required: true,
         type: 'int'
       },
@@ -192,7 +242,8 @@ class RoleScenicStatisService extends Service {
     // 根据scenicStatisTypeId查询对应的scenicStatisId
     const scenicStatis = await this.app.model.ScenicStatis.findAll({
       where: {
-        scenicStatisTypeId: params.scenicStatisTypeId
+        sys_isDelete: 0,
+        scenicStatisTypeId: params.dataLatitudeId
       }
     });
     // 遍历scenicStatis集合，将scenicStatisId放入数组
@@ -211,14 +262,48 @@ class RoleScenicStatisService extends Service {
         }
       }
     });
+    // 判断是否需要删除二级菜单权限
     // 若roleScenicStatis集合长度等于0，则证明scenicStatisTypeId下对应的具体数据，在roleScenicStatis表中已无权限，则需要级联删除RoleScenicStatisType中的数据
     if (roleScenicStatis.length === 0) {
       const deleteRoleApplyGroupParams = {
         roleId: params.roleId,
-        scenicStatisTypeId: params.scenicStatisTypeId,
+        scenicStatisTypeId: params.dataLatitudeId,
         sys_updator: params.sys_updator
       };
       await this.service.roleScenicStatisType.deleteRoleScenicStatisType(deleteRoleApplyGroupParams);
+
+      // 判断是否需要继续及联删除一级菜单权限
+      const scenicStatisByDataLatitudeId = await this.app.model.ScenicStatisType.findAll({
+        where: {
+          sys_isDelete: 0,
+          parentId: params.scenicStatisTypeId
+        }
+      });
+      // 遍历scenicStatis集合，将scenicStatisId放入数组
+      const scenicStatisIdListByDataLatitudeId = [];
+      for (const o in scenicStatisByDataLatitudeId) {
+        scenicStatisIdListByDataLatitudeId.push(scenicStatisByDataLatitudeId[o].id);
+      }
+      // 查询roleScenicStatis表，判断roleId对应的scenicStatisTypeId是否在scenicStatisIdList这个数组
+      const roleScenicStatisByDataLatitudeId = await this.app.model.RoleScenicStatisType.findAll({
+        where: {
+          sys_isDelete: 0,
+          roleId: params.roleId,
+          scenicStatisTypeId: {
+            [Op.in]: scenicStatisIdListByDataLatitudeId
+          }
+        }
+      });
+      // 判断是否需要删除一级菜单权限
+      // 若roleScenicStatis集合长度等于0，则证明scenicStatisTypeId下对应的具体数据，在roleScenicStatis表中已无权限，则需要级联删除RoleScenicStatisType中的数据
+      if (roleScenicStatisByDataLatitudeId.length === 0) {
+        const deleteRoleApplyGroupParams = {
+          roleId: params.roleId,
+          scenicStatisTypeId: params.scenicStatisTypeId,
+          sys_updator: params.sys_updator
+        };
+        await this.service.roleScenicStatisType.deleteRoleScenicStatisType(deleteRoleApplyGroupParams);
+      }
     }
     return result;
   }
