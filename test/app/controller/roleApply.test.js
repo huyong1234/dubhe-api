@@ -8,10 +8,12 @@ describe('test/app/controller/roleApplies.test.js', () => {
   });
   const testobj = {
     roleId: 1,
-    applyId: 1,
+    applyId: 5,
     applyOrderBy: 1,
-    applyGroupId: 1,
-    applyGroupOrderBy: 1
+    applyGroupId: 3,
+    applyGroupOrderBy: 1,
+    sys_adder: 1,
+    sys_updator: 1
   };
   // 新建权限接口
   it('should POST /api/RoleApplies', () => {
@@ -24,8 +26,6 @@ describe('test/app/controller/roleApplies.test.js', () => {
         const { body } = res;
         // 测试返回字段
         assert(body);
-        testobj.applyOrderBy = body.applyOrderBy;
-        testobj.applyGroupOrderBy = body.applyGroupOrderBy;
         assert(body.roleId, testobj.roleId);
         assert(body.applyId, testobj.applyId);
         assert(body.applyOrderBy, testobj.applyOrderBy);
@@ -41,6 +41,7 @@ describe('test/app/controller/roleApplies.test.js', () => {
         .httpRequest()
         // 如果有中文要用encodeURI()方法对url进行转码
         .get(`/api/RoleApplies/${testobj.roleId}`)
+        // .get('/api/RoleApplies/4')
         .expect((res) => {
           const { body } = res;
           assert(body);
@@ -55,7 +56,7 @@ describe('test/app/controller/roleApplies.test.js', () => {
   it('should DELETE /api/RoleApplies/:id', () => {
     return app
       .httpRequest()
-      .delete(`/api/RoleApplies/${testobj.applyId}/?roleId=${testobj.roleId}`)
+      .delete(`/api/RoleApplies/${testobj.applyId}/?roleId=${testobj.roleId}&applyGroupId=${testobj.applyGroupId}&sys_updator=${testobj.sys_updator}`)
       .expect({})
       .expect(204);
   });

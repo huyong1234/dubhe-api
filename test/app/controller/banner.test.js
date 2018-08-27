@@ -34,7 +34,7 @@ describe('test/app/controller/banner.test.js', () => {
         assert(body.action, testobj.action);
         assert(body.orderBy, testobj.orderBy);
         assert(body.actionType, testobj.actionType);
-        assert(body.sys_addTime);
+        assert(body.created_at);
       })
       .expect(200);
   });
@@ -57,7 +57,8 @@ describe('test/app/controller/banner.test.js', () => {
         assert(body.action, testobj.action);
         assert(body.orderBy, testobj.orderBy);
         assert(body.actionType, testobj.actionType);
-        assert(body.sys_addTime);
+        assert(body.created_at);
+        assert(body.updated_at);
       })
       .expect(200);
   });
@@ -68,7 +69,7 @@ describe('test/app/controller/banner.test.js', () => {
       app
         .httpRequest()
         // 用encodeURI()方法对url进行转码
-        .get(encodeURI('/api/Banners/?limit=4&offSet=0'))
+        .get(encodeURI('/api/Banners/?limit=4&offSet=0&companyId=1'))
         .expect((res) => {
           const { body } = res;
           assert(body);
@@ -95,7 +96,7 @@ describe('test/app/controller/banner.test.js', () => {
         assert(body.action, testobj.action);
         assert(body.orderBy, testobj.orderBy);
         assert(body.actionType, testobj.actionType);
-        assert(body.sys_addTime);
+        assert(body.created_at);
       });
   });
 

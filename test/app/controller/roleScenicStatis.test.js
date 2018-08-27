@@ -8,8 +8,12 @@ describe('test/app/controller/roleScenicStatis.test.js', () => {
   });
   const testobj = {
     roleId: 1,
+    sys_adder: 1,
+    sys_updator: 1,
     scenicStatisId: 1,
-    orderBy: 1
+    scenicStatisOrderBy: 1,
+    scenicStatisTypeId: 1,
+    scenicStatisTypeOrderBy: 1
   };
   // 新建权限接口
   it('should POST /api/RoleScenicStatis', () => {
@@ -36,7 +40,7 @@ describe('test/app/controller/roleScenicStatis.test.js', () => {
       app
         .httpRequest()
         // 如果有中文要用encodeURI()方法对url进行转码
-        .get(`/api/RoleApplies/${testobj.roleId}`)
+        .get(`/api/RoleScenicStatis/${testobj.roleId}`)
         .expect((res) => {
           const { body } = res;
           assert(body);
@@ -51,7 +55,7 @@ describe('test/app/controller/roleScenicStatis.test.js', () => {
   it('should DELETE /api/RoleScenicStatis/:id', () => {
     return app
       .httpRequest()
-      .delete(`/api/RoleApplies/${testobj.scenicStatisId}/?roleId=${testobj.roleId}`)
+      .delete(`/api/RoleScenicStatis/${testobj.scenicStatisId}/?roleId=${testobj.roleId}&scenicStatisTypeId=${testobj.scenicStatisTypeId}&sys_updator=${testobj.sys_updator}`)
       .expect({})
       .expect(204);
   });

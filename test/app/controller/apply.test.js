@@ -60,8 +60,8 @@ describe('test/app/controller/apply.test.js', () => {
         assert(body.action, testobj.action);
         assert(body.icon, testobj.icon);
         assert(body.orderBy, testobj.orderBy);
-        assert(body.sys_updateTime, testobj.sys_updateTime);
-        assert(body.sys_addTime);
+        assert(body.updated_at, testobj.sys_updateTime);
+        assert(body.created_at);
       })
       .expect(200);
   });
@@ -72,7 +72,7 @@ describe('test/app/controller/apply.test.js', () => {
       app
         .httpRequest()
         // 用encodeURI()方法对url进行转码
-        .get(encodeURI('/api/Applies/?limit=4&offSet=0'))
+        .get(encodeURI('/api/Applies/?limit=4&offSet=0&id=1'))
         .expect((res) => {
           const { body } = res;
           assert(body);

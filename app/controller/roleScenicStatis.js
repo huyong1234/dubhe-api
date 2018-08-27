@@ -32,6 +32,8 @@ class RoleScenicStatisController extends Controller {
     params.roleId = parseInt(params.roleId);
     params.scenicStatisId = parseInt(params.scenicStatisId);
     params.scenicStatisOrderBy = parseInt(params.scenicStatisOrderBy);
+    params.dataLatitudeId = parseInt(params.dataLatitudeId);
+    params.dataLatitudeOrderBy = parseInt(params.dataLatitudeOrderBy);
     params.scenicStatisTypeId = parseInt(params.scenicStatisTypeId);
     params.scenicStatisTypeOrderBy = parseInt(params.scenicStatisTypeOrderBy);
     params.sys_adder = parseInt(params.sys_adder);
@@ -45,6 +47,14 @@ class RoleScenicStatisController extends Controller {
         type: 'int'
       },
       scenicStatisOrderBy: {
+        required: true,
+        type: 'int'
+      },
+      dataLatitudeId: {
+        required: true,
+        type: 'int'
+      },
+      dataLatitudeOrderBy: {
         required: true,
         type: 'int'
       },
@@ -82,10 +92,12 @@ class RoleScenicStatisController extends Controller {
     // 获取url参数
     const scenicStatisId = this.ctx.params.id;
     const roleId = this.ctx.request.query.roleId;
+    const dataLatitudeId = this.ctx.request.query.dataLatitudeId;
     const scenicStatisTypeId = this.ctx.request.query.scenicStatisTypeId;
     const sys_updator = this.ctx.request.query.sys_updator;
     const params = {};
     params.scenicStatisId = parseInt(scenicStatisId);
+    params.dataLatitudeId = parseInt(dataLatitudeId);
     params.scenicStatisTypeId = parseInt(scenicStatisTypeId);
     params.sys_updator = parseInt(sys_updator);
     params.roleId = parseInt(roleId);
@@ -96,6 +108,10 @@ class RoleScenicStatisController extends Controller {
         type: 'int'
       },
       scenicStatisId: {
+        required: true,
+        type: 'int'
+      },
+      dataLatitudeId: {
         required: true,
         type: 'int'
       },

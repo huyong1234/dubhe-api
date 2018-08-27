@@ -29,7 +29,8 @@ describe('test/app/controller/applyGroup.test.js', () => {
         testobj.id = body.id;
         assert(body.name, testobj.name);
         assert(body.orderBy, testobj.orderBy);
-        assert(body.sys_addTime);
+        assert(body.created_at);
+        assert(body.updated_at);
       })
       .expect(200);
   });
@@ -49,7 +50,7 @@ describe('test/app/controller/applyGroup.test.js', () => {
         assert(body.id);
         assert(body.name, testobj.name);
         assert(body.orderBy, testobj.orderBy);
-        assert(body.sys_updateTime);
+        assert(body.updated_at);
       })
       .expect(200);
   });
@@ -60,7 +61,7 @@ describe('test/app/controller/applyGroup.test.js', () => {
       app
         .httpRequest()
         // 用encodeURI()方法对url进行转码
-        .get(encodeURI('/api/ApplyGroups/?limit=4&offSet=0'))
+        .get(encodeURI('/api/ApplyGroups/?limit=4&offSet=0&companyId=1'))
         .expect((res) => {
           const { body } = res;
           assert(body);
