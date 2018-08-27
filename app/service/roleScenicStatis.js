@@ -284,7 +284,7 @@ class RoleScenicStatisService extends Service {
       for (const o in scenicStatisByDataLatitudeId) {
         scenicStatisIdListByDataLatitudeId.push(scenicStatisByDataLatitudeId[o].id);
       }
-      // 查询roleScenicStatis表，判断roleId对应的scenicStatisTypeId是否在scenicStatisIdList这个数组
+      // 查询roleScenicStatisType表，判断roleId对应的scenicStatisTypeId是否在scenicStatisIdList这个数组
       const roleScenicStatisByDataLatitudeId = await this.app.model.RoleScenicStatisType.findAll({
         where: {
           sys_isDelete: 0,
@@ -295,7 +295,7 @@ class RoleScenicStatisService extends Service {
         }
       });
       // 判断是否需要删除一级菜单权限
-      // 若roleScenicStatis集合长度等于0，则证明scenicStatisTypeId下对应的具体数据，在roleScenicStatis表中已无权限，则需要级联删除RoleScenicStatisType中的数据
+      // 若roleScenicStatisByDataLatitudeId集合长度等于0，则证明scenicStatisTypeId下对应的具体数据，在roleScenicStatis表中已无权限，则需要级联删除RoleScenicStatisType中的数据
       if (roleScenicStatisByDataLatitudeId.length === 0) {
         const deleteRoleApplyGroupParams = {
           roleId: params.roleId,
