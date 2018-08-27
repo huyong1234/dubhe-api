@@ -62,7 +62,7 @@ describe('test/app/controller/scenicStatisTypes.test.js', () => {
       app
         .httpRequest()
         // 用encodeURI()方法对url进行转码
-        .get(encodeURI('/api/ScenicStatisTypes/?limit=4&offSet=0'))
+        .get(encodeURI('/api/ScenicStatisTypes/?limit=4&offSet=0&scenicId=1'))
         .expect((res) => {
           const { body } = res;
           assert(body);
