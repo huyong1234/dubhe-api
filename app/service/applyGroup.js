@@ -49,6 +49,7 @@ class ApplyGroupService extends Service {
     }
     const applyGroup = await this.app.model.ApplyGroup.findAll({
       where: whereSearch,
+      order: ['orderBy'],
       limit: params.limit,
       offset: params.offSet,
       attributes: fields

@@ -25,6 +25,7 @@ class DataLatitudeService extends Service {
     };
     const dataLatitudes = await this.app.model.DataLatitude.findAll({
       where: whereSearch,
+      order: ['orderBy'],
       attributes: fields
     });
     return dataLatitudes;

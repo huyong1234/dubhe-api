@@ -59,6 +59,7 @@ class ScenicStatisTypeService extends Service {
     }
     const dbScenicStatisTypes = await this.app.model.ScenicStatisType.findAll({
       where: whereSearch,
+      order: ['orderBy'],
       limit: params.limit,
       offset: params.offSet,
       attributes: fields

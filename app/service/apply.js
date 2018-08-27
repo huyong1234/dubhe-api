@@ -72,6 +72,8 @@ class ApplyService extends Service {
       where: whereSearch,
       limit: params.limit,
       offset: params.offSet,
+      // 排序
+      order: ['orderBy'],
       // 查询字段
       attributes: fields
     });

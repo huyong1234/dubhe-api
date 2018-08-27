@@ -33,14 +33,16 @@ class RoleApplyService extends Service {
       roleApply.orderBy = roleApplies[o].orderBy;
       // 根据applyId查询apply表
       const apply = await this.app.model.Apply.findById(roleApplies[o].applyId, {
-        attributes: ['id', 'name', 'icon', 'applyGroupId']
+        attributes: ['id', 'name', 'icon', 'applyGroupId'],
+        order: ['orderBy']
       });
       roleApply.applyName = apply.name;
       roleApply.applyIcon = apply.icon;
       roleApply.applyGroupId = apply.applyGroupId;
       // 根据applyGroupId查询applyGroup表
       const applyGroup = await this.app.model.ApplyGroup.findById(apply.applyGroupId, {
-        attributes: ['id', 'name', 'orderBy']
+        attributes: ['id', 'name', 'orderBy'],
+        order: ['orderBy']
       });
       roleApply.applyGroupName = applyGroup.name;
       roleApply.applyGroupOrderBy = applyGroup.orderBy;
