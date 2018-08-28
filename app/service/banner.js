@@ -86,6 +86,7 @@ class BannerService extends Service {
       where: whereSearch,
       limit: params.limit,
       offset: params.offSet,
+      order: ['orderBy'],
       attributes: fields
     });
 

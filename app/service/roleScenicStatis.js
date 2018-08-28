@@ -159,7 +159,7 @@ class RoleScenicStatisService extends Service {
       // 封装二级菜单查询参数
       const dataLatitudeParams = {
         scenicStatisTypeId: params.dataLatitudeId,
-        roleId: params.dataLatitudeOrderBy
+        roleId: params.roleId
       };
       const dataLatitudeList = await this.ctx.service.roleScenicStatisType.getRoleScenicStatisTypeList(
         dataLatitudeParams
