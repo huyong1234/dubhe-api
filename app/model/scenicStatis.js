@@ -47,7 +47,7 @@ module.exports = (app) => {
       },
       contents: {
         type: STRING,
-        allowNull: false
+        allowNull: true
       },
       name: {
         type: STRING,

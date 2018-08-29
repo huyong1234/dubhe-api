@@ -61,6 +61,57 @@ class ScenicStatisService extends Service {
     return ScenicStatis;
   }
 
+  // 新增数据
+  async addScenicStatis(params) {
+    // 参数校验规则
+    const createRule = {
+      name: {
+        type: 'string',
+        required: true
+      },
+      orderBy: {
+        type: 'int',
+        required: true
+      },
+      modelId: {
+        type: 'int',
+        required: true
+      },
+      scenicStatisTypeId: {
+        type: 'int',
+        required: true
+      },
+      sys_adder: {
+        type: 'int',
+        required: true
+      }
+    };
+
+    // 参数校验
+    const errors = this.app.validator.validate(createRule, params);
+    if (errors) {
+      const messages = [];
+      for (const index in errors) {
+        const message = errors[index].field + ' is ' + errors[index].message;
+        messages.push(message);
+      }
+      const err = JSON.stringify(messages);
+      this.ctx.throw(400, err);
+    }
+
+    const dbScenicStatis = await this.app.model.ScenicStatis.create(params);
+    const scenicStatis = {
+      id: dbScenicStatis.id,
+      scenicStatisTypeId: dbScenicStatis.scenicStatisTypeId,
+      modelId: dbScenicStatis.modelId,
+      name: dbScenicStatis.name,
+      orderBy: dbScenicStatis.orderBy,
+      sys_addTime: dbScenicStatis.sys_addTime,
+      sys_adder: dbScenicStatis.sys_adder
+    };
+    return scenicStatis;
+  }
+
   // 更新数据
   async updateScenicStatis(params) {
     const createRule = {
