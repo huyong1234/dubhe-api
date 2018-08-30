@@ -2,7 +2,6 @@
 
 const Service = require('egg').Service;
 
-
 class RoleApplyService extends Service {
   // 查询列表
   async getRoleApplyList(id) {
@@ -36,21 +35,24 @@ class RoleApplyService extends Service {
         attributes: ['id', 'name', 'icon', 'applyGroupId'],
         order: ['orderBy']
       });
-      roleApply.applyName = apply.name;
-      roleApply.applyIcon = apply.icon;
-      roleApply.applyGroupId = apply.applyGroupId;
-      // 根据applyGroupId查询applyGroup表
-      const applyGroup = await this.app.model.ApplyGroup.findById(apply.applyGroupId, {
-        attributes: ['id', 'name', 'orderBy'],
-        order: ['orderBy']
-      });
-      roleApply.applyGroupName = applyGroup.name;
-      roleApply.applyGroupOrderBy = applyGroup.orderBy;
+      if (apply) {
+        roleApply.applyName = apply.name;
+        roleApply.applyIcon = apply.icon;
+        roleApply.applyGroupId = apply.applyGroupId;
+        // 根据applyGroupId查询applyGroup表
+        const applyGroup = await this.app.model.ApplyGroup.findById(apply.applyGroupId, {
+          attributes: ['id', 'name', 'orderBy'],
+          order: ['orderBy']
+        });
+        if (applyGroup) {
+          roleApply.applyGroupName = applyGroup.name;
+          roleApply.applyGroupOrderBy = applyGroup.orderBy;
+        }
 
-      // 将roleApply对象放入roleApplyList
-      roleApplyList.push(roleApply);
+        // 将roleApply对象放入roleApplyList
+        roleApplyList.push(roleApply);
+      }
     }
-
     // 组装接口返回列表
     return roleApplyList;
   }

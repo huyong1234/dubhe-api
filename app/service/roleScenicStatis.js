@@ -33,29 +33,33 @@ class RoleScenicStatisService extends Service {
       const scenicStatis = await this.app.model.ScenicStatis.findById(roleScenicStatises[o].scenicStatisId, {
         attributes: ['id', 'modelId', 'contents', 'scenicStatisTypeId', 'name', 'orderBy']
       });
-      roleScenicStatis.scenicStatisModelId = scenicStatis.modelId;
-      roleScenicStatis.scenicStatisName = scenicStatis.name;
-      roleScenicStatis.scenicStatisOrderBy = scenicStatis.orderBy;
-      roleScenicStatis.scenicStatisContents = scenicStatis.contents;
-      roleScenicStatis.scenicStatisTypeId = scenicStatis.scenicStatisTypeId;
-      // 根据scenicStatisTypeId查询scenicStatisType表
-      const scenicStatisType = await this.app.model.ScenicStatisType.findById(scenicStatis.scenicStatisTypeId, {
-        attributes: ['id', 'parentId', 'name', 'subName', 'icon', 'orderBy']
-      });
-      roleScenicStatis.dataLatitudesNmae = scenicStatisType.name;
-      roleScenicStatis.dataLatitudesId = scenicStatisType.id;
-      roleScenicStatis.scenicStatisTypeSubName = scenicStatisType.subName;
-      roleScenicStatis.scenicStatisTypeOrderBy = scenicStatisType.orderBy;
-      roleScenicStatis.scenicStatisTypeIcon = scenicStatisType.icon;
-      roleScenicStatis.scenicStatisTypeId = scenicStatisType.parentId;
+      if (scenicStatis) {
+        roleScenicStatis.scenicStatisModelId = scenicStatis.modelId;
+        roleScenicStatis.scenicStatisName = scenicStatis.name;
+        roleScenicStatis.scenicStatisOrderBy = scenicStatis.orderBy;
+        roleScenicStatis.scenicStatisContents = scenicStatis.contents;
+        roleScenicStatis.scenicStatisTypeId = scenicStatis.scenicStatisTypeId;
+        // 根据scenicStatisTypeId查询scenicStatisType表
+        const scenicStatisType = await this.app.model.ScenicStatisType.findById(scenicStatis.scenicStatisTypeId, {
+          attributes: ['id', 'parentId', 'name', 'subName', 'icon', 'orderBy']
+        });
+        if (scenicStatisType) {
+          roleScenicStatis.dataLatitudesNmae = scenicStatisType.name;
+          roleScenicStatis.dataLatitudesId = scenicStatisType.id;
+          roleScenicStatis.scenicStatisTypeSubName = scenicStatisType.subName;
+          roleScenicStatis.scenicStatisTypeOrderBy = scenicStatisType.orderBy;
+          roleScenicStatis.scenicStatisTypeIcon = scenicStatisType.icon;
+          roleScenicStatis.scenicStatisTypeId = scenicStatisType.parentId;
 
-      // 根据parentId查询scenicStatisType表，获取统计数据类型名称
-      const scenicStatisTypeParent = await this.app.model.ScenicStatisType.findById(scenicStatisType.parentId, {
-        attributes: ['id', 'name']
-      });
-      roleScenicStatis.scenicStatisTypeName = scenicStatisTypeParent.name;
-      // 将roleApply对象放入roleApplyList
-      roleScenicStatisList.push(roleScenicStatis);
+          // 根据parentId查询scenicStatisType表，获取统计数据类型名称
+          const scenicStatisTypeParent = await this.app.model.ScenicStatisType.findById(scenicStatisType.parentId, {
+            attributes: ['id', 'name']
+          });
+          roleScenicStatis.scenicStatisTypeName = scenicStatisTypeParent.name;
+          // 将roleApply对象放入roleApplyList
+          roleScenicStatisList.push(roleScenicStatis);
+        }
+      }
     }
 
     // 组装接口返回列表
