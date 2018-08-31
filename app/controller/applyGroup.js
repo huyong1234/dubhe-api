@@ -46,11 +46,9 @@ class ApplyGroupController extends Controller {
     }
     // 调用service，获取数据列表
     const applyGroup = await this.ctx.service.applyGroup.getApplyGroupList(params);
-    // 调用service，查询总数据条数
-    const total = await this.ctx.service.applyGroup.getTotal(params.companyId);
     // 将数据总条数，放入响应头
-    this.ctx.response.set('total', total);
-    this.ctx.body = applyGroup;
+    this.ctx.response.set('total', applyGroup.total);
+    this.ctx.body = applyGroup.applyGroupList;
   }
 
   // 查询单个

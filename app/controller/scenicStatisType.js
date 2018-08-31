@@ -44,11 +44,9 @@ class ScenicStatisTypeController extends Controller {
     }
     // 调用service，获取数据列表
     const scenicStatisType = await this.ctx.service.scenicStatisType.getScenicStatisTypeList(params);
-    // 调用service，查询总数据条数
-    const total = await this.ctx.service.scenicStatisType.getTotal(params.scenicId);
     // 将数据总条数，放入响应头
-    this.ctx.response.set('total', total);
-    this.ctx.body = scenicStatisType;
+    this.ctx.response.set('total', scenicStatisType.total);
+    this.ctx.body = scenicStatisType.dbScenicStatisTypes;
   }
 
   // 查询单个接口

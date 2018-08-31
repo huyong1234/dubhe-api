@@ -55,12 +55,10 @@ class ApplyController extends Controller {
     }
     // 调用service,获取数据列表
     const apply = await this.ctx.service.apply.getApplyList(params);
-    // 调用service，查询总数据条数
-    const total = await this.ctx.service.apply.getTotal(params.id);
     // 将数据总条数，放入响应头
-    this.ctx.response.set('total', total);
+    this.ctx.response.set('total', apply.total);
 
-    this.ctx.body = apply;
+    this.ctx.body = apply.applyList;
   }
 
   // // 查询单个

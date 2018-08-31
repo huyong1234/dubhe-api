@@ -2,7 +2,7 @@
 
 const Service = require('egg').Service;
 // 查询字段
-const fields = [ 'id', 'companyId', 'name', 'orderBy', 'sys_adder', 'sys_updator', 'created_at', 'updated_at' ];
+const fields = ['id', 'companyId', 'name', 'orderBy', 'sys_adder', 'sys_updator', 'created_at', 'updated_at'];
 
 class ApplyGroupService extends Service {
   // 查询列表
@@ -47,13 +47,18 @@ class ApplyGroupService extends Service {
     if (params.name) {
       whereSearch.name = params.name;
     }
-    const applyGroup = await this.app.model.ApplyGroup.findAll({
+    const applyGroupList = await this.app.model.ApplyGroup.findAll({
       where: whereSearch,
       order: ['orderBy'],
       limit: params.limit,
       offset: params.offSet,
       attributes: fields
     });
+    const total = await this.getTotal(whereSearch);
+    const applyGroup = {
+      applyGroupList,
+      total
+    };
     return applyGroup;
   }
 
@@ -174,11 +179,7 @@ class ApplyGroupService extends Service {
   }
 
   // 查询数据总量
-  async getTotal(companyId) {
-    const whereSearch = {
-      sys_isDelete: 0,
-      companyId
-    };
+  async getTotal(whereSearch) {
     const total = await this.app.model.ApplyGroup.count({
       where: whereSearch
     });

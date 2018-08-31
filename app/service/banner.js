@@ -82,7 +82,7 @@ class BannerService extends Service {
     }
 
     // 查询数据库
-    const dbBanners = await this.app.model.Banner.findAll({
+    const bannerList = await this.app.model.Banner.findAll({
       where: whereSearch,
       limit: params.limit,
       offset: params.offSet,
@@ -90,7 +90,13 @@ class BannerService extends Service {
       attributes: fields
     });
 
-    return dbBanners;
+    const total = await this.getTotal(whereSearch);
+    const banner = {
+      bannerList,
+      total
+    };
+
+    return banner;
   }
 
   // 根据id查询
@@ -239,11 +245,7 @@ class BannerService extends Service {
   }
 
   // 查询数据总量
-  async getTotal(companyId) {
-    const whereSearch = {
-      sys_isDelete: 0,
-      companyId
-    };
+  async getTotal(whereSearch) {
     const total = await this.app.model.Banner.count({
       where: whereSearch
     });
