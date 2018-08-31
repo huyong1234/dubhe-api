@@ -32,6 +32,9 @@ class RoleApplyService extends Service {
       roleApply.orderBy = roleApplies[o].orderBy;
       // 根据applyId查询apply表
       const apply = await this.app.model.Apply.findById(roleApplies[o].applyId, {
+        where: {
+          sys_isDelete: 0
+        },
         attributes: ['id', 'name', 'icon', 'applyGroupId'],
         order: ['orderBy']
       });
@@ -41,6 +44,9 @@ class RoleApplyService extends Service {
         roleApply.applyGroupId = apply.applyGroupId;
         // 根据applyGroupId查询applyGroup表
         const applyGroup = await this.app.model.ApplyGroup.findById(apply.applyGroupId, {
+          where: {
+            sys_isDelete: 0
+          },
           attributes: ['id', 'name', 'orderBy'],
           order: ['orderBy']
         });
