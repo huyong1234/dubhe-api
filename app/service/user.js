@@ -3,7 +3,7 @@
 const Service = require('egg').Service;
 
 class UserService extends Service {
-  // 跟去SSOID查询用户信息
+  // 根据SSOID查询用户信息
   async getUser(ssoid) {
     const user = await this.app.model.Users.findAll({
       where: {
