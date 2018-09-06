@@ -104,6 +104,30 @@ class OssController extends Controller {
     });
     this.ctx.body = result;
   }
+
+  /**
+   * 获取通知模块（Notice）上传路径及签名
+   */
+  async getNoticeUploadPathAndSignature() {
+    const {
+      accessKeyId,
+      accessKeySecret,
+      bucket,
+      endpoint,
+      policys: { noytice: noticePolicyConfig }
+    } = this.app.config.aliyunOSS;
+
+    // 调用service
+    const result = await this.service.oss.getUploadPathAndSignature({
+      accessKeyId,
+      accessKeySecret,
+      bucket,
+      endpoint,
+      policy: noticePolicyConfig
+    });
+    this.ctx.body = result;
+  }
+
   /**
    * 获取加密后的OSS访问地址
    */

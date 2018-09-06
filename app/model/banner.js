@@ -55,7 +55,7 @@ module.exports = (app) => {
       }
     },
     {
-      // timestamps: false,
+      // c
       freezeTableName: true,
       tableName: TABLBE_NAME
     }

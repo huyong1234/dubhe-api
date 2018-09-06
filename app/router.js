@@ -30,10 +30,19 @@ module.exports = (app) => {
   router.resources('Scenics', '/api/Scenics', controller.scenic);
   // api/Users
   router.resources('Users', '/api/Users', controller.user);
+  // api/Notices
+  router.resources('Notices', '/api/Notices', controller.notice);
+  // api/NoticesType
+  router.resources('NoticesType', '/api/NoticesType', controller.noticeType);
+  // api/NoticesHistory
+  router.resources('NoticesHistory', '/api/NoticesHistory', controller.noticeHistory);
+  // api/Department
+  router.get('Department', '/api/Department/:subCompanyId', controller.department.echo);
   // oss上传
   router.get('/api/OSSConfig/Banner', controller.oss.getBannerUploadPathAndSignature);
   router.get('/api/OSSConfig/Apply', controller.oss.getApplyUploadPathAndSignature);
   router.get('/api/OSSConfig/ScenicStatis', controller.oss.getScenicStatisUploadPathAndSignature);
+  router.get('/api/OSSConfig/Notice', controller.oss.getNoticeUploadPathAndSignature);
   // oss访问
   router.get('/api/OSSConfig/SignatureUrl/:path', controller.oss.getSignatureUrl);
   // 健康检查接口
