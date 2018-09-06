@@ -12,6 +12,8 @@ describe('test/app/controller/roleScenicStatis.test.js', () => {
     sys_updator: 1,
     scenicStatisId: 1,
     scenicStatisOrderBy: 1,
+    dataLatitudeId: 1,
+    dataLatitudeOrderBy: 1,
     scenicStatisTypeId: 1,
     scenicStatisTypeOrderBy: 1
   };
@@ -55,7 +57,7 @@ describe('test/app/controller/roleScenicStatis.test.js', () => {
   it('should DELETE /api/RoleScenicStatis/:id', () => {
     return app
       .httpRequest()
-      .delete(`/api/RoleScenicStatis/${testobj.scenicStatisId}/?roleId=${testobj.roleId}&scenicStatisTypeId=${testobj.scenicStatisTypeId}&sys_updator=${testobj.sys_updator}`)
+      .delete(`/api/RoleScenicStatis/${testobj.scenicStatisId}/?roleId=${testobj.roleId}&dataLatitudeId=${testobj.dataLatitudeId}&scenicStatisTypeId=${testobj.scenicStatisTypeId}&sys_updator=${testobj.sys_updator}`)
       .expect({})
       .expect(204);
   });

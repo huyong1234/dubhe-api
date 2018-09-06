@@ -39,6 +39,10 @@ module.exports = (appInfo) => {
       scenicStatis: {
         expiration: 30,
         dir: 'scenic-statis/'
+      },
+      notice: {
+        expiration: 30,
+        dir: 'notice/'
       }
     }
   };
@@ -60,6 +64,24 @@ module.exports = (appInfo) => {
       if (this.status < 500) {
         ctx.body = err.message;
       }
+    }
+  };
+
+  // 推送相关配置
+  config.notify = {
+    // url: 'http://127.0.0.1:7001/api/notice',
+    url: 'http://api.zhaochewisdom.com/notify/api/notice',
+    headers: {
+      'ZC-Authorization': '5a9cb35668d85500019e5bf10f383e4606c342d997e5d69ea0373a77',
+      'ZC-X-AccessKey': 'dubhe-app-push'
+    }
+  };
+
+  // java接口
+  config.department = {
+    host: 'http://api.zhaochewisdom.com/dubhe-app/api/departments',
+    headers: {
+      'ZC-Authorization': '5a9cb35668d85500019e5bf10f383e4606c342d997e5d69ea0373a77'
     }
   };
 

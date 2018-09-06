@@ -68,7 +68,7 @@ class ApplyService extends Service {
     if (params.id) {
       whereSearch.applyGroupId = params.id;
     }
-    const apply = await this.app.model.Apply.findAll({
+    const applyList = await this.app.model.Apply.findAll({
       where: whereSearch,
       limit: params.limit,
       offset: params.offSet,
@@ -77,6 +77,12 @@ class ApplyService extends Service {
       // 查询字段
       attributes: fields
     });
+    // 查询数据总数
+    const total = await this.getTotal(whereSearch);
+    const apply = {
+      applyList,
+      total
+    };
     return apply;
   }
   // 查询对象
@@ -223,11 +229,7 @@ class ApplyService extends Service {
   }
 
   // 查询数据总量
-  async getTotal(applyGroupId) {
-    const whereSearch = {
-      applyGroupId,
-      sys_isDelete: 0
-    };
+  async getTotal(whereSearch) {
     const total = await this.app.model.Apply.count({
       where: whereSearch
     });

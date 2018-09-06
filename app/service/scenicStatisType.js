@@ -64,8 +64,13 @@ class ScenicStatisTypeService extends Service {
       offset: params.offSet,
       attributes: fields
     });
+    const total = await this.getTotal(whereSearch);
+    const scenicStatisTypes = {
+      dbScenicStatisTypes,
+      total
+    };
 
-    return dbScenicStatisTypes;
+    return scenicStatisTypes;
   }
 
   // 查询单个
@@ -201,12 +206,7 @@ class ScenicStatisTypeService extends Service {
   }
 
   // 查询数据总量
-  async getTotal(scenicId) {
-    const whereSearch = {
-      scenicId,
-      parentId: 0,
-      sys_isDelete: 0
-    };
+  async getTotal(whereSearch) {
     const total = await this.app.model.ScenicStatisType.count({
       where: whereSearch
     });
