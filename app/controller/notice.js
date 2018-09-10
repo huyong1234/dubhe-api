@@ -79,6 +79,7 @@ class NoticeController extends Controller {
   async create() {
     // 获取参数
     const params = this.ctx.request.body;
+    this.app.logger.debug('新增通知接口参数' + params);
     // 配置验证规则
     const createRule = {
       partition: {
@@ -115,6 +116,7 @@ class NoticeController extends Controller {
       }
     };
     // 参数校验
+    this.app.logger.debug('valid controller params begin...');
     const errors = this.app.validator.validate(createRule, params);
     if (errors) {
       const messages = [];
@@ -125,6 +127,7 @@ class NoticeController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
+    this.app.logger.debug('valid controller params end');
     // 将string转为int类型
     params.sys_adder = parseInt(params.sys_adder);
     params.partition = parseInt(params.partition);
@@ -140,6 +143,7 @@ class NoticeController extends Controller {
     const noticeId = this.ctx.params.id;
     // 获取formbody参数
     const params = this.ctx.request.body;
+    this.app.logger.debug('修改通知接口参数' + params);
     // 配置验证规则
     const createRule = {
       partition: {
@@ -176,6 +180,7 @@ class NoticeController extends Controller {
       }
     };
     // 参数校验
+    this.app.logger.debug('valid controller params begin...');
     const errors = this.app.validator.validate(createRule, params);
     if (errors) {
       const messages = [];
@@ -186,6 +191,7 @@ class NoticeController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
+    this.app.logger.debug('valid controller params end');
     // 将string转为int类型
     params.sys_updator = parseInt(params.sys_updator);
     if (params.partition) {

@@ -13,6 +13,7 @@ class DataLatitudeController extends Controller {
   async create() {
     // 获取formBody参数
     const params = this.ctx.request.body;
+    this.app.logger.debug('新建数据纬度接口参数：' + params);
     params.scenicId = parseInt(params.scenicId);
     params.parentId = parseInt(params.parentId);
     params.orderBy = parseInt(params.orderBy);
@@ -45,6 +46,7 @@ class DataLatitudeController extends Controller {
       }
     };
     // 参数校验
+    this.app.logger.debug('valid params begin...');
     const errors = this.app.validator.validate(createRule, params);
     if (errors) {
       const messages = [];
@@ -55,6 +57,7 @@ class DataLatitudeController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
+    this.app.logger.debug('valid params end');
     // 调用service
     const dataLatitude = await this.ctx.service.dataLatitude.addDataLatitude(params);
     this.ctx.body = dataLatitude;
@@ -70,6 +73,7 @@ class DataLatitudeController extends Controller {
     params.id = parseInt(params.id);
     params.sys_updator = parseInt(params.sys_updator);
     params.orderBy = parseInt(params.orderBy);
+    this.app.logger.debug('更新数据纬度接口参数：' + params);
     const createRule = {
       id: {
         type: 'int',
@@ -93,6 +97,7 @@ class DataLatitudeController extends Controller {
       }
     };
     // 参数校验
+    this.app.logger.debug('valid params begin...');
     const errors = this.app.validator.validate(createRule, params);
     if (errors) {
       const messages = [];
@@ -103,6 +108,7 @@ class DataLatitudeController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
+    this.app.logger.debug('valid params end');
     // 调用service,进行更新操作
     const dataLatitudeResult = await this.ctx.service.dataLatitude.updateDataLatitude(params);
     if (dataLatitudeResult[0] === 0) {

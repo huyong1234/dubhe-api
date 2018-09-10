@@ -29,6 +29,7 @@ class RoleApplyController extends Controller {
   async create() {
     // 获取post提交的参数
     const params = this.ctx.request.body;
+    this.app.logger.debug('新增应用权限接口参数' + params);
     params.roleId = parseInt(params.roleId);
     params.applyId = parseInt(params.applyId);
     params.sys_adder = parseInt(params.sys_adder);
@@ -61,6 +62,7 @@ class RoleApplyController extends Controller {
         type: 'int'
       }
     };
+    this.app.logger.debug('valid controller params begin...');
     const errors = this.app.validator.validate(rules, params);
     // 抛出错误异常
     if (errors) {
@@ -73,6 +75,7 @@ class RoleApplyController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
+    this.app.logger.debug('valid controller params end');
     const apply = await this.ctx.service.roleApply.createRoleApply(params);
     this.ctx.body = apply;
   }
@@ -89,6 +92,7 @@ class RoleApplyController extends Controller {
     params.roleId = parseInt(roleId);
     params.applyGroupId = parseInt(applyGroupId);
     params.sys_updator = parseInt(sys_updator);
+    this.app.logger.debug('删除应用权限接口参数' + params);
     // 配置校验规则
     const rules = {
       roleId: {
@@ -109,6 +113,7 @@ class RoleApplyController extends Controller {
       }
     };
     // 参数校验
+    this.app.logger.debug('valid controller params begin...');
     const errors = this.app.validator.validate(rules, params);
     // 抛出错误异常
     if (errors) {
@@ -121,6 +126,7 @@ class RoleApplyController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
+    this.app.logger.debug('valid controller params end');
     const result = await this.ctx.service.roleApply.destroy(params);
     if (result[0] === 0) {
       this.ctx.throw('数据删除失败');

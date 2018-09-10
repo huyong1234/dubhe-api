@@ -77,6 +77,7 @@ class NoticeHistoryController extends Controller {
   async create() {
     // 获取参数
     const params = this.ctx.request.body;
+    this.app.logger.debug('添加发送通知历史接口参数：' + params);
     // 配置验证规则
     const createRule = {
       noticeId: {
@@ -97,6 +98,7 @@ class NoticeHistoryController extends Controller {
       }
     };
     // 参数校验
+    this.app.logger.debug('valid controller params begin...');
     const errors = this.app.validator.validate(createRule, params);
     if (errors) {
       const messages = [];
@@ -107,6 +109,7 @@ class NoticeHistoryController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
+    this.app.logger.debug('valid controller params end');
     params.noticeId = parseInt(params.noticeId);
     params.companyId = parseInt(params.companyId);
     params.sys_adder = parseInt(params.sys_adder);

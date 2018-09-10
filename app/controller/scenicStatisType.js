@@ -7,6 +7,7 @@ class ScenicStatisTypeController extends Controller {
   async index() {
     // 获取查询参数
     const params = this.ctx.request.query;
+    this.app.logger.debug('查询数据分组接口参数' + params);
     params.limit = parseInt(params.limit);
     params.offSet = parseInt(params.offSet);
     if (params.scenicId) {
@@ -32,6 +33,7 @@ class ScenicStatisTypeController extends Controller {
       }
     };
     // 校验参数
+    this.app.logger.debug('valid controller params begin...');
     const errors = this.app.validator.validate(createRule, params);
     if (errors) {
       const messages = [];
@@ -42,6 +44,7 @@ class ScenicStatisTypeController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
+    this.app.logger.debug('valid controller params end');
     // 调用service，获取数据列表
     const scenicStatisType = await this.ctx.service.scenicStatisType.getScenicStatisTypeList(params);
     // 将数据总条数，放入响应头
@@ -61,6 +64,7 @@ class ScenicStatisTypeController extends Controller {
   async create() {
     // 获取formBody参数
     const params = this.ctx.request.body;
+    this.app.logger.debug('新建数据分组接口参数' + params);
     params.scenicId = parseInt(params.scenicId);
     params.parentId = parseInt(params.parentId);
     params.sys_adder = parseInt(params.sys_adder);
@@ -96,7 +100,8 @@ class ScenicStatisTypeController extends Controller {
         type: 'int'
       }
     };
-
+    // 参数校验
+    this.app.logger.debug('valid controller params begin...');
     const errors = this.app.validator.validate(rules, params);
     if (errors) {
       const messages = [];
@@ -107,6 +112,7 @@ class ScenicStatisTypeController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
+    this.app.logger.debug('valid controller params end');
     // 调用service，添加数据
     const scenicStatisType = await this.ctx.service.scenicStatisType.addScenicStatisType(params);
     this.ctx.body = scenicStatisType;
@@ -122,6 +128,7 @@ class ScenicStatisTypeController extends Controller {
     params.id = parseInt(params.id);
     params.sys_updator = parseInt(params.sys_updator);
     params.orderBy = parseInt(params.orderBy);
+    this.app.logger.debug('更新数据分组接口参数' + params);
     const createRule = {
       id: {
         type: 'int',
@@ -149,6 +156,7 @@ class ScenicStatisTypeController extends Controller {
       }
     };
     // 参数校验
+    this.app.logger.debug('valid controller params begin...');
     const errors = this.app.validator.validate(createRule, params);
     if (errors) {
       const messages = [];
@@ -159,6 +167,7 @@ class ScenicStatisTypeController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
+    this.app.logger.debug('valid controller params end');
     params.id = parseInt(params.id);
     params.sys_updator = parseInt(params.sys_updator);
     params.orderBy = parseInt(params.orderBy);

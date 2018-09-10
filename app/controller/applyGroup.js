@@ -7,6 +7,7 @@ class ApplyGroupController extends Controller {
   async index() {
     // 获取url参数
     const params = this.ctx.request.query;
+    this.app.logger.debug('获取应用分组列表接口参数：' + params);
     // sting转int
     params.limit = parseInt(params.limit);
     params.offSet = parseInt(params.offSet);
@@ -32,6 +33,7 @@ class ApplyGroupController extends Controller {
       }
     };
     // 参数验证
+    this.app.logger.debug('valid params begin...');
     const errors = this.app.validator.validate(rules, params);
     // 抛出错误异常
     if (errors) {
@@ -44,6 +46,7 @@ class ApplyGroupController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
+    this.app.logger.debug('valid params end');
     // 调用service，获取数据列表
     const applyGroup = await this.ctx.service.applyGroup.getApplyGroupList(params);
     // 将数据总条数，放入响应头
@@ -62,6 +65,7 @@ class ApplyGroupController extends Controller {
   async create() {
     // 获取post提交的参数
     const params = this.ctx.request.body;
+    this.app.logger.debug('新建应用分组列表接口参数：' + params);
     params.orderBy = parseInt(params.orderBy);
     params.companyId = parseInt(params.companyId);
     params.sys_adder = parseInt(params.sys_adder);
@@ -83,6 +87,7 @@ class ApplyGroupController extends Controller {
         type: 'int'
       }
     };
+    this.app.logger.debug('valid params begin...');
     const errors = this.app.validator.validate(rules, params);
     // 抛出错误异常
     if (errors) {
@@ -95,6 +100,7 @@ class ApplyGroupController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
+    this.app.logger.debug('valid params end');
     const applyGroup = await this.ctx.service.applyGroup.createApplyGroup(params);
     this.ctx.body = applyGroup;
   }
@@ -109,6 +115,7 @@ class ApplyGroupController extends Controller {
     params.companyId = parseInt(params.companyId);
     params.orderBy = parseInt(params.orderBy);
     params.sys_updator = parseInt(params.sys_updator);
+    this.app.logger.debug('更新应用分组列表接口参数：' + params);
     const rules = {
       id: {
         required: true,
@@ -131,6 +138,7 @@ class ApplyGroupController extends Controller {
         required: true
       }
     };
+    this.app.logger.debug('valid params begin...');
     const errors = this.app.validator.validate(rules, params);
     // 抛出错误异常
     if (errors) {
@@ -143,6 +151,7 @@ class ApplyGroupController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
+    this.app.logger.debug('valid params end');
     const result = await this.ctx.service.applyGroup.update(params);
     // 判断数据库操作是否成功，操作失败则抛出异常
     if (result[0] === 0) {

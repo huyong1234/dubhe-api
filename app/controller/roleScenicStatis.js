@@ -29,6 +29,7 @@ class RoleScenicStatisController extends Controller {
   async create() {
     // 获取post提交的参数
     const params = this.ctx.request.body;
+    this.app.logger.debug('新增数据权限接口参数' + params);
     params.roleId = parseInt(params.roleId);
     params.scenicStatisId = parseInt(params.scenicStatisId);
     params.scenicStatisOrderBy = parseInt(params.scenicStatisOrderBy);
@@ -71,6 +72,7 @@ class RoleScenicStatisController extends Controller {
         type: 'int'
       }
     };
+    this.app.logger.debug('valid controller params begin...');
     const errors = this.app.validator.validate(rules, params);
     // 抛出错误异常
     if (errors) {
@@ -83,6 +85,7 @@ class RoleScenicStatisController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
+    this.app.logger.debug('valid controller params end');
     const roleScenicStatis = await this.ctx.service.roleScenicStatis.createRoleScenicStatis(params);
     this.ctx.body = roleScenicStatis;
   }
@@ -101,6 +104,7 @@ class RoleScenicStatisController extends Controller {
     params.scenicStatisTypeId = parseInt(scenicStatisTypeId);
     params.sys_updator = parseInt(sys_updator);
     params.roleId = parseInt(roleId);
+    this.app.logger.debug('删除数据权限接口参数' + params);
     // 配置校验规则
     const rules = {
       roleId: {
@@ -125,6 +129,7 @@ class RoleScenicStatisController extends Controller {
       }
     };
     // 参数校验
+    this.app.logger.debug('valid controller params begin...');
     const errors = this.app.validator.validate(rules, params);
     // 抛出错误异常
     if (errors) {
@@ -137,6 +142,7 @@ class RoleScenicStatisController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
+    this.app.logger.debug('valid controller params end');
     const result = await this.ctx.service.roleScenicStatis.destroy(params);
     if (result[0] === 0) {
       this.ctx.throw('数据删除失败');

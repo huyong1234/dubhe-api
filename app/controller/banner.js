@@ -7,6 +7,7 @@ class BannerController extends Controller {
   async index() {
     // 获取参数
     const params = this.ctx.request.query;
+    this.app.logger.debug('获取banner列表接口参数：' + params);
     // 将string类型转为int类型
     if (params.actionType) params.actionType = parseInt(params.actionType);
     params.limit = parseInt(params.limit);
@@ -77,6 +78,7 @@ class BannerController extends Controller {
   async create() {
     // 获取参数
     const params = this.ctx.request.body;
+    this.app.logger.debug('新建banner接口参数：' + params);
     // 将string转为int类型
     params.sys_adder = parseInt(params.sys_adder);
     params.orderBy = parseInt(params.orderBy);
@@ -114,6 +116,7 @@ class BannerController extends Controller {
       }
     };
     // 参数校验
+    this.app.logger.debug('valid params begin...');
     const errors = this.app.validator.validate(createRule, params);
     if (errors) {
       const messages = [];
@@ -124,6 +127,7 @@ class BannerController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
+    this.app.logger.debug('valid params end');
     const banner = await this.ctx.service.banner.addBanner(params);
     this.ctx.body = banner;
   }
@@ -139,6 +143,7 @@ class BannerController extends Controller {
     params.orderBy = parseInt(params.orderBy);
     params.companyId = parseInt(params.companyId);
     params.actionType = parseInt(params.actionType);
+    this.app.logger.debug('修改banner接口参数：' + params);
     const createRule = {
       id: {
         type: 'int',
@@ -174,6 +179,7 @@ class BannerController extends Controller {
       }
     };
     // 参数校验
+    this.app.logger.debug('valid params begin...');
     const errors = this.app.validator.validate(createRule, params);
     if (errors) {
       const messages = [];
@@ -188,6 +194,7 @@ class BannerController extends Controller {
     if (bannerResult[0] === 0) {
       this.ctx.throw('数据更新失败');
     }
+    this.app.logger.debug('valid params end');
     const banner = await this.ctx.service.banner.getBanner(params.id);
 
     this.ctx.body = banner;

@@ -7,6 +7,7 @@ class ApplyController extends Controller {
   async index() {
     // 获取url参数
     const params = this.ctx.request.query;
+    this.app.logger.debug('获取应用列表接口参数：' + params);
     console.log(params);
     // 将string类型转换成int类型
     params.limit = parseInt(params.limit);
@@ -41,6 +42,7 @@ class ApplyController extends Controller {
       }
     };
     // 参数验证
+    this.app.logger.debug('valid params begin...');
     const errors = this.app.validator.validate(rules, params);
     // 抛出错误异常
     if (errors) {
@@ -53,6 +55,7 @@ class ApplyController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
+    this.app.logger.debug('valid params end');
     // 调用service,获取数据列表
     const apply = await this.ctx.service.apply.getApplyList(params);
     // 将数据总条数，放入响应头
@@ -72,6 +75,7 @@ class ApplyController extends Controller {
   async create() {
     // 获取post提交的参数
     const params = this.ctx.request.body;
+    this.app.logger.debug('新建应用接口参数：' + params);
     // 将string类型的参数转为int类型
     params.sys_adder = parseInt(params.sys_adder);
     params.orderBy = parseInt(params.orderBy);
@@ -109,6 +113,7 @@ class ApplyController extends Controller {
       }
     };
     // 按规则检验参数
+    this.app.logger.debug('valid params begin...');
     const errors = this.app.validator.validate(rules, params);
     // 抛出错误异常
     if (errors) {
@@ -121,6 +126,7 @@ class ApplyController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
+    this.app.logger.debug('valid params end');
     const apply = await this.ctx.service.apply.createApply(params);
     this.ctx.body = apply;
   }
@@ -136,6 +142,7 @@ class ApplyController extends Controller {
     params.orderBy = parseInt(params.orderBy);
     params.applyGroupId = parseInt(params.applyGroupId);
     params.actionType = parseInt(params.actionType);
+    this.app.logger.debug('更新应用接口参数：' + params);
     const rules = {
       id: {
         required: true,
@@ -170,6 +177,7 @@ class ApplyController extends Controller {
         required: true
       }
     };
+    this.app.logger.debug('valid params begin...');
     const errors = this.app.validator.validate(rules, params);
     // 抛出错误异常
     if (errors) {
@@ -182,6 +190,7 @@ class ApplyController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
+    this.app.logger.debug('valid params end');
     const result = await this.ctx.service.apply.updateApply(params);
     // 判断数据库操作是否成功，操作失败则抛出异常
     if (result[0] === 0) {
