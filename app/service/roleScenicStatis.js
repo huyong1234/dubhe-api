@@ -33,6 +33,7 @@ class RoleScenicStatisService extends Service {
       const scenicStatis = await this.app.model.ScenicStatis.findById(roleScenicStatises[o].scenicStatisId, {
         attributes: ['id', 'modelId', 'contents', 'scenicStatisTypeId', 'name', 'orderBy']
       });
+      // 如果不为空，则将对应属性封装到roleScenicStatis这个对象中
       if (scenicStatis) {
         roleScenicStatis.scenicStatisModelId = scenicStatis.modelId;
         roleScenicStatis.scenicStatisName = scenicStatis.name;
@@ -102,6 +103,8 @@ class RoleScenicStatisService extends Service {
         type: 'int'
       }
     };
+    // 参数校验
+    this.app.logger.debug('valid service params begin...');
     const errors = this.app.validator.validate(rules, params);
     if (errors) {
       const messages = [];
@@ -113,6 +116,7 @@ class RoleScenicStatisService extends Service {
       const err = JSON.stringify(messages);
       this.ctx.throw(err);
     }
+    this.app.logger.debug('valid service params end');
     const roleScenicStatisParams = {
       roleId: params.roleId,
       scenicStatisId: params.scenicStatisId,
@@ -216,6 +220,7 @@ class RoleScenicStatisService extends Service {
       }
     };
     // 参数校验
+    this.app.logger.debug('valid service params begin...');
     const errors = this.app.validator.validate(rules, params);
     if (errors) {
       const messages = [];
@@ -227,6 +232,7 @@ class RoleScenicStatisService extends Service {
       const err = JSON.stringify(messages);
       this.ctx.throw(err);
     }
+    this.app.logger.debug('valid service params end');
     const whereSearch = {
       roleId: params.roleId,
       scenicStatisId: params.scenicStatisId

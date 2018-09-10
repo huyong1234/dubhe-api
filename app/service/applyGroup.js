@@ -27,6 +27,7 @@ class ApplyGroupService extends Service {
       }
     };
     // 参数验证
+    this.app.logger.debug('valid service params begin...');
     const errors = this.app.validator.validate(rules, params);
     // 判断：如果参数验证错误，抛出错误
     if (errors) {
@@ -39,6 +40,8 @@ class ApplyGroupService extends Service {
       const err = JSON.stringify(messages);
       this.ctx.throw(err);
     }
+    this.app.logger.debug('valid service params end');
+    // 查询条件
     const whereSearch = {
       sys_isDelete: 0,
       companyId: params.companyId
@@ -47,6 +50,7 @@ class ApplyGroupService extends Service {
     if (params.name) {
       whereSearch.name = params.name;
     }
+    // 查询数据库
     const applyGroupList = await this.app.model.ApplyGroup.findAll({
       where: whereSearch,
       order: ['orderBy'],
@@ -54,7 +58,9 @@ class ApplyGroupService extends Service {
       offset: params.offSet,
       attributes: fields
     });
+    // 查询数据总量
     const total = await this.getTotal(whereSearch);
+    // 将返回数据和数据总量放入对象，返回给controller
     const applyGroup = {
       applyGroupList,
       total
@@ -72,6 +78,7 @@ class ApplyGroupService extends Service {
 
   // 新建
   async createApplyGroup(params) {
+    // 校验规则
     const rules = {
       name: {
         required: true,
@@ -90,6 +97,8 @@ class ApplyGroupService extends Service {
         type: 'int'
       }
     };
+    // 参数校验
+    this.app.logger.debug('valid service params begin...');
     const errors = this.app.validator.validate(rules, params);
     if (errors) {
       const messages = [];
@@ -101,6 +110,7 @@ class ApplyGroupService extends Service {
       const err = JSON.stringify(messages);
       this.ctx.throw(err);
     }
+    this.app.logger.debug('valid service params end');
     const applyGroup = await this.app.model.ApplyGroup.create(params);
     // 创建返回对象
     const result = {
@@ -139,6 +149,8 @@ class ApplyGroupService extends Service {
         required: true
       }
     };
+    // 参数校验
+    this.app.logger.debug('valid service params begin...');
     const errors = this.app.validator.validate(rules, params);
     // 判断：如果参数验证错误，抛出500错误
     if (errors) {
@@ -151,6 +163,7 @@ class ApplyGroupService extends Service {
       const err = JSON.stringify(messages);
       this.ctx.throw(err);
     }
+    this.app.logger.debug('valid service params end');
     // 设置where条件
     const whereSearch = {
       id: params.id

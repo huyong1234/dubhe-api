@@ -45,9 +45,8 @@ class NoticeHistoryService extends Service {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
-
     this.app.logger.debug('valid service params end');
-    // 封住查询参数
+    // 封装查询参数
     const whereSearch = {
       sys_isDelete: 0
     };
@@ -75,6 +74,7 @@ class NoticeHistoryService extends Service {
       limit: params.limit,
       offSet: params.offSet,
       attributes: fields,
+      // 多表连查关键字
       include: [
         {
           model: this.app.model.Notice,
@@ -95,9 +95,10 @@ class NoticeHistoryService extends Service {
     });
     // 最终结果结合
     const result = [];
-    // 部门集合
     for (const i in noticeGroup) {
+      // 部门集合
       const department = [];
+      // 新建一个NoticeHistory对象
       let newNoticehistory = {};
       const noticeId = noticeGroup[i].dataValues.noticeid;
       for (const o in noticeHistory) {
@@ -119,10 +120,12 @@ class NoticeHistoryService extends Service {
             id: noticeHistory[o].dataValues.hrmDepartment.id,
             departmentname: noticeHistory[o].hrmDepartment.departmentname
           };
+          // 将部门放入部门集合
           department.push(newDepartment);
           newNoticehistory.department = department;
         }
       }
+      // 将newNoticehistory对象放入结果集合
       result.push(newNoticehistory);
     }
     return result;
@@ -198,6 +201,7 @@ class NoticeHistoryService extends Service {
       }
     };
     // 参数校验
+    this.app.logger.debug('valid service params begin...');
     const errors = this.app.validator.validate(createRule, params);
     if (errors) {
       const messages = [];
@@ -208,6 +212,7 @@ class NoticeHistoryService extends Service {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
+    this.app.logger.debug('valid service params end');
     // 将department字符窜转化为数组
     const dempartmentArray = JSON.parse(params.department);
     // 遍历dempartmentArray，往数据库插入数据

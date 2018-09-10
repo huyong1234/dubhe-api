@@ -42,7 +42,7 @@ class ApplyController extends Controller {
       }
     };
     // 参数验证
-    this.app.logger.debug('valid params begin...');
+    this.app.logger.debug('valid controller params begin...');
     const errors = this.app.validator.validate(rules, params);
     // 抛出错误异常
     if (errors) {
@@ -55,7 +55,7 @@ class ApplyController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
-    this.app.logger.debug('valid params end');
+    this.app.logger.debug('valid controller params end');
     // 调用service,获取数据列表
     const apply = await this.ctx.service.apply.getApplyList(params);
     // 将数据总条数，放入响应头
@@ -113,7 +113,7 @@ class ApplyController extends Controller {
       }
     };
     // 按规则检验参数
-    this.app.logger.debug('valid params begin...');
+    this.app.logger.debug('valid controller params begin...');
     const errors = this.app.validator.validate(rules, params);
     // 抛出错误异常
     if (errors) {
@@ -126,7 +126,7 @@ class ApplyController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
-    this.app.logger.debug('valid params end');
+    this.app.logger.debug('valid controller params end');
     const apply = await this.ctx.service.apply.createApply(params);
     this.ctx.body = apply;
   }
@@ -177,7 +177,7 @@ class ApplyController extends Controller {
         required: true
       }
     };
-    this.app.logger.debug('valid params begin...');
+    this.app.logger.debug('valid controller params begin...');
     const errors = this.app.validator.validate(rules, params);
     // 抛出错误异常
     if (errors) {
@@ -190,7 +190,7 @@ class ApplyController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
-    this.app.logger.debug('valid params end');
+    this.app.logger.debug('valid controller params end');
     const result = await this.ctx.service.apply.updateApply(params);
     // 判断数据库操作是否成功，操作失败则抛出异常
     if (result[0] === 0) {

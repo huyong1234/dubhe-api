@@ -68,6 +68,7 @@ class DataLatitudeService extends Service {
       }
     };
     // 参数校验
+    this.app.logger.debug('valid service params begin...');
     const errors = this.app.validator.validate(createRule, params);
     if (errors) {
       const messages = [];
@@ -78,6 +79,7 @@ class DataLatitudeService extends Service {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
+    this.app.logger.debug('valid service params end');
     //
     const dbDataLatitudes = await this.app.model.DataLatitude.create(params);
     // 新建返回对象
@@ -122,7 +124,8 @@ class DataLatitudeService extends Service {
         required: true
       }
     };
-
+    // 参数校验
+    this.app.logger.debug('valid service params begin...');
     const errors = this.app.validator.validate(createRule, params);
     if (errors) {
       const messages = [];
@@ -133,6 +136,7 @@ class DataLatitudeService extends Service {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
+    this.app.logger.debug('valid service params end');
     const whereSearch = {
       id: params.id
     };

@@ -37,6 +37,8 @@ class ScenicStatisTypeService extends Service {
         required: false
       }
     };
+    // 参数校验
+    this.app.logger.debug('valid service params begin...');
     const errors = this.app.validator.validate(createRule, params);
     if (errors) {
       const messages = [];
@@ -47,6 +49,8 @@ class ScenicStatisTypeService extends Service {
       const err = JSON.stringify(errors);
       this.ctx.throw(400, err);
     }
+    this.app.logger.debug('valid service params end');
+    // 封装查询条件
     const whereSearch = {
       parentId: 0,
       sys_isDelete: 0
@@ -57,6 +61,7 @@ class ScenicStatisTypeService extends Service {
     if (params.name) {
       whereSearch.name = params.name;
     }
+    // 查询数据库
     const dbScenicStatisTypes = await this.app.model.ScenicStatisType.findAll({
       where: whereSearch,
       order: ['orderBy'],
@@ -64,6 +69,7 @@ class ScenicStatisTypeService extends Service {
       offset: params.offSet,
       attributes: fields
     });
+    // 查询数据总量
     const total = await this.getTotal(whereSearch);
     const scenicStatisTypes = {
       dbScenicStatisTypes,
@@ -113,7 +119,8 @@ class ScenicStatisTypeService extends Service {
         type: 'int'
       }
     };
-
+    // 参数校验
+    this.app.logger.debug('valid service params begin...');
     const errors = this.app.validator.validate(createRule, params);
     if (errors) {
       const messages = [];
@@ -124,6 +131,7 @@ class ScenicStatisTypeService extends Service {
       const err = JSON.stringify(errors);
       this.ctx.throw(400, err);
     }
+    this.app.logger.debug('valid service params end');
     const dbScenicStatisTypes = await this.app.model.ScenicStatisType.create(params);
     // 新建返回对象
     const scenicStatisTypes = {
@@ -170,7 +178,8 @@ class ScenicStatisTypeService extends Service {
         required: true
       }
     };
-
+    // 参数校验
+    this.app.logger.debug('valid service params begin...');
     const errors = this.app.validator.validate(createRule, params);
     if (errors) {
       const messages = [];
@@ -181,6 +190,7 @@ class ScenicStatisTypeService extends Service {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
+    this.app.logger.debug('valid service params end');
     const whereSearch = {
       id: params.id
     };

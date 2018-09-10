@@ -17,6 +17,7 @@ class RoleScenicStatisTypeService extends Service {
       }
     };
     // 参数校验
+    this.app.logger.debug('valid service params begin...');
     const errors = this.app.validator.validate(createRule, params);
     if (errors) {
       const messages = [];
@@ -27,6 +28,7 @@ class RoleScenicStatisTypeService extends Service {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
+    this.app.logger.debug('valid service params end');
     // 查询条件
     const whereSearch = {
       sys_isDelete: 0,
@@ -64,6 +66,7 @@ class RoleScenicStatisTypeService extends Service {
       }
     };
     // 参数校验
+    this.app.logger.debug('valid service params begin...');
     const errors = this.app.validator.validate(createRule, params);
     if (errors) {
       const messages = [];
@@ -74,6 +77,7 @@ class RoleScenicStatisTypeService extends Service {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
+    this.app.logger.debug('valid service params end');
     // 操作数据库，新增一条记录
     const dbRoleApplyGroup = await this.app.model.RoleScenicStatisType.create(params);
 
@@ -98,6 +102,7 @@ class RoleScenicStatisTypeService extends Service {
       }
     };
     // 参数校验
+    this.app.logger.debug('valid service params begin...');
     const errors = this.app.validator.validate(createRule, param);
     if (errors) {
       const messages = [];
@@ -108,7 +113,7 @@ class RoleScenicStatisTypeService extends Service {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
-
+    this.app.logger.debug('valid service params end');
     const updateParams = {
       roleId: param.roleId,
       scenicStatisTypeId: param.scenicStatisTypeId

@@ -88,6 +88,7 @@ class ScenicStatisService extends Service {
     };
 
     // 参数校验
+    this.app.logger.debug('valid service params begin...');
     const errors = this.app.validator.validate(createRule, params);
     if (errors) {
       const messages = [];
@@ -98,8 +99,9 @@ class ScenicStatisService extends Service {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
-
+    this.app.logger.debug('valid service params end');
     const dbScenicStatis = await this.app.model.ScenicStatis.create(params);
+    // 新建返回对象
     const scenicStatis = {
       id: dbScenicStatis.id,
       scenicStatisTypeId: dbScenicStatis.scenicStatisTypeId,
@@ -133,6 +135,7 @@ class ScenicStatisService extends Service {
       }
     };
     // 参数校验
+    this.app.logger.debug('valid service params begin...');
     const errors = this.app.validator.validate(createRule, params);
     if (errors) {
       const messages = [];
@@ -143,6 +146,7 @@ class ScenicStatisService extends Service {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
+    this.app.logger.debug('valid service params end');
     const whereSearch = {
       id: params.id
     };

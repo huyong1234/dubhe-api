@@ -46,7 +46,7 @@ class BannerController extends Controller {
       }
     };
     // 参数校验
-    this.app.logger.debug('valid params begin...');
+    this.app.logger.debug('valid controller params begin...');
     const errors = this.app.validator.validate(createRule, params);
     if (errors) {
       const messages = [];
@@ -58,7 +58,7 @@ class BannerController extends Controller {
       this.ctx.throw(400, err);
     }
 
-    this.app.logger.debug('valid params end');
+    this.app.logger.debug('valid controller params end');
     // 调用service，获取返回列表
     const banner = await this.ctx.service.banner.getBannerList(params);
     // 将数据总条数，放入响应头
@@ -116,7 +116,7 @@ class BannerController extends Controller {
       }
     };
     // 参数校验
-    this.app.logger.debug('valid params begin...');
+    this.app.logger.debug('valid controller params begin...');
     const errors = this.app.validator.validate(createRule, params);
     if (errors) {
       const messages = [];
@@ -127,7 +127,7 @@ class BannerController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
-    this.app.logger.debug('valid params end');
+    this.app.logger.debug('valid controller params end');
     const banner = await this.ctx.service.banner.addBanner(params);
     this.ctx.body = banner;
   }
@@ -179,7 +179,7 @@ class BannerController extends Controller {
       }
     };
     // 参数校验
-    this.app.logger.debug('valid params begin...');
+    this.app.logger.debug('valid controller params begin...');
     const errors = this.app.validator.validate(createRule, params);
     if (errors) {
       const messages = [];
@@ -194,7 +194,7 @@ class BannerController extends Controller {
     if (bannerResult[0] === 0) {
       this.ctx.throw('数据更新失败');
     }
-    this.app.logger.debug('valid params end');
+    this.app.logger.debug('valid controller params end');
     const banner = await this.ctx.service.banner.getBanner(params.id);
 
     this.ctx.body = banner;

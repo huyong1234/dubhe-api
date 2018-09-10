@@ -38,6 +38,7 @@ class RoleApplyService extends Service {
         attributes: ['id', 'name', 'icon', 'applyGroupId'],
         order: ['orderBy']
       });
+      // 如果apply不为空，则将apply的属性封装到roleApply中
       if (apply) {
         roleApply.applyName = apply.name;
         roleApply.applyIcon = apply.icon;
@@ -91,6 +92,8 @@ class RoleApplyService extends Service {
         type: 'int'
       }
     };
+    // 参数校验
+    this.app.logger.debug('valid service params begin...');
     const errors = this.app.validator.validate(rules, params);
     if (errors) {
       const messages = [];
@@ -102,7 +105,7 @@ class RoleApplyService extends Service {
       const err = JSON.stringify(messages);
       this.ctx.throw(err);
     }
-
+    this.app.logger.debug('valid service params end');
     // 组装新建roleApply的参数
     const applyParam = {};
     // applyParam.sys_adder = params.userId;
@@ -167,6 +170,7 @@ class RoleApplyService extends Service {
       }
     };
     // 参数校验
+    this.app.logger.debug('valid service params begin...');
     const errors = this.app.validator.validate(rules, params);
     if (errors) {
       const messages = [];
@@ -178,6 +182,7 @@ class RoleApplyService extends Service {
       const err = JSON.stringify(messages);
       this.ctx.throw(err);
     }
+    this.app.logger.debug('valid service params end');
     const whereSearch = {
       roleId: params.roleId,
       applyId: params.applyId

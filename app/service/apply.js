@@ -43,6 +43,7 @@ class ApplyService extends Service {
       }
     };
     // 参数验证
+    this.app.logger.debug('valid service params begin...');
     const errors = this.app.validator.validate(rules, params);
     // 判断：如果参数验证错误，抛出错误
     if (errors) {
@@ -55,6 +56,7 @@ class ApplyService extends Service {
       const err = JSON.stringify(messages);
       this.ctx.throw(err);
     }
+    this.app.logger.debug('valid service params end');
     const whereSearch = {
       sys_isDelete: 0
     };
@@ -125,6 +127,8 @@ class ApplyService extends Service {
         type: 'int'
       }
     };
+    // service层参数校验
+    this.app.logger.debug('valid service params begin...');
     const errors = this.app.validator.validate(rules, params);
     if (errors) {
       const messages = [];
@@ -136,6 +140,7 @@ class ApplyService extends Service {
       const err = JSON.stringify(messages);
       this.ctx.throw(err);
     }
+    this.app.logger.debug('valid service params end');
     const apply = await this.app.model.Apply.create(params);
     // 创建返回对象
     const newApply = {
@@ -189,6 +194,7 @@ class ApplyService extends Service {
         required: true
       }
     };
+    this.app.logger.debug('valid service params begin...');
     const errors = this.app.validator.validate(rules, params);
     // 判断：如果参数验证错误，抛出500错误
     if (errors) {
@@ -201,6 +207,7 @@ class ApplyService extends Service {
       const err = JSON.stringify(messages);
       this.ctx.throw(err);
     }
+    this.app.logger.debug('valid service params end');
     // 设置where条件
     const whereSearch = {
       id: params.id

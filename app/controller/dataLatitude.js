@@ -46,7 +46,7 @@ class DataLatitudeController extends Controller {
       }
     };
     // 参数校验
-    this.app.logger.debug('valid params begin...');
+    this.app.logger.debug('valid controller params begin...');
     const errors = this.app.validator.validate(createRule, params);
     if (errors) {
       const messages = [];
@@ -57,7 +57,7 @@ class DataLatitudeController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
-    this.app.logger.debug('valid params end');
+    this.app.logger.debug('valid controller params end');
     // 调用service
     const dataLatitude = await this.ctx.service.dataLatitude.addDataLatitude(params);
     this.ctx.body = dataLatitude;
@@ -97,7 +97,7 @@ class DataLatitudeController extends Controller {
       }
     };
     // 参数校验
-    this.app.logger.debug('valid params begin...');
+    this.app.logger.debug('valid controller params begin...');
     const errors = this.app.validator.validate(createRule, params);
     if (errors) {
       const messages = [];
@@ -108,7 +108,7 @@ class DataLatitudeController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
-    this.app.logger.debug('valid params end');
+    this.app.logger.debug('valid controller params end');
     // 调用service,进行更新操作
     const dataLatitudeResult = await this.ctx.service.dataLatitude.updateDataLatitude(params);
     if (dataLatitudeResult[0] === 0) {

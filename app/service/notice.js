@@ -100,10 +100,9 @@ class NoticeService extends Service {
     if (params.updated_at) {
       // 获取传递时间参数得当天时间，endOf(表示一天最晚的一个时间点)
       const updateTime = moment(params.updated_at).endOf('day');
-      whereSearch.created_at =
-      {
-        $gt: params.updated_at,
-        $lt: updateTime
+      whereSearch.created_at = {
+        $gt: params.updated_at, // >
+        $lt: updateTime // <
       };
     }
     // 查询数据库
@@ -181,6 +180,7 @@ class NoticeService extends Service {
       }
     };
     // 参数校验
+    this.app.logger.debug('valid service params begin...');
     const errors = this.app.validator.validate(createRule, params);
     if (errors) {
       const messages = [];
@@ -191,6 +191,7 @@ class NoticeService extends Service {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
+    this.app.logger.debug('valid service params end');
     // 将通知内容相关的字段，都放进一个json数组
     const contentObject = {
       abstract: params.abstract,
@@ -264,6 +265,7 @@ class NoticeService extends Service {
       }
     };
     // 参数校验
+    this.app.logger.debug('valid service params begin...');
     const errors = this.app.validator.validate(createRule, params);
     if (errors) {
       const messages = [];
@@ -274,6 +276,7 @@ class NoticeService extends Service {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
+    this.app.logger.debug('valid service params end');
     const whereSearch = {
       id: params.noticeId
     };

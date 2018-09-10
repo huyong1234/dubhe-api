@@ -33,7 +33,7 @@ class ApplyGroupController extends Controller {
       }
     };
     // 参数验证
-    this.app.logger.debug('valid params begin...');
+    this.app.logger.debug('valid controller params begin...');
     const errors = this.app.validator.validate(rules, params);
     // 抛出错误异常
     if (errors) {
@@ -46,7 +46,7 @@ class ApplyGroupController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
-    this.app.logger.debug('valid params end');
+    this.app.logger.debug('valid controller params end');
     // 调用service，获取数据列表
     const applyGroup = await this.ctx.service.applyGroup.getApplyGroupList(params);
     // 将数据总条数，放入响应头
@@ -87,7 +87,7 @@ class ApplyGroupController extends Controller {
         type: 'int'
       }
     };
-    this.app.logger.debug('valid params begin...');
+    this.app.logger.debug('valid controller params begin...');
     const errors = this.app.validator.validate(rules, params);
     // 抛出错误异常
     if (errors) {
@@ -100,7 +100,7 @@ class ApplyGroupController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
-    this.app.logger.debug('valid params end');
+    this.app.logger.debug('valid controller params end');
     const applyGroup = await this.ctx.service.applyGroup.createApplyGroup(params);
     this.ctx.body = applyGroup;
   }
@@ -138,7 +138,7 @@ class ApplyGroupController extends Controller {
         required: true
       }
     };
-    this.app.logger.debug('valid params begin...');
+    this.app.logger.debug('valid controller params begin...');
     const errors = this.app.validator.validate(rules, params);
     // 抛出错误异常
     if (errors) {
@@ -151,7 +151,7 @@ class ApplyGroupController extends Controller {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
-    this.app.logger.debug('valid params end');
+    this.app.logger.debug('valid controller params end');
     const result = await this.ctx.service.applyGroup.update(params);
     // 判断数据库操作是否成功，操作失败则抛出异常
     if (result[0] === 0) {

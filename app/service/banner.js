@@ -51,6 +51,7 @@ class BannerService extends Service {
       }
     };
     // 参数校验
+    this.app.logger.debug('valid service params begin...');
     const errors = this.app.validator.validate(createRule, params);
     if (errors) {
       const messages = [];
@@ -61,6 +62,7 @@ class BannerService extends Service {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
+    this.app.logger.debug('valid service params end');
     // 查询条件
     const whereSearch = {
       sys_isDelete: 0,
@@ -141,6 +143,7 @@ class BannerService extends Service {
       }
     };
     // 参数校验
+    this.app.logger.debug('valid service params begin...');
     const errors = this.app.validator.validate(createRule, params);
     if (errors) {
       const messages = [];
@@ -151,6 +154,7 @@ class BannerService extends Service {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
+    this.app.logger.debug('valid service params end');
     // 操作数据库，新增一条记录
     const dbBanners = await this.app.model.Banner.create(params);
     // 新建返回对象,根据API文档，组装返回对象属性
@@ -208,6 +212,7 @@ class BannerService extends Service {
       }
     };
     // 参数校验
+    this.app.logger.debug('valid service params begin...');
     const errors = this.app.validator.validate(createRule, params);
     if (errors) {
       const messages = [];
@@ -218,6 +223,7 @@ class BannerService extends Service {
       const err = JSON.stringify(messages);
       this.ctx.throw(400, err);
     }
+    this.app.logger.debug('valid service params end');
     const whereSearch = {
       id: params.id
     };
