@@ -18,6 +18,7 @@ class OssController extends Controller {
     };
    */
   async getBannerUploadPathAndSignature() {
+    this.app.logger.debug('调用上传banner图片接口');
     const {
       accessKeyId,
       accessKeySecret,
@@ -52,6 +53,7 @@ class OssController extends Controller {
     };
    */
   async getApplyUploadPathAndSignature() {
+    this.app.logger.debug('调用上传apply图片接口');
     const {
       accessKeyId,
       accessKeySecret,
@@ -86,6 +88,7 @@ class OssController extends Controller {
     };
    */
   async getScenicStatisUploadPathAndSignature() {
+    this.app.logger.debug('调用上传ScenicStatis图片接口');
     const {
       accessKeyId,
       accessKeySecret,
@@ -109,12 +112,13 @@ class OssController extends Controller {
    * 获取通知模块（Notice）上传路径及签名
    */
   async getNoticeUploadPathAndSignature() {
+    this.app.logger.debug('调用上传Notice图片接口');
     const {
       accessKeyId,
       accessKeySecret,
       bucket,
       endpoint,
-      policys: { noytice: noticePolicyConfig }
+      policys: { notice: noticePolicyConfig }
     } = this.app.config.aliyunOSS;
 
     // 调用service
