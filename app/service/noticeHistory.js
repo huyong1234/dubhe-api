@@ -46,6 +46,8 @@ class NoticeHistoryService extends Service {
       this.ctx.throw(400, err);
     }
     this.app.logger.debug('valid service params end');
+    // 引入sequelize插件中的Op函数
+    const Op = this.app.Sequelize.Op;
     // 封装查询参数
     const whereSearch = {
       sys_isDelete: 0
@@ -54,11 +56,26 @@ class NoticeHistoryService extends Service {
       sys_isDelete: 0,
       companyId: params.companyId
     };
+    // 如果只传partition没有传noticeType，则需要先根据partition查询所有的noticeTypeId
     if (params.partition) {
-      whereSearch.partition = params.partition;
+      const noticeType = await this.app.model.NoticeType.findAll({
+        where: {
+          sys_isDelete: 0,
+          partition: params.partition
+        }
+      });
+      const noticeTypeIdList = [];
+      for (const o in noticeType) {
+        const noticeTypeId = noticeType[o].id;
+        noticeTypeIdList.push(noticeTypeId);
+      }
+      whereSearch.noticeTypeId = {
+        [Op.in]: noticeTypeIdList
+      };
     }
+    // 如果传了noticeType，则直接根据noticeType进行查询
     if (params.noticeType) {
-      whereSearch.noticeType = params.noticeType;
+      whereSearch.noticeTypeId = params.noticeType;
     }
     if (params.updated_at) {
       // 获取传递时间参数得当天时间，endOf(表示一天最晚的一个时间点)
@@ -100,10 +117,20 @@ class NoticeHistoryService extends Service {
       const department = [];
       // 新建一个NoticeHistory对象
       let newNoticehistory = {};
+      const temp = {};
       const noticeId = noticeGroup[i].dataValues.noticeid;
       for (const o in noticeHistory) {
         // 根据noticeId进行分组
         if (noticeHistory[o].dataValues.notice.id === noticeId) {
+          const newDepartment = {
+            id: noticeHistory[o].dataValues.hrmDepartment.id,
+            departmentname: noticeHistory[o].hrmDepartment.departmentname
+          };
+          // 将部门放入部门集合
+          if (temp[newDepartment.id]) continue; // department去重
+          department.push(newDepartment);
+          temp[newDepartment.id] = true;
+          // 这里先定义department，然后再在newNoticehistory对象中使用，不然会出现赋值失败的情况
           newNoticehistory = {
             sys_addTime: noticeHistory[o].dataValues.sys_addTime,
             sys_updateTime: noticeHistory[o].dataValues.sys_updateTime,
@@ -114,15 +141,9 @@ class NoticeHistoryService extends Service {
               noticeTypeId: noticeHistory[o].dataValues.notice.noticeTypeId,
               title: noticeHistory[o].dataValues.notice.title,
               contents: noticeHistory[o].dataValues.notice.contents
-            }
+            },
+            department
           };
-          const newDepartment = {
-            id: noticeHistory[o].dataValues.hrmDepartment.id,
-            departmentname: noticeHistory[o].hrmDepartment.departmentname
-          };
-          // 将部门放入部门集合
-          department.push(newDepartment);
-          newNoticehistory.department = department;
         }
       }
       // 将newNoticehistory对象放入结果集合
@@ -154,6 +175,7 @@ class NoticeHistoryService extends Service {
     const department = [];
     let newNoticehistory = {};
     const temp = {};
+    // 这里的for寻获逻辑和查询列表时一样
     for (const o in noticeHistory) {
       newNoticehistory = {
         sys_addTime: noticeHistory[o].dataValues.sys_addTime,
@@ -171,6 +193,7 @@ class NoticeHistoryService extends Service {
         id: noticeHistory[o].dataValues.hrmDepartment.id,
         departmentname: noticeHistory[o].hrmDepartment.departmentname
       };
+      // 这里有一个疑问，这是先创建对象，再赋值，但是这里并不会失败，查询列表的时候如果这样写会失败
       if (temp[newDepartment.id]) continue;
       department.push(newDepartment);
       temp[newDepartment.id] = true;
