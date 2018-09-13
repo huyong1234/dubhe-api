@@ -57,21 +57,24 @@ class NoticeHistoryService extends Service {
       companyId: params.companyId
     };
     // 如果只传partition没有传noticeType，则需要先根据partition查询所有的noticeTypeId
-    if (params.partition) {
-      const noticeType = await this.app.model.NoticeType.findAll({
-        where: {
-          sys_isDelete: 0,
-          partition: params.partition
+    // partition=0或者partition=''转换成布尔值都是false
+    if (params.partition || params.partition === 0) {
+      if (!params.noticeType) {
+        const noticeType = await this.app.model.NoticeType.findAll({
+          where: {
+            sys_isDelete: 0,
+            partition: params.partition
+          }
+        });
+        const noticeTypeIdList = [];
+        for (const o in noticeType) {
+          const noticeTypeId = noticeType[o].id;
+          noticeTypeIdList.push(noticeTypeId);
         }
-      });
-      const noticeTypeIdList = [];
-      for (const o in noticeType) {
-        const noticeTypeId = noticeType[o].id;
-        noticeTypeIdList.push(noticeTypeId);
+        whereSearch.noticeTypeId = {
+          [Op.in]: noticeTypeIdList
+        };
       }
-      whereSearch.noticeTypeId = {
-        [Op.in]: noticeTypeIdList
-      };
     }
     // 如果传了noticeType，则直接根据noticeType进行查询
     if (params.noticeType) {
@@ -86,7 +89,7 @@ class NoticeHistoryService extends Service {
       };
     }
     // 三表连查
-    const noticeHistory = await this.app.model.NoticeHistory.findAll({
+    const noticeHistoryList = await this.app.model.NoticeHistory.findAll({
       where: whereSearchHistory,
       limit: params.limit,
       offSet: params.offSet,
@@ -104,51 +107,23 @@ class NoticeHistoryService extends Service {
         }
       ]
     });
-    // groupBy noticeId
-    const noticeGroup = await this.app.model.NoticeHistory.findAll({
-      where: whereSearchHistory,
-      attributes: ['noticeid'],
-      group: 'noticeid'
-    });
     // 最终结果结合
-    const result = [];
-    for (const i in noticeGroup) {
-      // 部门集合
-      const department = [];
-      // 新建一个NoticeHistory对象
-      let newNoticehistory = {};
-      const temp = {};
-      const noticeId = noticeGroup[i].dataValues.noticeid;
-      for (const o in noticeHistory) {
-        // 根据noticeId进行分组
-        if (noticeHistory[o].dataValues.notice.id === noticeId) {
-          const newDepartment = {
-            id: noticeHistory[o].dataValues.hrmDepartment.id,
-            departmentname: noticeHistory[o].hrmDepartment.departmentname
-          };
-          // 将部门放入部门集合
-          if (temp[newDepartment.id]) continue; // department去重
-          department.push(newDepartment);
-          temp[newDepartment.id] = true;
-          // 这里先定义department，然后再在newNoticehistory对象中使用，不然会出现赋值失败的情况
-          newNoticehistory = {
-            sys_addTime: noticeHistory[o].dataValues.sys_addTime,
-            sys_updateTime: noticeHistory[o].dataValues.sys_updateTime,
-            sys_adder: noticeHistory[o].dataValues.sys_adder,
-            sys_updator: noticeHistory[o].dataValues.sys_updator,
-            notice: {
-              id: noticeHistory[o].dataValues.notice.id,
-              noticeTypeId: noticeHistory[o].dataValues.notice.noticeTypeId,
-              title: noticeHistory[o].dataValues.notice.title,
-              contents: noticeHistory[o].dataValues.notice.contents
-            },
-            department
-          };
-        }
-      }
-      // 将newNoticehistory对象放入结果集合
-      result.push(newNoticehistory);
+    let result = [];
+    // noticeId集合
+    const noticeIdList = {};
+    const temp = {};
+    // 对查询结果进行分组，组装
+    for (let index = 0; index < noticeHistoryList.length; index++) {
+      const noticeHistory = noticeHistoryList[index];
+      // 三元运算，进行判断分组
+      noticeIdList[noticeHistory.notice.id] ||
+        (noticeIdList[noticeHistory.notice.id] = Object.assign({}, noticeHistory.dataValues, { department: [] }));// 使用Object.assign()进行分组
+      // department去重
+      if (temp[noticeHistory.hrmDepartment.id]) continue;
+      noticeIdList[noticeHistory.notice.id].department.push(noticeHistory.hrmDepartment);
+      temp[noticeHistory.hrmDepartment.id] = true;
     }
+    result = noticeIdList;
     return result;
   }
 
@@ -189,6 +164,7 @@ class NoticeHistoryService extends Service {
           contents: noticeHistory[o].dataValues.notice.contents
         }
       };
+      // const bb = newNoticehistory.propertyIsEnumerable();
       const newDepartment = {
         id: noticeHistory[o].dataValues.hrmDepartment.id,
         departmentname: noticeHistory[o].hrmDepartment.departmentname

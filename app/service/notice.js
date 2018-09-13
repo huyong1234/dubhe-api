@@ -117,10 +117,18 @@ class NoticeService extends Service {
         attributes: ['partition', 'name']
       }
     });
+    const newNoticeList = [];
+    for (const o in noticeList) {
+      const notice = noticeList[o].dataValues;
+      // 将contents中的imgId属性取出来，放在外面
+      const content = JSON.parse(notice.contents);
+      notice.imgId = content.imgid;
+      newNoticeList.push(notice);
+    }
     // 查询当前查询条件下的数据总量
     const total = await this.getTotal(whereSearch);
     const noticeListAndTotal = {
-      noticeList,
+      newNoticeList,
       total
     };
     return noticeListAndTotal;
