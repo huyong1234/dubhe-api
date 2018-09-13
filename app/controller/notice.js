@@ -65,7 +65,7 @@ class NoticeController extends Controller {
     const notice = await this.ctx.service.notice.getNoticeList(params);
     // 将数据总条数，放入响应头
     this.ctx.response.set('total', notice.total);
-    this.ctx.body = notice.newNoticeList;
+    this.ctx.body = notice.noticeList;
   }
 
   // 根据id查询一条通知
