@@ -58,23 +58,21 @@ class NoticeHistoryService extends Service {
     };
     // 如果只传partition没有传noticeType，则需要先根据partition查询所有的noticeTypeId
     // partition=0或者partition=''转换成布尔值都是false
-    if (params.partition || params.partition === 0) {
-      if (!params.noticeType) {
-        const noticeType = await this.app.model.NoticeType.findAll({
-          where: {
-            sys_isDelete: 0,
-            partition: params.partition
-          }
-        });
-        const noticeTypeIdList = [];
-        for (const o in noticeType) {
-          const noticeTypeId = noticeType[o].id;
-          noticeTypeIdList.push(noticeTypeId);
+    if (!params.noticeType && (params.partition || params.partition === 0)) {
+      const noticeType = await this.app.model.NoticeType.findAll({
+        where: {
+          sys_isDelete: 0,
+          partition: params.partition
         }
-        whereSearch.noticeTypeId = {
-          [Op.in]: noticeTypeIdList
-        };
+      });
+      const noticeTypeIdList = [];
+      for (const o in noticeType) {
+        const noticeTypeId = noticeType[o].id;
+        noticeTypeIdList.push(noticeTypeId);
       }
+      whereSearch.noticeTypeId = {
+        [Op.in]: noticeTypeIdList
+      };
     }
     // 如果传了noticeType，则直接根据noticeType进行查询
     if (params.noticeType) {
@@ -117,7 +115,7 @@ class NoticeHistoryService extends Service {
       const noticeHistory = noticeHistoryList[index];
       // 三元运算，进行判断分组
       noticeIdList[noticeHistory.notice.id] ||
-        (noticeIdList[noticeHistory.notice.id] = Object.assign({}, noticeHistory.dataValues, { department: [] }));// 使用Object.assign()进行分组
+        (noticeIdList[noticeHistory.notice.id] = Object.assign({}, noticeHistory.dataValues, { department: [] })); // 使用Object.assign()进行分组
       // department去重
       if (temp[noticeHistory.hrmDepartment.id]) continue;
       noticeIdList[noticeHistory.notice.id].department.push(noticeHistory.hrmDepartment);

@@ -77,7 +77,7 @@ class NoticeService extends Service {
       },
       sys_isDelete: 0
     };
-    if (params.partition) {
+    if (!params.noticeType && (params.partition || params.partition === 0)) {
       // 如果要根据模块进行查询，则需要先根据模块查询模块下的通知类型
       const noticeType = await this.app.model.NoticeType.findAll({
         where: {
