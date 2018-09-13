@@ -121,7 +121,12 @@ class NoticeHistoryService extends Service {
       noticeIdList[noticeHistory.notice.id].department.push(noticeHistory.hrmDepartment);
       temp[noticeHistory.hrmDepartment.id] = true;
     }
-    result = noticeIdList;
+    // 将对象转为数组
+    result = Object.values(noticeIdList);
+    // 去除对象多余属性——hrmDepartment
+    for (const o in result) {
+      delete result[o].hrmDepartment;
+    }
     return result;
   }
 
