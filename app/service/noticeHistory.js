@@ -217,21 +217,33 @@ class NoticeHistoryService extends Service {
     this.app.logger.debug('valid service params end');
     // 将department字符窜转化为数组
     const dempartmentArray = JSON.parse(params.department);
+
+    // 使用reducer处理数组，这里可以再思考一下，看看是否可以抽象成一个公用的方法
+    const reducefucn = (rs, item) => {
+      rs.push(item);
+      if (item.list) {
+        rs = rs.concat(item.list.reduce(reducefucn, []));
+      }
+      delete item.list;
+      return rs;
+    };
+    const tempResults = dempartmentArray.reduce(reducefucn, []);
+    // 部门id数组
+    const departmentIdList = [];
     // 遍历dempartmentArray，往数据库插入数据
-    for (let index = 0; index < dempartmentArray.length; index++) {
-      params.departmentId = dempartmentArray[index];
+    for (let index = 0; index < tempResults.length; index++) {
+      params.departmentId = tempResults[index].id;
+      departmentIdList.push(params.departmentId);
       // 插入数据
       const noticeHistory = await this.app.model.NoticeHistory.create(params);
-      if (noticeHistory) {
-        continue;
-      }
+      if (noticeHistory) continue;
     }
     const Op = this.app.Sequelize.Op;
     // 根据部门id，查询部门下的员工信息
     const userInfo = await this.app.model.HrmResource.findAll({
       where: {
         departmentid: {
-          [Op.in]: dempartmentArray
+          [Op.in]: departmentIdList
         }
       }
     });
@@ -272,6 +284,8 @@ class NoticeHistoryService extends Service {
     });
     return result.data;
   }
+
+  // 使用reducer处理数组
 }
 
 module.exports = NoticeHistoryService;

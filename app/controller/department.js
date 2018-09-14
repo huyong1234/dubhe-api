@@ -14,7 +14,7 @@ class DepartmentController extends Controller {
     const info = JSON.parse(department.data);
     // 若info的长度等于0，则表示部门列表为空
     if (info.length > 0) {
-      this.ctx.body = info[0].deptList;
+      this.ctx.body = info;
     } else {
       // 如果该公司id下部门为空，则返回null
       this.ctx.body = null;

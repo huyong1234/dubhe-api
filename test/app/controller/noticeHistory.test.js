@@ -8,24 +8,25 @@ describe('test/app/controller/NoticesHistory.test.js', () => {
   });
   const testobj = {
     noticeId: 1,
-    department: '[1083, 1078]',
+    department:
+      '[{"id":1078,"departmentname":"总经办"},{"id":1079,"departmentname":"行政人事部"}]',
     companyId: 1,
     sys_adder: 1
   };
   // 发送通知接口
-  //   it('should POST /api/NoticesHistory', () => {
-  //     return app
-  //       .httpRequest()
-  //       .post('/api/NoticesHistory')
-  //       .type('form')
-  //       .send(testobj)
-  //       .expect((res) => {
-  //         const { body } = res;
-  //         // 测试返回字段
-  //         assert(body);
-  //       })
-  //       .expect(200);
-  //   });
+  it('should POST /api/NoticesHistory', () => {
+    return app
+      .httpRequest()
+      .post('/api/NoticesHistory')
+      .type('form')
+      .send(testobj)
+      .expect((res) => {
+        const { body } = res;
+        // 测试返回字段
+        assert(body);
+      })
+      .expect(200);
+  });
 
   // 查询发送通知历史列表接口
   it('should GET /api/NoticesHistory', () => {
