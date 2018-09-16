@@ -152,7 +152,13 @@ class NoticeHistoryService extends Service {
       include: [
         {
           model: this.app.model.Notice,
-          attributes: ['id', 'noticeTypeId', 'title', 'contents']
+          attributes: ['id', 'noticeTypeId', 'title', 'contents'],
+          include: [
+            {
+              model: this.app.model.NoticeType,
+              attributes: ['partition']
+            }
+          ]
         },
         {
           model: this.app.model.HrmDepartment,
@@ -174,7 +180,8 @@ class NoticeHistoryService extends Service {
           id: noticeHistory[o].dataValues.notice.id,
           noticeTypeId: noticeHistory[o].dataValues.notice.noticeTypeId,
           title: noticeHistory[o].dataValues.notice.title,
-          contents: noticeHistory[o].dataValues.notice.contents
+          contents: noticeHistory[o].dataValues.notice.contents,
+          partition: noticeHistory[o].dataValues.notice.noticeType.partition
         }
       };
       // const bb = newNoticehistory.propertyIsEnumerable();
