@@ -97,7 +97,14 @@ class NoticeHistoryService extends Service {
         {
           model: this.app.model.Notice,
           where: whereSearch,
-          attributes: ['id', 'noticeTypeId', 'title', 'contents']
+          attributes: ['id', 'noticeTypeId', 'title', 'contents'],
+          // 关联外键
+          include: [
+            {
+              model: this.app.model.NoticeType,
+              attributes: ['partition']
+            }
+          ]
         },
         {
           model: this.app.model.HrmDepartment,
@@ -125,6 +132,9 @@ class NoticeHistoryService extends Service {
     result = Object.values(noticeIdList);
     // 去除对象多余属性——hrmDepartment
     for (const o in result) {
+      // 把partition属性放在外层
+      result[o].notice.dataValues.partition = result[o].notice.noticeType.partition;
+      delete result[o].notice.dataValues.noticeType;
       delete result[o].hrmDepartment;
     }
     return result;
