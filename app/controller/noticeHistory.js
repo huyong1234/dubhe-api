@@ -31,6 +31,10 @@ class NoticeHistoryController extends Controller {
         type: 'int',
         required: false
       },
+      created_at: {
+        type: 'string',
+        required: false
+      },
       updated_at: {
         type: 'string',
         required: false

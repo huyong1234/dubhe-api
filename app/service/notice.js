@@ -38,6 +38,10 @@ class NoticeService extends Service {
         type: 'int',
         required: false
       },
+      created_at: {
+        type: 'string',
+        required: false
+      },
       updated_at: {
         type: 'string',
         required: false
@@ -97,14 +101,21 @@ class NoticeService extends Service {
     if (params.noticeType) {
       whereSearch.noticeTypeId = params.noticeType;
     }
-    if (params.updated_at) {
-      // 获取传递时间参数得当天时间，endOf(表示一天最晚的一个时间点)
-      const updateTime = moment(params.updated_at).endOf('day');
-      whereSearch.created_at = {
-        $gt: params.updated_at, // >
-        $lt: updateTime // <
+    // 根据时间段进行查询
+    if (params.created_at && params.updated_at) {
+      whereSearch.sys_addTime = {
+        $gt: params.created_at,
+        $lt: params.updated_at
       };
     }
+    // if (params.updated_at) {
+    //   // 获取传递时间参数得当天时间，endOf(表示一天最晚的一个时间点)
+    //   const updateTime = moment(params.updated_at).endOf('day');
+    //   whereSearch.created_at = {
+    //     $gt: params.updated_at, // >
+    //     $lt: updateTime // <
+    //   };
+    // }
     // 查询数据库
     const noticeList = await this.app.model.Notice.findAll({
       where: whereSearch,
