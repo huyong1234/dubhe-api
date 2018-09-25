@@ -78,7 +78,8 @@ class NoticeService extends Service {
       noticeTypeId: {
         [Op.in]: noticeTypeIdList
       },
-      sys_isDelete: 0
+      sys_isDelete: 0,
+      status: 0 // 未发送
     };
     if (!params.noticeType && (params.partition || params.partition === 0)) {
       // 如果要根据模块进行查询，则需要先根据模块查询模块下的通知类型
@@ -144,7 +145,7 @@ class NoticeService extends Service {
     return notice;
   }
 
-  // 查询数据总量
+  // 查询未发送数据总量
   async getTotal(whereSearch) {
     const total = await this.app.model.Notice.count({
       where: whereSearch

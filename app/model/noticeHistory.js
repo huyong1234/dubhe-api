@@ -37,9 +37,10 @@ module.exports = (app) => {
         allowNull: false,
         field: 'sys_addTime'
       },
-      noticeId: {
+      notice_id: {
         type: INTEGER,
-        allowNull: true
+        allowNull: true,
+        field: 'noticeId'
       },
       companyId: {
         type: INTEGER,

@@ -1,7 +1,6 @@
 'use strict';
 
 const Service = require('egg').Service;
-const moment = require('moment');
 const fields = ['id', 'sys_addTime', 'sys_updateTime', 'sys_adder', 'sys_updator'];
 class NoticeHistoryService extends Service {
   // 查询推送历史列表
@@ -54,7 +53,8 @@ class NoticeHistoryService extends Service {
     const Op = this.app.Sequelize.Op;
     // 封装查询参数
     const whereSearch = {
-      sys_isDelete: 0
+      sys_isDelete: 0,
+      status: 1
     };
     const whereSearchHistory = {
       sys_isDelete: 0,
@@ -84,71 +84,87 @@ class NoticeHistoryService extends Service {
     }
     // 根据时间段进行查询
     if (params.created_at && params.updated_at) {
-      whereSearch.sys_addTime = {
+      whereSearchHistory.sys_addTime = {
         $gt: params.created_at,
         $lt: params.updated_at
       };
     }
     // 三表连查
-    const noticeHistoryList = await this.app.model.NoticeHistory.findAll({
-      where: whereSearchHistory,
+    const noticeHistoryList = await this.app.model.Notice.findAll({
       limit: params.limit,
-      offSet: params.offSet,
-      attributes: fields,
-      // 多表连查关键字
+      offset: params.offSet,
+      where: whereSearch,
+      attributes: ['id', 'noticeTypeId', 'title', 'contents'],
       include: [
         {
-          model: this.app.model.Notice,
-          where: whereSearch,
-          attributes: ['id', 'noticeTypeId', 'title', 'contents'],
-          // 关联外键
-          include: [
-            {
-              model: this.app.model.NoticeType,
-              attributes: ['partition']
-            }
-          ]
+          model: this.app.model.NoticeType,
+          attributes: ['partition']
         },
         {
-          model: this.app.model.HrmDepartment,
-          attributes: ['id', 'departmentname']
+          model: this.app.model.NoticeHistory,
+          where: whereSearchHistory,
+          attributes: fields,
+          include: [
+            {
+              model: this.app.model.HrmDepartment,
+              attributes: ['id', 'departmentname']
+            }
+          ]
         }
       ]
     });
-    // 最终结果结合
-    let result = [];
-    // noticeId集合
-    const noticeIdList = {};
+    const result = [];
     const temp = {};
-    // 对查询结果进行分组，组装
     for (let index = 0; index < noticeHistoryList.length; index++) {
-      const noticeHistory = noticeHistoryList[index];
-      // 三元运算，进行判断分组
-      noticeIdList[noticeHistory.notice.id] ||
-        (noticeIdList[noticeHistory.notice.id] = Object.assign({}, noticeHistory.dataValues, { department: [] })); // 使用Object.assign()进行分组
-      // department去重
-      if (temp[noticeHistory.hrmDepartment.id]) continue;
-      noticeIdList[noticeHistory.notice.id].department.push(noticeHistory.hrmDepartment);
-      temp[noticeHistory.hrmDepartment.id] = true;
+      const element = noticeHistoryList[index];
+      // 重新组装返回对象——notice
+      const notice = {
+        id: element.dataValues.id,
+        noticeTypeId: element.dataValues.noticeTypeId,
+        title: element.dataValues.title,
+        contents: element.dataValues.contents,
+        partition: element.dataValues.noticeType.partition
+      };
+      // 合并noticeHistory对象
+      const noticeHistory = Object.assign(...element.noticeHistories);
+      // 使用reduce合并部门信息,[]是赋给pre的初始值
+      const hrmDepartment = element.dataValues.noticeHistories.reduce((pre, current) => {
+        const tempkey = `${element.id}_${current.hrmDepartment.id}`;
+        // 在函数中不能使用continue关键字(非语法糖)，所以使用return pre 代替
+        if (temp[tempkey]) return pre;
+        // list.push(pre.hrmDepartment, current.hrmDepartment);
+        pre.push(current.hrmDepartment);
+        temp[tempkey] = true;
+        return pre;
+      }, []);
+      // 重新组装返回对象——pushHistory
+      const pushHistory = {
+        sys_addTime: noticeHistory.dataValues.sys_addTime,
+        sys_updateTime: noticeHistory.dataValues.sys_updateTime,
+        sys_adder: noticeHistory.sys_adder,
+        sys_updator: noticeHistory.sys_updator,
+        notice,
+        department: hrmDepartment
+      };
+      result.push(pushHistory);
     }
-    // 将对象转为数组
-    result = Object.values(noticeIdList);
-    // 去除对象多余属性——hrmDepartment
-    for (const o in result) {
-      // 把partition属性放在外层
-      result[o].notice.dataValues.partition = result[o].notice.noticeType.partition;
-      delete result[o].notice.dataValues.noticeType;
-      delete result[o].hrmDepartment;
-    }
-    return result;
+    // 查询当前查询条件下的数据总量
+    whereSearch.status = 1;
+    const total = await this.ctx.service.notice.getTotal(whereSearch);
+    const noticeListAndTotal = {
+      result,
+      total
+    };
+    return noticeListAndTotal;
+
   }
 
   // 查询推送详情接口
-  async getNoticeHistory(noticeId) {
+  async getNoticeHistory(notice_id) {
     // 三表连查
     const noticeHistory = await this.app.model.NoticeHistory.findAll({
       where: {
-        noticeId,
+        notice_id,
         sys_isDelete: 0
       },
       attributes: fields,
@@ -258,6 +274,13 @@ class NoticeHistoryService extends Service {
       const noticeHistory = await this.app.model.NoticeHistory.create(params);
       if (noticeHistory) continue;
     }
+    // 将对应的通知状态改为已发送（status=1）
+    const param = {
+      noticeId: params.noticeId,
+      sys_updator: params.sys_adder,
+      status: 1
+    };
+    await this.ctx.service.notice.updateNotice(param);
     const Op = this.app.Sequelize.Op;
     // 根据部门id，查询部门下的员工信息
     const userInfo = await this.app.model.HrmResource.findAll({
