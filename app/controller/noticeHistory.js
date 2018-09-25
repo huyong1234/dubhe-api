@@ -66,7 +66,9 @@ class NoticeHistoryController extends Controller {
     }
     // 调用service
     const noticeHistory = await this.ctx.service.noticeHistory.getNoticeHistoryList(params);
-    this.ctx.body = noticeHistory;
+    // 将数据总条数，放入响应头
+    this.ctx.response.set('total', noticeHistory.total);
+    this.ctx.body = noticeHistory.result;
   }
 
   // 查询推送详情

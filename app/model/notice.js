@@ -53,7 +53,8 @@ module.exports = (app) => {
       },
       status: {
         type: INTEGER,
-        allowNull: true
+        allowNull: true,
+        defaultValue: 0
       }
     },
     {
@@ -63,6 +64,7 @@ module.exports = (app) => {
   // 建立两表关系，便于及联查询
   Notice.associate = function() {
     app.model.Notice.belongsTo(app.model.NoticeType, { foreignKey: 'noticeTypeId', targetKey: 'id' });
+    app.model.Notice.hasMany(app.model.NoticeHistory);
   };
   return Notice;
 };
