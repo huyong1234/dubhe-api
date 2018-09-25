@@ -1,5 +1,4 @@
 'use strict';
-const moment = require('moment');
 const Service = require('egg').Service;
 const fields = [
   'id',
@@ -120,7 +119,7 @@ class NoticeService extends Service {
     const noticeList = await this.app.model.Notice.findAll({
       where: whereSearch,
       limit: params.limit,
-      offSet: params.offSet,
+      offset: params.offSet,
       attributes: fields,
       // 连表查询
       include: {
@@ -175,7 +174,7 @@ class NoticeService extends Service {
       },
       imgId: {
         type: 'string',
-        required: true
+        required: false
       },
       substance: {
         type: 'string',

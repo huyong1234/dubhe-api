@@ -104,7 +104,7 @@ class NoticeController extends Controller {
       },
       imgId: {
         type: 'string',
-        required: true
+        required: false
       },
       substance: {
         type: 'string',
