@@ -7,7 +7,7 @@ describe('test/app/controller/noticeType.test.js', () => {
     assert(app.config.keys.startsWith(pkg.name));
   });
 
-  // 查询banner列表接口
+  // 查询通知类型列表接口
   it('should GET /api/NoticesType', () => {
     return (
       app

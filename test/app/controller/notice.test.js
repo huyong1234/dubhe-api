@@ -23,7 +23,7 @@ describe('test/app/controller/notice.test.js', () => {
     imgId: testobj.imgId,
     substance: testobj.substance
   };
-  // 新建banner接口
+  // 新建通知接口
   it('should POST /api/Notices', () => {
     return app
       .httpRequest()
@@ -47,7 +47,7 @@ describe('test/app/controller/notice.test.js', () => {
       .expect(200);
   });
 
-  // 修改banner接口
+  // 修改通知接口
   it('should PATCH /api/Notices/:id', () => {
     testobj.abstract = '修改通知摘要';
     return app
@@ -72,7 +72,7 @@ describe('test/app/controller/notice.test.js', () => {
       .expect(200);
   });
 
-  // 查询banner列表接口
+  // 查询通知列表接口
   it('should GET /api/Notices', () => {
     return (
       app
@@ -89,7 +89,7 @@ describe('test/app/controller/notice.test.js', () => {
     );
   });
 
-  // 查询banner对象接口
+  // 查询通知对象接口
   it('should GET /api/Notices/:id', () => {
     return app
       .httpRequest()
@@ -111,7 +111,7 @@ describe('test/app/controller/notice.test.js', () => {
       });
   });
 
-  // 删除banner对象接口
+  // 删除通知对象接口
   it('should DELETE /api/Notices/:id', () => {
     return app
       .httpRequest()
