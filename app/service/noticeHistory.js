@@ -134,7 +134,7 @@ class NoticeHistoryService extends Service {
         partition: element.dataValues.noticeType.partition
       };
       // 合并noticeHistory对象
-      const noticeHistory = Object.assign(...element.noticeHistories);
+      const noticeHistory = Object.assign({}, ...element.noticeHistories);
       // 使用reduce合并部门信息,[]是赋给pre的初始值
       const hrmDepartment = element.dataValues.noticeHistories.reduce((pre, current) => {
         const tempkey = `${element.id}_${current.hrmDepartment.id}`;
@@ -149,8 +149,8 @@ class NoticeHistoryService extends Service {
       const pushHistory = {
         sys_addTime: noticeHistory.dataValues.sys_addTime,
         sys_updateTime: noticeHistory.dataValues.sys_updateTime,
-        sys_adder: noticeHistory.sys_adder,
-        sys_updator: noticeHistory.sys_updator,
+        sys_adder: noticeHistory.dataValues.sys_adder,
+        sys_updator: noticeHistory.dataValues.sys_updator,
         notice,
         department: hrmDepartment
       };
