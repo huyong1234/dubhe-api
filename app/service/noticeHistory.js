@@ -34,6 +34,10 @@ class NoticeHistoryService extends Service {
       updated_at: {
         type: 'string',
         required: false
+      },
+      departmentId: {
+        type: 'int',
+        required: false
       }
     };
     // 参数校验
@@ -88,6 +92,10 @@ class NoticeHistoryService extends Service {
         $gt: params.created_at,
         $lt: params.updated_at
       };
+    }
+    // 增加按部门查询条件
+    if (params.departmentId) {
+      whereSearchHistory.departmentId = params.departmentId;
     }
     // 三表连查
     const noticeHistoryList = await this.app.model.Notice.findAll({
@@ -156,7 +164,6 @@ class NoticeHistoryService extends Service {
       total
     };
     return noticeListAndTotal;
-
   }
 
   // 查询推送详情接口

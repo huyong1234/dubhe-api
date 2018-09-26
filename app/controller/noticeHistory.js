@@ -38,7 +38,12 @@ class NoticeHistoryController extends Controller {
       updated_at: {
         type: 'string',
         required: false
+      },
+      departmentId: {
+        type: 'int',
+        required: false
       }
+
     };
     // 参数校验
     this.app.logger.debug('valid controller params begin...');
