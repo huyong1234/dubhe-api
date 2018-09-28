@@ -53,6 +53,10 @@ module.exports = (app) => {
       orderBy: {
         type: INTEGER,
         allowNull: true
+      },
+      is_automatic: {
+        type: INTEGER,
+        allowNull: true
       }
     },
     {

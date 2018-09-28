@@ -17,6 +17,8 @@ class NoticeTypeService extends Service {
         where: {
           companyId,
           sys_isDelete: 0,
+          // 区分是自动触发还是后台新建的
+          is_automatic: 1,
           partition: noticeTypeList[index].partition
         },
         attributes: ['id', 'name']
