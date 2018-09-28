@@ -89,8 +89,8 @@ class NoticeHistoryService extends Service {
     // 根据时间段进行查询
     if (params.created_at && params.updated_at) {
       whereSearchHistory.sys_addTime = {
-        $gt: params.created_at,
-        $lt: params.updated_at
+        $lt: params.created_at,
+        $gt: params.updated_at
       };
     }
     // 增加按部门查询条件
