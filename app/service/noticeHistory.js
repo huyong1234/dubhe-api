@@ -73,6 +73,7 @@ class NoticeHistoryService extends Service {
           partition: params.partition
         }
       });
+      // 存放noticeTypId的集合
       const noticeTypeIdList = [];
       for (const o in noticeType) {
         const noticeTypeId = noticeType[o].id;
@@ -103,6 +104,7 @@ class NoticeHistoryService extends Service {
       offset: params.offSet,
       where: whereSearch,
       attributes: ['id', 'noticeTypeId', 'title', 'contents'],
+      // 联表查询关键字，需要先在model中定义
       include: [
         {
           model: this.app.model.NoticeType,
@@ -122,6 +124,7 @@ class NoticeHistoryService extends Service {
       ]
     });
     const result = [];
+    // 新建一个对象，位下面的去重做准备
     const temp = {};
     for (let index = 0; index < noticeHistoryList.length; index++) {
       const element = noticeHistoryList[index];
@@ -137,6 +140,7 @@ class NoticeHistoryService extends Service {
       const noticeHistory = Object.assign({}, ...element.noticeHistories);
       // 使用reduce合并部门信息,[]是赋给pre的初始值
       const hrmDepartment = element.dataValues.noticeHistories.reduce((pre, current) => {
+        // 因为是二维数组，所以用element.id和hrmDepartment.id一起做去重判断
         const tempkey = `${element.id}_${current.hrmDepartment.id}`;
         // 在函数中不能使用continue关键字(非语法糖)，所以使用return pre 代替
         if (temp[tempkey]) return pre;
