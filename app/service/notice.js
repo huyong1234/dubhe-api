@@ -104,8 +104,8 @@ class NoticeService extends Service {
     // 根据时间段进行查询
     if (params.created_at && params.updated_at) {
       whereSearch.sys_addTime = {
-        $lt: params.created_at, // $lt => 大于
-        $gt: params.updated_at // $gt => 小于
+        $gt: params.created_at, // $gt => 大于
+        $lt: params.updated_at // $lt => 小于
       };
     }
     // if (params.updated_at) {
