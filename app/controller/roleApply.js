@@ -29,7 +29,7 @@ class RoleApplyController extends Controller {
   async create() {
     // 获取post提交的参数
     const params = this.ctx.request.body;
-    this.app.logger.debug('新增应用权限接口参数' + params);
+    this.app.logger.debug('新增应用权限接口参数' + JSON.stringify(params));
     params.roleId = parseInt(params.roleId);
     params.applyId = parseInt(params.applyId);
     params.sys_adder = parseInt(params.sys_adder);

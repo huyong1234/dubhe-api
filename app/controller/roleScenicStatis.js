@@ -104,7 +104,7 @@ class RoleScenicStatisController extends Controller {
     params.scenicStatisTypeId = parseInt(scenicStatisTypeId);
     params.sys_updator = parseInt(sys_updator);
     params.roleId = parseInt(roleId);
-    this.app.logger.debug('删除数据权限接口参数' + params);
+    this.app.logger.debug('删除数据权限接口参数' + JSON.stringify(params));
     // 配置校验规则
     const rules = {
       roleId: {

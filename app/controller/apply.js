@@ -7,7 +7,7 @@ class ApplyController extends Controller {
   async index() {
     // 获取url参数
     const params = this.ctx.request.query;
-    this.app.logger.debug('获取应用列表接口参数：' + params);
+    this.app.logger.debug('获取应用列表接口参数：' + JSON.stringify(params));
     console.log(params);
     // 将string类型转换成int类型
     params.limit = parseInt(params.limit);
@@ -75,7 +75,7 @@ class ApplyController extends Controller {
   async create() {
     // 获取post提交的参数
     const params = this.ctx.request.body;
-    this.app.logger.debug('新建应用接口参数：' + params);
+    this.app.logger.debug('新建应用接口参数：' + JSON.stringify(params));
     // 将string类型的参数转为int类型
     params.sys_adder = parseInt(params.sys_adder);
     params.orderBy = parseInt(params.orderBy);
@@ -142,7 +142,7 @@ class ApplyController extends Controller {
     params.orderBy = parseInt(params.orderBy);
     params.applyGroupId = parseInt(params.applyGroupId);
     params.actionType = parseInt(params.actionType);
-    this.app.logger.debug('更新应用接口参数：' + params);
+    this.app.logger.debug('更新应用接口参数：' + JSON.stringify(params));
     const rules = {
       id: {
         required: true,

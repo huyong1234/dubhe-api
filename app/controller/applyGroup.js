@@ -7,7 +7,7 @@ class ApplyGroupController extends Controller {
   async index() {
     // 获取url参数
     const params = this.ctx.request.query;
-    this.app.logger.debug('获取应用分组列表接口参数：' + params);
+    this.app.logger.debug('获取应用分组列表接口参数：' + JSON.stringify(params));
     // sting转int
     params.limit = parseInt(params.limit);
     params.offSet = parseInt(params.offSet);
@@ -65,7 +65,7 @@ class ApplyGroupController extends Controller {
   async create() {
     // 获取post提交的参数
     const params = this.ctx.request.body;
-    this.app.logger.debug('新建应用分组列表接口参数：' + params);
+    this.app.logger.debug('新建应用分组列表接口参数：' + JSON.stringify(params));
     params.orderBy = parseInt(params.orderBy);
     params.companyId = parseInt(params.companyId);
     params.sys_adder = parseInt(params.sys_adder);
@@ -115,7 +115,7 @@ class ApplyGroupController extends Controller {
     params.companyId = parseInt(params.companyId);
     params.orderBy = parseInt(params.orderBy);
     params.sys_updator = parseInt(params.sys_updator);
-    this.app.logger.debug('更新应用分组列表接口参数：' + params);
+    this.app.logger.debug('更新应用分组列表接口参数：' + JSON.stringify(params));
     const rules = {
       id: {
         required: true,

@@ -7,7 +7,7 @@ class ScenicStatisTypeController extends Controller {
   async index() {
     // 获取查询参数
     const params = this.ctx.request.query;
-    this.app.logger.debug('查询数据分组接口参数' + params);
+    this.app.logger.debug('查询数据分组接口参数' + JSON.stringify(params));
     params.limit = parseInt(params.limit);
     params.offSet = parseInt(params.offSet);
     if (params.scenicId) {
@@ -64,7 +64,7 @@ class ScenicStatisTypeController extends Controller {
   async create() {
     // 获取formBody参数
     const params = this.ctx.request.body;
-    this.app.logger.debug('新建数据分组接口参数' + params);
+    this.app.logger.debug('新建数据分组接口参数' + JSON.stringify(params));
     params.scenicId = parseInt(params.scenicId);
     params.parentId = parseInt(params.parentId);
     params.sys_adder = parseInt(params.sys_adder);
@@ -128,7 +128,7 @@ class ScenicStatisTypeController extends Controller {
     params.id = parseInt(params.id);
     params.sys_updator = parseInt(params.sys_updator);
     params.orderBy = parseInt(params.orderBy);
-    this.app.logger.debug('更新数据分组接口参数' + params);
+    this.app.logger.debug('更新数据分组接口参数' + JSON.stringify(params));
     const createRule = {
       id: {
         type: 'int',

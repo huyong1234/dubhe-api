@@ -45,7 +45,7 @@ class ScenicStatisController extends Controller {
   async create() {
     // 获取参数
     const params = this.ctx.request.body;
-    this.app.logger.debug('查询具体数据列表接口参数' + params);
+    this.app.logger.debug('查询具体数据列表接口参数' + JSON.stringify(params));
     // 将string转为int类型
     params.sys_adder = parseInt(params.sys_adder);
     params.orderBy = parseInt(params.orderBy);
@@ -100,7 +100,7 @@ class ScenicStatisController extends Controller {
     params.id = id;
     params.id = parseInt(params.id);
     params.orderBy = parseInt(params.orderBy);
-    this.app.logger.debug('更新具体数据接口参数' + params);
+    this.app.logger.debug('更新具体数据接口参数' + JSON.stringify(params));
     const createRule = {
       id: {
         type: 'int',

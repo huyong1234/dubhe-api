@@ -78,7 +78,7 @@ class BannerController extends Controller {
   async create() {
     // 获取参数
     const params = this.ctx.request.body;
-    this.app.logger.debug('新建banner接口参数：' + params);
+    this.app.logger.debug('新建banner接口参数：' + JSON.stringify(params));
     // 将string转为int类型
     params.sys_adder = parseInt(params.sys_adder);
     params.orderBy = parseInt(params.orderBy);
@@ -143,7 +143,7 @@ class BannerController extends Controller {
     params.orderBy = parseInt(params.orderBy);
     params.companyId = parseInt(params.companyId);
     params.actionType = parseInt(params.actionType);
-    this.app.logger.debug('修改banner接口参数：' + params);
+    this.app.logger.debug('修改banner接口参数：' + JSON.stringify(params));
     const createRule = {
       id: {
         type: 'int',

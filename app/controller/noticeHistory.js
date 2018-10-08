@@ -8,7 +8,7 @@ class NoticeHistoryController extends Controller {
     // 获取参数
     const params = this.ctx.request.query;
     // 日志记录参数信息
-    this.app.logger.debug('查询通知历史列表接口参数' + params);
+    this.app.logger.debug('查询通知历史列表接口参数' + JSON.stringify(params));
     // 配置参数校验规则
     const createRule = {
       companyId: {
@@ -88,7 +88,7 @@ class NoticeHistoryController extends Controller {
   async create() {
     // 获取参数
     const params = this.ctx.request.body;
-    this.app.logger.debug('添加发送通知历史接口参数：' + params);
+    this.app.logger.debug('添加发送通知历史接口参数：' + JSON.stringify(params));
     // 配置验证规则
     const createRule = {
       noticeId: {
